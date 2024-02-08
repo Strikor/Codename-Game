@@ -1,3 +1,5 @@
+//Good start
+
 function setup() {
     noCanvas();
 }
