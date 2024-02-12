@@ -3,7 +3,7 @@
 **1. Title Page**  
    **"A Krill In Time"** [title image here]
 
-   > Proposed By:[everyone's full name here]
+   > Proposed By: Anna Anello, Sophia Testa, Jason Graham, Mason Shreffler, Alyssa reinagle, Chuck, Erik wood, Emmanuel David, Mohammad Alashkar, Nolan 
    >
    > Febuary 12, 2024
    
