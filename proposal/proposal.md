@@ -7,7 +7,7 @@
 
    > Proposed By: Anna Anello, Sophia Testa, Jason Graham, Mason Shreffler, Alyssa reinagle, Chuck, Erik wood, Emmanuel David, Mohammad Alashkar, Nolan 
    >
-   > Febuary 12, 2024
+   > February 12, 2024
    
 _________________
 
@@ -18,7 +18,7 @@ _________________
 _________________
 
 **3. Product Vision**  
-   >**Purpose of the Product**: This immersive stealth game, challenges players to navigate through complex environments filled with dynamic, semi-intelligent NPCs and inticate puzzles. Strategic thinking is required as players assume the role of a krill equipped with a temporal manipualtion capability. This mechanic is deeply woven into the game's puzzle design, and level progession systems. While solving these puzzles the player must also avoid detection and confrontation with enemies. In order to complete the mission of escaping, a blend of tactical foresight, spatial awareness, and stategic use of the time manipulation mechanic are required. All of this will be presented as a sleek online browser game with keyboard controls.     
+   >**Purpose of the Product**: This immersive stealth game, challenges players to navigate through complex environments filled with dynamic, semi-intelligent NPCs and intricate puzzles. Strategic thinking is required as players assume the role of a krill equipped with a temporal manipualtion capability. This mechanic is deeply woven into the game's puzzle design, and level progession systems. While solving these puzzles the player must also avoid detection and confrontation with enemies. In order to complete the mission of escaping, a blend of tactical foresight, spatial awareness, and strategic use of the time manipulation mechanic are required. All of this will be presented as a sleek online browser game with keyboard controls.     
    >  
    >**Target Audience**: The aim for this project is to create an experience that is accessible for those who are newer to browser gaming while also having features that appeal to more skilled players.   
    > 
@@ -27,9 +27,10 @@ _________________
 
 
 **4. Product Value**
-   > **Benefits**: The main benefits of this project go to the software development team working on it. By the completion of "A Krill In Time," team members will have gained the lifelong skills of proper software development practices, working well on a team, and better use of important tools like GitHub. The other benefactors will, ofcourse, be the players who get to play an enteraining and interesting finished product.    
+   > **Benefits**: The main benefits of this project go to the software development team working on it. By the completion of "A Krill In Time," team members will have gained the lifelong skills of proper software development practices, working well on a team, and better use of important tools like GitHub. The other benefactors will, of course, be the players who get to play an entertaining and interesting finished product.    
    > **Cost Analysis**: The creation of this project will require several months worth of time and effort from the development team. This includes man hours devoted to coding, revising, documenting, and designing for all aspects of the game.  
-   > **Value Proposition**: The benefits of this game come primarily from the action of creating the game. As stated previously the development team gains knowledge of software development, and players gain the benefit of playing an interesting final product. These benefits exceed the costs, which simply amount to man hours.  
+   > **Value Proposition**: The benefits of this game come primarily from the action of creating the game. As stated previously, the development team gains knowledge of software development, and players gain the benefit of playing an interesting final product. These benefits exceed the costs, which simply amount to man hours.  
+_________________
 
 **5. Product Creation Outline**
    > **Design Overview**: This game will be a top-down, 2D, pixelart game. The plan is to include the following features (an more):
@@ -40,7 +41,7 @@ _________________
       > - multiple difficulty levels for players of different skill levels 
       > 
    > **Development Plan**: No set plan with milestones created yet, but in order to complete the task of creating this product, the development team will have weekly meetings with discussions of the goals for each sprint, as well as the overarching goals of the project as a whole.   
-   > **Development Methodology**: Our team will be using th engineering methodology of Scrum sprints with Kanban. All the requirements for each sprint will be added to that sprint's kanban from the project issues backlog, during each sprint(sprint period: roughly 1 week) issues will be worked on and tested.   
+   > **Development Methodology**: Our team will be using the engineering methodology of Scrum sprints with Kanban. All the requirements for each sprint will be added to that sprint's kanban from the project issues backlog, during each sprint(sprint period: roughly 1 week) issues will be worked on and tested.   
    > **Resource Requirements**: The resources and technologies our team plans on using are:
       > - HTML / CSS
       > - Javascript
@@ -50,25 +51,25 @@ _________________
       > - VSCode
       > - GitHub pages
       > - P5.js
-
+_________________
 
 **6. Quality and Evaluation**
    > **Quality Standards**: Original artwork and assets that look good, well functioning and tested code, thoughful level design, interesting gameplay, useful mechanics  
-   > **Testing Procedures**: Our team will discuss futher how we wish to implement testing, as of now the plan is to test incrementakky using standard JavaScript testing idioms   
+   > **Testing Procedures**: Our team will discuss futher how we wish to implement testing, as of now the plan is to test incrementally using standard JavaScript testing idioms   
    > **Evaluation Metrics**: Later on as more of the objective are implemented, play testing can be considered.
-
+_________________
 **7. Deployment Plans**
-   > **Automation and Mechanisms**: The end produc wil be a web based game hosted through using GitHub tools on a school affilated site.
+   > **Automation and Mechanisms**: The end product will be a web based game hosted through using GitHub tools on a school affilated site.
    > **Production Timeline**: While it is too early to outline milestones in development, the planned released of the finished product coincides with the final examination date for this course.  
    > **User Training**: A tutorial level will be provided for new players.   
    > **Risk Management**: Writing secure code that can be hosted on a server without causing any issues is our main concern.  
-
+_________________
 **8. Maintenance Plans**
    > **Defects:**  More rigorous testing will be done if a defect is discovered post-release  
    > **Evolution:**  After release the development team has no current plans to maintain the product
-
+_________________
 **Sprint One Kanban Backlog:**
    > As planned the team will move forward with sprint one from:   
-   Monday Febuary 12 - Monday Febuary 19
+   Monday February 12 - Monday February 19
 
    ![backlog sc](S1BackLog.png)
