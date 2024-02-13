@@ -1,8 +1,8 @@
 ### Product Proposal
 
 **1. Title Page**  
-   **"A Krill In Time"** 
-   ![title screen](bg.png)
+   **"A Krill In Time"**   
+   ![title screen](bg.png)  
       Title Screen(WIP)
 
    > Proposed By: Anna Anello, Sophia Testa, Jason Graham, Mason Shreffler, Alyssa reinagle, Chuck, Erik wood, Emmanuel David, Mohammad Alashkar, Nolan 
