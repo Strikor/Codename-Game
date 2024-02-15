@@ -16,7 +16,7 @@ var Krill = {
 f
 
 function preload() {
-    Krill.sprite = loadImage('assets/IMG_4987.png');
+    Krill.sprite = loadImage('assets/sideWalkL.gif');
 }
 
 function setup() {
