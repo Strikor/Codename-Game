@@ -5,6 +5,20 @@ var view = {
     zoom: 1  
 };
 
+var Krill = {
+    x: 0,
+    y: 0,
+    speed: 1,
+    direction: 0,
+    sprite: Image
+};
+
+f
+
+function preload() {
+    Krill.sprite = loadImage('assets/sideWalkL.gif');
+}
+
 function setup() {
     createCanvas(400,400);
     windowResized();
@@ -24,6 +38,8 @@ function draw() {
     scale(view.zoom);
     translate(-view.x, -view.y);
 
+    //Impliment a level based draw system
+
     // Draw objects
     fill(32, 158, 74)
     rect(-100, -200, 500, 500)
@@ -31,6 +47,10 @@ function draw() {
     fill(102);
     rect(0, 0, 63, 63);
     rect(100, 150, 63, 63);
+
+    //Draw Character
+    keyTyped();
+    image(Krill.sprite, Krill.x, Krill.y, 63, 63);
 
     // Draw HUD elements
     resetMatrix();
@@ -47,13 +67,29 @@ function mouseWheel(e) {
   
 }
 
+function keyTyped() {
+    if (key.toLowerCase() == 'w') {
+        Krill.y -= Krill.speed;
+    } else if (key.toLowerCase() == 's') {
+        Krill.y += Krill.speed;
+    } else if (key.toLowerCase() == 'a') {
+        Krill.x -= Krill.speed;
+    } else if (key.toLowerCase() == 'd') {
+        Krill.x += Krill.speed;
+    }
+}
+
+function keyReleased() {
+    key = '';
+}
+
 // Fixed a problem with accelerated movement when mouse moved quickly by checking against the initial mouse position
 var initialMouseX, initialMouseY;
 
 function mousePressed() {
     initialMouseX = mouseX;
     initialMouseY = mouseY;
-  }
+}
   
 function mouseDragged() {
     var totalMouseX = mouseX - initialMouseX;
