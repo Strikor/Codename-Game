@@ -8,15 +8,13 @@ var view = {
 var Krill = {
     x: 0,
     y: 0,
-    speed: 1,
+    speed: 2,
     direction: 0,
     sprite: Image
 };
 
-f
-
 function preload() {
-    Krill.sprite = loadImage('assets/IMG_4987.png');
+    Krill.sprite = loadImage('assets/sideWalkL.gif');
 }
 
 function setup() {
@@ -50,7 +48,7 @@ function draw() {
 
     //Draw Character
     keyTyped();
-    image(Krill.sprite, Krill.x, Krill.y, 63, 63);
+    image(Krill.sprite, Krill.x, Krill.y, -128, 64);
 
     // Draw HUD elements
     resetMatrix();
