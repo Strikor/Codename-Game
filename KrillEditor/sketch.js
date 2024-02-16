@@ -1,8 +1,9 @@
+//Testing
 //keeps track of screen space
 var view = {
     x: 0,
     y: 0,
-    zoom: 1, 
+    zoom: 1,
     tool: null,
     cameraLocked: false
 };
@@ -14,11 +15,11 @@ var mapObjects = {
 var gridSize = 64;
 
 function preload() {
-    
+
 }
 
 function setup() {
-    createCanvas(400,400);
+    createCanvas(400, 400);
     windowResized();
 
 }
@@ -66,7 +67,7 @@ function draw() {
     resetMatrix();
     fill(0, 0, 0, 100);
     rect(0, 0, 140, 50);
-    
+
     fill(0);
     text(view.zoom + "x\n" + int(mouseX - width / 2) + ", " + int(mouseY - height / 2), 10, 20);
 
@@ -91,11 +92,11 @@ function draw() {
 function mouseWheel(e) {
     view.zoom -= e.delta / 1000;
     view.zoom = constrain(view.zoom, 0.5, 5);
-  
+
 }
 
 function keyTyped() {
-    
+
 }
 
 function keyReleased() {
@@ -143,7 +144,7 @@ function mousePressed() {
         });
     }
 }
-  
+
 function mouseDragged() {
     if (!view.cameraLocked) { // Only move the camera if it's not locked
         var totalMouseX = mouseX - initialMouseX;
@@ -164,4 +165,4 @@ function mouseDragged() {
         rectangle.width = currentMouseX - initialMouseX;
         rectangle.height = currentMouseY - initialMouseY;
     }
-  }
+}
