@@ -11,7 +11,7 @@ _________________
 
 **2. Executive Summary**
 
-   > You are a Krill. You can manipulate time. You must use this power to enact your goal: *escape*. In "A Krill in Time," time is your enemy, your friend, and your weapon. This top-down, 2D, stealth, survival game, allows players to control a krill who manipulates time. With this power players must solve puzzles and clear levels in order to escape a high-security animal testing facility. Survival is achived, not by fighting enemies, but evading them through time manipulation, and ultimately escaping the lab. 
+   > You are a Krill. You can manipulate time. You must use this power to enact your goal: *escape*. In "*working title*," time is your enemy, your friend, and your weapon. This top-down, 2D, stealth, survival game, allows players to control a krill who manipulates time. With this power players must solve puzzles and clear levels in order to escape a high-security animal testing facility. Survival is achived, not by fighting enemies, but evading them through time manipulation, and ultimately escaping the lab. 
    
 _________________
 
