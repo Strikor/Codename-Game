@@ -4,7 +4,7 @@ html, body {
     justify-content: center;
     align-items: center;
     height: 100%;
-    background-image: url('bg.png');
+    background-image: url('titlescreen.png');
     background-repeat: no-repeat;
     background-size:cover;
     width:flex;
