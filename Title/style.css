@@ -1,54 +1,9 @@
-<<<<<<< HEAD
-html, body {
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    background-image: url('titlescreen.png');
-    background-repeat: no-repeat;
-    background-size:cover;
-    width:flex;
-}
-
-.screen {
-    text-align: center;
-}
-
-h1 {
-    color: white;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #6495ED;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    margin: 10px;
-    text-align: center;
-    justify-content: center;
-    align-items:center;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-button:hover {
-    background-color: #00008B;
-}
-=======
 html, body {
     margin: auto ;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 540px;
-    width: 960px;
+    height: 100vh;
     image-rendering: pixelated;
     background-image: url('titlescreen.png');
     background-repeat: no-repeat;
@@ -66,7 +21,7 @@ h1 {
 button {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #6495ED;
+    background-image: linear-gradient(pink, purple);
     color: white;
     border: none;
     border-radius: 5px;
@@ -74,15 +29,14 @@ button {
     transition: background-color 0.3s;
     margin: 10px;
     text-align: center;
-    justify-content: center;
+    justify-content: right;
     align-items:center;
     position: absolute;
-    left: 50%;
-    top: 50%;
+    left: 80%;
+    top: 90%;
     transform: translate(-50%, -50%);
 }
 
 button:hover {
-    background-color: #00008B;
+    background-image: linear-gradient(red, purple);;
 }
->>>>>>> e131831745137f2b5a5455e3a6366e9447d88047
