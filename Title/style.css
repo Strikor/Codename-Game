@@ -1,13 +1,14 @@
 html, body {
-    margin: 0;
+    margin: auto ;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-    background-image: url('bg.png');
+    height: 540px;
+    width: 960px;
+    image-rendering: pixelated;
+    background-image: url('titlescreen.png');
     background-repeat: no-repeat;
     background-size:cover;
-    width:flex;
 }
 
 .screen {
