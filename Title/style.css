@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 html, body {
     margin: 0;
     display: flex;
@@ -40,3 +41,48 @@ button {
 button:hover {
     background-color: #00008B;
 }
+=======
+html, body {
+    margin: auto ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 540px;
+    width: 960px;
+    image-rendering: pixelated;
+    background-image: url('titlescreen.png');
+    background-repeat: no-repeat;
+    background-size:cover;
+}
+
+.screen {
+    text-align: center;
+}
+
+h1 {
+    color: white;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #6495ED;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 10px;
+    text-align: center;
+    justify-content: center;
+    align-items:center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+button:hover {
+    background-color: #00008B;
+}
+>>>>>>> e131831745137f2b5a5455e3a6366e9447d88047
