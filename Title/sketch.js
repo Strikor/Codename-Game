@@ -1,9 +1,25 @@
+let mySound;
+
+function preload() {
+    soundFormats("mp3");
+    mySound=loadSound('Krill_In_the_Lab.mp3');
+}
+
 function setup() {
     noCanvas();
+    backgroundMusic();
+}
+
+function backgroundMusic(){
+    mySound.play();
+    mySound.loop();
+    mySound.setVolume(0.5);
+    userStartAudio();
 }
 
 function draw() {
     // You can include any continuous animation or updates here if needed
+    
 }
 
 function toggleScreens() {
@@ -17,9 +33,4 @@ function toggleScreens() {
 function startTutorialLevel() {
     // Add functionality to start the tutorial level
     console.log('Starting Tutorial Level');
-}
-
-function startLevel1() {
-    // Add functionality to start level 1
-    console.log('Starting Level 1');
 }

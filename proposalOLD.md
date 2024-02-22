@@ -3,7 +3,7 @@
 **1. Title Page**  
    **"A Krill In Time"** [title image here]
 
-   > Proposed By:[everyone's full name here]
+   > Proposed By: Anna Anello, Sophia Testa, Jason Graham, Mason Shreffler, Alyssa reinagle, Chuck Murphy, Erik wood, Emmanuel David, Mohammad Alashkar, Nolan Zubaty
    >
    > Febuary 12, 2024
    
@@ -16,10 +16,10 @@ _________________
 _________________
 
 **3. Product Vision**  
-   >**Purpose of the Product**: This immersive stealth game, challenges players to navigate through challenging levels filled with dynamic, semi-intelligent NPCs and complex environmental puzzles. Strategic thinking is required as players manipulate time to outsmart enemies and overcome obstacles. All of this will be presented as a sleek online browser game with keyboard controls.
+   >**Purpose of the Product**: This immersive stealth game, challenges players to navigate through complex environments filled with dynamic, semi-intelligent NPCs and inticate puzzles. Strategic thinking is required as players assume the role of a krill equipped with a temporal manipualtion capability. This mechanic is deeply woven into the game's puzzle design, and level progession systems. While solving these puzzles the player must also avoid detection and confrontation with enemies. In order to complete the mission of escaping, a blend of tactical foresight, spatial awareness, and stategic use of the time manipulation mechanic are required. All of this will be presented as a sleek online browser game with keyboard controls.     
    >  
    >**Target Audience**: The aim for this project is to create an experience that is accessible for those who are newer to browser gaming while also having features that appeal to more skilled players.   
-   >
+   > 
    >**Long-term Vision**: A polished, completed game that is hosted and playable on a browser. The scope of this game is mainly to showcase the growth in software development skills of the team making it. But outside of this class we also intend to produce a product that we are proud of and is fun to play. 
 _________________
 
