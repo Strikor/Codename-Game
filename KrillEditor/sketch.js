@@ -15,7 +15,7 @@ var mapObjects = {
 var gridSize = 64;
 
 function preload() {
-
+//Sprite code
 }
 
 function setup() {
