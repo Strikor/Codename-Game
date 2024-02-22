@@ -3,8 +3,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 540px;
-    width: 960px;
+    height: 100vh;
     image-rendering: pixelated;
     background-image: url('titlescreen.png');
     background-repeat: no-repeat;
@@ -22,22 +21,20 @@ h1 {
 button {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: #6495ED;
-    color: white;
+    background-image:url('button.png'); /*get button background to be transparent */
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100px;
+    height: 50px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    margin: 10px;
+    margin: 5px;
     text-align: center;
     justify-content: center;
     align-items:center;
     position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-}
-
-button:hover {
-    background-color: #00008B;
+    left: 77%;
+    top: 85%;
+   
 }
