@@ -23,8 +23,8 @@ function setup() {
 
 // enemy object
 var enemy = {
-    x: 300,
-    y: 300,
+    x: 150,
+    y: 150,
     speed: 100, // pixel per seconds
     directionX: 0,
     directionY: 0,
