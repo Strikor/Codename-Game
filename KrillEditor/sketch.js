@@ -68,23 +68,22 @@ function draw() {
         line(startX, y, endX, y);
     }
 
-    //Draw Temporary Objects
-        fill(255, 0, 0);
-        rect(tmpMapObject.x, tmpMapObject.y, tmpMapObject.width, tmpMapObject.height);
-
-    /*// Draw objects
-    fill(255, 0, 0);
-    for (var i = 0; i < mapObjects.rectangles.length; i++) {
-        var rectangle = mapObjects.rectangles[i];
+    // Draw objects
+    for (var i = 0; i < mapObjects.tiles.length; i++) {
+        var tile = mapObjects.tiles[i];
 
         // Add tile types as needed. Sprites can also be added here
-        if (rectangle.tile == "Wall") {
-            fill(0, 0, 0);
-        } else if (rectangle.tile == "Floor") {
-            fill(255, 255, 255);
+        if (tile.type == "Wall") {
+            fill(0, 255, 0);
+        } else if (tile.type == "Floor") {
+            fill(0, 0, 255);
         }
-        rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-    }*/
+        rect(tile.x, tile.y, gridSize, gridSize);
+    }
+
+    //Draw Temporary Objects
+    fill(255, 0, 0);
+    rect(tmpMapObject.x, tmpMapObject.y, tmpMapObject.width, tmpMapObject.height);
     
 
     //Draw Character
@@ -175,7 +174,7 @@ function mousePressed() {
             y: initialMouseY,
             width: 0,
             height: 0,
-            tile: tileSelect.value()
+            type: tileSelect.value()
         }
     }
 }
@@ -199,4 +198,45 @@ function mouseDragged() {
         tmpMapObject.width = currentMouseX - initialMouseX;
         tmpMapObject.height = currentMouseY - initialMouseY;
     }
+}
+
+/*mapObjects.rectangles.push({
+            x: initialMouseX,
+            y: initialMouseY,
+            width: 0,
+            height: 0
+        });*/
+
+function mouseReleased() {
+    if (view.tool == "rectangle") {
+        var widthTileNum = Math.abs(tmpMapObject.width / gridSize);
+        var heightTileNum = Math.abs(tmpMapObject.height / gridSize);
+
+        //Deletes any tiles that are in the same location as the new tiles
+        if(tmpMapObject.width != 0) {
+            for(var i = 0; i < mapObjects.tiles.length; i++) {
+                if(mapObjects.tiles[i].x == tmpMapObject.x && mapObjects.tiles[i].y == tmpMapObject.y) {
+                    mapObjects.tiles.splice(i, 1);
+                }
+            }
+        }
+
+        for (var i = 0; i < heightTileNum; i++) {
+            for (var j = 0; j < widthTileNum; j++) {
+                mapObjects.tiles.push({
+                    x: (tmpMapObject.width < 0 ? tmpMapObject.x - gridSize + j * gridSize * -1 : tmpMapObject.x + j * gridSize * 1),
+                    y: (tmpMapObject.height < 0 ? tmpMapObject.y - gridSize + i * gridSize * -1 : tmpMapObject.y + i * gridSize * 1),
+                    type: tileSelect.value()
+                });
+            }
+        }
+
+        tmpMapObject.x = 0;
+        tmpMapObject.y = 0;
+        tmpMapObject.width = 0;
+        tmpMapObject.height = 0;
+        tmpMapObject.type = null;
+
+    }
+
 }
