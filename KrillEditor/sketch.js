@@ -8,11 +8,11 @@ var view = {
     cameraLocked: false
 };
 
-var mapObjects = {
-    rectangles: [] // Rectangles that have been drawn
-};
-
 var gridSize = 64;
+
+var mapObjects = {
+    rectangles: []
+};
 
 function preload() {
 
@@ -21,6 +21,13 @@ function preload() {
 function setup() {
     createCanvas(400, 400);
     windowResized();
+
+    //Tile Type Selector
+    tileSelect = createSelect();
+    tileSelect.position(0, 50);
+
+    tileSelect.option('Wall');
+    tileSelect.option('Floor');
 
 }
 
@@ -57,8 +64,16 @@ function draw() {
     fill(255, 0, 0);
     for (var i = 0; i < mapObjects.rectangles.length; i++) {
         var rectangle = mapObjects.rectangles[i];
+
+        // Add tile types as needed. Sprites can also be added here
+        if (rectangle.tile == "Wall") {
+            fill(0, 0, 0);
+        } else if (rectangle.tile == "Floor") {
+            fill(255, 255, 255);
+        }
         rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
     }
+    
 
     //Draw Character
     //keyTyped();
@@ -140,7 +155,8 @@ function mousePressed() {
             x: initialMouseX,
             y: initialMouseY,
             width: 0,
-            height: 0
+            height: 0,
+            tile: tileSelect.value()
         });
     }
 }
