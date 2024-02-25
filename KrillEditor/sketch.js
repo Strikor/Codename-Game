@@ -99,7 +99,13 @@ function draw() {
         }
         rect(0, buttonY, buttonWidth, buttonHeight);
         fill(255);
-        text("Button " + (i + 1), 10, buttonY + 30);
+        if(i == 0) {
+            text("Select", 10, buttonY + 30);
+        } else if(i == 1) {
+            text("Draw", 10, buttonY + 30);
+        } else {//Add more buttons names here
+            text("Button " + (i + 1), 10, buttonY + 30);
+        }
         buttonY += buttonHeight + buttonSpacing;
     }
 }
