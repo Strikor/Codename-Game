@@ -4,14 +4,22 @@ var view = {
     x: 0,
     y: 0,
     zoom: 1,
-    tool: null,
+    tool: 'select',
     cameraLocked: false
 };
 
 var gridSize = 64;
 
+var tmpMapObject = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    tile: null
+};
+
 var mapObjects = {
-    rectangles: []
+    tiles: []
 };
 
 function preload() {
@@ -60,7 +68,11 @@ function draw() {
         line(startX, y, endX, y);
     }
 
-    // Draw objects
+    //Draw Temporary Objects
+        fill(255, 0, 0);
+        rect(tmpMapObject.x, tmpMapObject.y, tmpMapObject.width, tmpMapObject.height);
+
+    /*// Draw objects
     fill(255, 0, 0);
     for (var i = 0; i < mapObjects.rectangles.length; i++) {
         var rectangle = mapObjects.rectangles[i];
@@ -72,7 +84,7 @@ function draw() {
             fill(255, 255, 255);
         }
         rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-    }
+    }*/
     
 
     //Draw Character
@@ -147,7 +159,7 @@ function mousePressed() {
                 view.cameraLocked = true; // Unlock the camera when button 1 is clicked
             } else {
                 view.tool = null;
-                view.cameraLocked = true; // Lock the camera when any other button is clicked
+                view.cameraLocked = false; // Lock the camera when any other button is clicked
             }
         }
         buttonY += buttonHeight + buttonSpacing;
@@ -157,13 +169,14 @@ function mousePressed() {
     if (view.tool == "rectangle") {
         initialMouseX = Math.round(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
         initialMouseY = Math.round(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
-        mapObjects.rectangles.push({
+        
+        tmpMapObject = {
             x: initialMouseX,
             y: initialMouseY,
             width: 0,
             height: 0,
             tile: tileSelect.value()
-        });
+        }
     }
 }
 
@@ -181,10 +194,9 @@ function mouseDragged() {
 
     // If the rectangle tool is selected, update the size of the current rectangle
     if (view.tool == "rectangle") {
-        var rectangle = mapObjects.rectangles[mapObjects.rectangles.length - 1];
         var currentMouseX = Math.round(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
         var currentMouseY = Math.round(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
-        rectangle.width = currentMouseX - initialMouseX;
-        rectangle.height = currentMouseY - initialMouseY;
+        tmpMapObject.width = currentMouseX - initialMouseX;
+        tmpMapObject.height = currentMouseY - initialMouseY;
     }
 }
