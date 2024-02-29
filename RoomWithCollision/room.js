@@ -120,11 +120,10 @@ function setup() {
         32,32  //h, w in px of each tile
     ) 
 
-    krill.x = 250;
-    krill.y = 250;
-    krill.direction = 12;
-    krill.speed = 20;
-    krill.vel.x = 10;
+    krill.speed = 3;
+    if (kb.pressing('up')){
+        krill.direction = -90;
+    }
 
 }
 
