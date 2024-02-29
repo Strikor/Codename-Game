@@ -4,15 +4,24 @@ var view = {
     x: 0,
     y: 0,
     zoom: 1,
-    tool: null,
+    tool: 'select',
     cameraLocked: false
 };
 
-var mapObjects = {
-    rectangles: [] // Rectangles that have been drawn
+var gridSize = 64;
+
+var tmpMapObject = {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+    tile: null
 };
 
-var gridSize = 64;
+var mapObjects = {
+    tiles: []//,
+    //entities: []
+};
 
 function preload() {
 
@@ -21,6 +30,13 @@ function preload() {
 function setup() {
     createCanvas(400, 400);
     windowResized();
+
+    //Tile Type Selector
+    tileSelect = createSelect();
+    tileSelect.position(0, 50);
+
+    tileSelect.option('Wall');
+    tileSelect.option('Floor');
 
 }
 
@@ -54,11 +70,22 @@ function draw() {
     }
 
     // Draw objects
-    fill(255, 0, 0);
-    for (var i = 0; i < mapObjects.rectangles.length; i++) {
-        var rectangle = mapObjects.rectangles[i];
-        rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    for (var i = 0; i < mapObjects.tiles.length; i++) {
+        var tile = mapObjects.tiles[i];
+
+        // Add tile types as needed. Sprites can also be added here
+        if (tile.type == "Wall") {
+            fill(0, 255, 0);
+        } else if (tile.type == "Floor") {
+            fill(0, 0, 255);
+        }
+        rect(tile.x, tile.y, gridSize, gridSize);
     }
+
+    //Draw Temporary Objects
+    fill(255, 0, 0);
+    rect(tmpMapObject.x, tmpMapObject.y, tmpMapObject.width, tmpMapObject.height);
+    
 
     //Draw Character
     //keyTyped();
@@ -77,14 +104,32 @@ function draw() {
     var buttonSpacing = 10;
     var buttonY = height / 3;
     for (var i = 0; i < 5; i++) {
-        if ((i == 0 && view.tool == "select") || (i == 1 && view.tool == "rectangle")) { // Check if button 1 or 2 is selected
+        if ((i == 0) && view.tool == "select" ||
+                (i == 1 && view.tool == "rectangle") ||
+                (i == 2 && view.tool == "touch") ||
+                (i == 3 && view.tool == null) ||
+                (i == 4 && view.tool == "delete")) { // Check if button 1 or 2 is selected
+
             fill(255, 0, 0, 100); // Draw the selected button in red
         } else {
             fill(0, 0, 0, 100); // Draw other buttons in black
         }
         rect(0, buttonY, buttonWidth, buttonHeight);
         fill(255);
-        text("Button " + (i + 1), 10, buttonY + 30);
+        if(i == 0) {
+            text("Select", 10, buttonY + 30);
+        } else if(i == 1) {
+            text("Draw", 10, buttonY + 30);
+
+        } else if(i == 2) {
+            text("Touch", 10, buttonY + 30);
+        } else if(i == 3) {
+            text("Button 4", 10, buttonY + 30);
+        } else if(i == 4) {
+            text("Delete", 10, buttonY + 30);
+        }/* else {//Add more buttons names here
+            text("Button " + (i + 1), 10, buttonY + 30);
+        }*/
         buttonY += buttonHeight + buttonSpacing;
     }
 }
@@ -124,9 +169,18 @@ function mousePressed() {
             } else if (i == 1) {
                 view.tool = "rectangle";
                 view.cameraLocked = true; // Unlock the camera when button 1 is clicked
+            } else if (i == 2) {
+                view.tool = "touch";
+                view.cameraLocked = true; // Unlock the camera when button 1 is clicked
+            } else if (i == 3) {
+                view.tool = null;
+                view.cameraLocked = false; // Unlock the camera when button 1 is clicked
+            } else if (i == 4) {
+                view.tool = "delete";
+                view.cameraLocked = true; // Unlock the camera when button 1 is clicked
             } else {
                 view.tool = null;
-                view.cameraLocked = true; // Lock the camera when any other button is clicked
+                view.cameraLocked = false; // Lock the camera when any other button is clicked
             }
         }
         buttonY += buttonHeight + buttonSpacing;
@@ -136,12 +190,16 @@ function mousePressed() {
     if (view.tool == "rectangle") {
         initialMouseX = Math.round(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
         initialMouseY = Math.round(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
-        mapObjects.rectangles.push({
+        
+        tmpMapObject = {
             x: initialMouseX,
             y: initialMouseY,
             width: 0,
-            height: 0
-        });
+            height: 0,
+            type: tileSelect.value()
+        }
+    } else if (view.tool == "touch") {
+        // Fix a single tap not painting properly
     }
 }
 
@@ -158,11 +216,70 @@ function mouseDragged() {
     }
 
     // If the rectangle tool is selected, update the size of the current rectangle
+    var currentMouseX, currentMouseY;
+
     if (view.tool == "rectangle") {
-        var rectangle = mapObjects.rectangles[mapObjects.rectangles.length - 1];
-        var currentMouseX = Math.round(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
-        var currentMouseY = Math.round(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
-        rectangle.width = currentMouseX - initialMouseX;
-        rectangle.height = currentMouseY - initialMouseY;
+        currentMouseX = Math.round(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
+        currentMouseY = Math.round(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
+        
+        tmpMapObject.width = currentMouseX - initialMouseX;
+        tmpMapObject.height = currentMouseY - initialMouseY;
+    
+    } else if (view.tool == "touch") {
+        currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
+        currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
+
+        for (var i = 0; i < mapObjects.tiles.length; i++) {
+            if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
+                mapObjects.tiles.splice(i, 1);
+            }
+        }
+
+        mapObjects.tiles.push({
+            x: currentMouseX,
+            y: currentMouseY,
+            type: tileSelect.value()
+        });
     }
+}
+
+/*mapObjects.rectangles.push({
+            x: initialMouseX,
+            y: initialMouseY,
+            width: 0,
+            height: 0
+        });*/
+
+function mouseReleased() {
+    if (view.tool == "rectangle") {
+        var widthTileNum = Math.abs(tmpMapObject.width / gridSize);
+        var heightTileNum = Math.abs(tmpMapObject.height / gridSize);
+
+        //Deletes any tiles that are in the same location as the new tiles
+        if(tmpMapObject.width != 0) {
+            for(var i = 0; i < mapObjects.tiles.length; i++) {
+                if(mapObjects.tiles[i].x == tmpMapObject.x && mapObjects.tiles[i].y == tmpMapObject.y) {
+                    mapObjects.tiles.splice(i, 1);
+                }
+            }
+        }
+
+        for (var i = 0; i < heightTileNum; i++) {
+            for (var j = 0; j < widthTileNum; j++) {
+                mapObjects.tiles.push({
+                    x: (tmpMapObject.width < 0 ? tmpMapObject.x - gridSize + j * gridSize * -1 : tmpMapObject.x + j * gridSize * 1),
+                    y: (tmpMapObject.height < 0 ? tmpMapObject.y - gridSize + i * gridSize * -1 : tmpMapObject.y + i * gridSize * 1),
+                    type: tileSelect.value()
+                });
+            }
+        }
+
+        tmpMapObject.x = 0;
+        tmpMapObject.y = 0;
+        tmpMapObject.width = 0;
+        tmpMapObject.height = 0;
+        tmpMapObject.type = null;
+
+    }
+
 }
