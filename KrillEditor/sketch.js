@@ -38,11 +38,15 @@ function setup() {
     tileSelect.option('Wall');
     tileSelect.option('Floor');
 
-    let button = createButton('click me');
-    button.position(0, 100);
+    let importBTN = createButton('Import Map');
+    importBTN.position(140, 0);
 
-    // Use the button to change the background color.
-    button.mousePressed(() => exportTiles());
+    importBTN.mousePressed(() => importTiles());
+
+    let exportBTN = createButton('Export Map');
+    exportBTN.position(140, 29);
+
+    exportBTN.mousePressed(() => exportTiles());
 
 }
 
@@ -57,7 +61,8 @@ function exportTiles() {
     let highX = mapObjects.tiles[0].x;
     let highY = mapObjects.tiles[0].y;
 
-    for (var i = 0; i < mapObjects.tiles.length; i++) {
+    //Find the lowest and highest x and y values
+    for (var i = 1; i < mapObjects.tiles.length; i++) {
         if (mapObjects.tiles[i].x < lowX) {
             lowX = mapObjects.tiles[i].x;
         }
@@ -72,17 +77,24 @@ function exportTiles() {
         }
     }
 
+    //Round the values to the nearest grid size accounting for JS division error
+    lowX = Math.round(lowX / gridSize);
+    lowY = Math.round(lowY / gridSize);
+    highX = Math.round(highX / gridSize);
+    highY = Math.round(highY / gridSize);
+
     mapWidth = highX - lowX;
     mapHeight = highY - lowY;
 
+    //Find the locations of all tiles in the order they exist in the map
     let curX = lowX;
-    for(var i = 0; i < mapHeight; i++) {
+    for(var i = 0; i <= mapHeight; i++) {
         let curX = lowX;
         let row = '';
-        for(var j = 0; j < mapWidth; j++) {
+        for(var j = 0; j <= mapWidth; j++) {
             let found = false;
             for(var k = 0; k < mapObjects.tiles.length; k++) {
-                if(mapObjects.tiles[k].x == curX && mapObjects.tiles[k].y == i + lowY) {
+                if(Math.round(mapObjects.tiles[k].x / gridSize) == curX && Math.round(mapObjects.tiles[k].y / gridSize) == i + lowY) {
                     row += findTypeChar(mapObjects.tiles[k].type);
                     found = true;
                     break;
@@ -96,11 +108,28 @@ function exportTiles() {
         outputMap.push(row);
     }
 
-    for(var i = 0; i < outputMap.length; i++) {
+    /*for(var i = 0; i < outputMap.length; i++) {
         console.log(outputMap[i]);
-    }
+    }*/
+
+    //Convert outputMap to a string
+    let outputString = outputMap.join('\n');
+
+    //Create a Blob Object from the string
+    let blob = new Blob([outputString], {type: 'text/plain'});
+
+    //Create a download link
+    let link = document.createElement('a');
+    link.download = 'output.txt';
+    link.href = URL.createObjectURL(blob);
+
+    //Add the temporary link to the document for downloading
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
+//Add more tile types/make dynamic
 function findTypeChar(type) {
     if(type == "Wall") {
         return 'W';
@@ -310,6 +339,15 @@ function mouseDragged() {
             y: currentMouseY,
             type: tileSelect.value()
         });
+    } else if (view.tool == "delete") {
+        currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
+        currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
+
+        for (var i = 0; i < mapObjects.tiles.length; i++) {
+            if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
+                mapObjects.tiles.splice(i, 1);
+            }
+        }
     }
 }
 
