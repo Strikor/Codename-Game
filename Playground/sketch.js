@@ -23,18 +23,18 @@ function setup() {
 
 // enemy object
 var enemy = {
-    x: 150,
-    y: 150,
+    x: 120,
+    y: 120,
     speed: 100, // pixel per seconds
-    directionX: 0,
+    directionX: 1,
     directionY: 0,
-    ChangeInterval: 120, // interval in frame to change direction
+    size: 20, // enemy size
 };
 
-// function yo update enemy position
+// function to update enemy position
 function updateEnemy(deltaTime) {
-    // randomly change direction every 'changeInterval' frames
-    if (frameCount % enemy.changeInterval === 0) {
+    // randomly change direction to create unpredicted movement
+    if (frameCount % 60 === 0) { // Change direction every 60 frame
         enemy.directionX = random([-1, 0, 1]); // chooses one of those numbers for x direction
         enemy.directionY = random([-1, 0, 1]); // chooses one of those numbers for y direction
     }
@@ -43,15 +43,15 @@ function updateEnemy(deltaTime) {
     enemy.x += enemy.directionX * enemy.speed * deltaTime;
     enemy.y += enemy.directionY * enemy.speed * deltaTime;
 
-    //keep enemy withtin canvas boundries
-    enemy.x = constrain(enemy.x, 0, width);
-    enemy.y = constrain(enemy.y, 0, height);
+    //keep enemy withtin green canvas boundries
+    enemy.x = constrain(enemy.x, -100, 400 - enemy.size);
+    enemy.y = constrain(enemy.y, -200, 300 - enemy.size);
 }
 
 //function to draw enemy
 function drawEnemy() {
     fill(255, 0, 0); //enemy color
-    ellipse(enemy.x, enemy.y, 30, 30); //draw enemy as a circle
+    ellipse(enemy.x, enemy.y, enemy.size); //draw enemy as a circle
 }
 
 function draw() {
@@ -76,7 +76,8 @@ function draw() {
 
     image(krill.sprite, krill.x, krill.y, -128, 64);
 
-    drawEnemy(); // enemy drawing
+    updateEnemy(deltaTime); //pass deltaTime correctly
+    drawEnemy();
 
     resetMatrix();
     fill(0, 0, 0, 100);
