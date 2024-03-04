@@ -26,3 +26,8 @@ The krill is not animated because I saved it as a static file, but I think this 
 ## Krill movement
 
 The krill movement is very basic, I did not implement the movement mechanisms our team has done yet.
+
+## Walls32.png Usage 
+
+The png file consists of 8 X 8 tiles, each being 32x32 px, the top left blank tile is row 0, col 0, the 
+bottom right corner, also blank, is row 7, col 7. 

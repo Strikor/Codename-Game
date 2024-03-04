@@ -6,12 +6,12 @@ let room;
 let krill; 
 
 function preload(){
-    sheetImg = loadImage('7x7.png'); 
+    sheetImg = loadImage('walls32.png');      //replaced with self-created graphics
     spriteImg = loadImage('krillTrim3.png');
 }
 
 function setup() {
-    new Canvas(540, 540, 'pixelated');
+    new Canvas(540, 540, 'pixelated'); //may display better with 'pixelated x2' 
 
     krill = new Sprite;
     krill.spriteSheet = spriteImg;
@@ -128,6 +128,6 @@ function setup() {
 }
 
 function draw() {
-    background('lightgray')
+    background('lightgray')  //maybe make some sort of sciency blue gradient for final product ~~(. _ .)~~
     //noLoop();
 }
