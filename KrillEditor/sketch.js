@@ -38,6 +38,76 @@ function setup() {
     tileSelect.option('Wall');
     tileSelect.option('Floor');
 
+    let button = createButton('click me');
+    button.position(0, 100);
+
+    // Use the button to change the background color.
+    button.mousePressed(() => exportTiles());
+
+}
+
+function exportTiles() {
+    var outputMap = [];
+
+    let mapWidth = 0;
+    let mapHeight = 0;
+
+    let lowX = mapObjects.tiles[0].x;
+    let lowY = mapObjects.tiles[0].y;
+    let highX = mapObjects.tiles[0].x;
+    let highY = mapObjects.tiles[0].y;
+
+    for (var i = 0; i < mapObjects.tiles.length; i++) {
+        if (mapObjects.tiles[i].x < lowX) {
+            lowX = mapObjects.tiles[i].x;
+        }
+        if (mapObjects.tiles[i].y < lowY) {
+            lowY = mapObjects.tiles[i].y;
+        }
+        if (mapObjects.tiles[i].x > highX) {
+            highX = mapObjects.tiles[i].x;
+        }
+        if (mapObjects.tiles[i].y > highY) {
+            highY = mapObjects.tiles[i].y;
+        }
+    }
+
+    mapWidth = highX - lowX;
+    mapHeight = highY - lowY;
+
+    let curX = lowX;
+    for(var i = 0; i < mapHeight; i++) {
+        let curX = lowX;
+        let row = '';
+        for(var j = 0; j < mapWidth; j++) {
+            let found = false;
+            for(var k = 0; k < mapObjects.tiles.length; k++) {
+                if(mapObjects.tiles[k].x == curX && mapObjects.tiles[k].y == i + lowY) {
+                    row += findTypeChar(mapObjects.tiles[k].type);
+                    found = true;
+                    break;
+                }
+            }
+            if(!found) {
+                row += ' ';
+            }
+            curX++;
+        }
+        outputMap.push(row);
+    }
+
+    for(var i = 0; i < outputMap.length; i++) {
+        console.log(outputMap[i]);
+    }
+}
+
+function findTypeChar(type) {
+    if(type == "Wall") {
+        return 'W';
+    } else if(type == "Floor") {
+        return 'F';
+    }
+
 }
 
 function windowResized() {
