@@ -38,6 +38,167 @@ function setup() {
     tileSelect.option('Wall');
     tileSelect.option('Floor');
 
+    let importBTN = createButton('Import Map');
+    importBTN.position(140, 0);
+
+    importBTN.mousePressed(() => importTiles());
+
+    let exportBTN = createButton('Export Map');
+    exportBTN.position(140, 29);
+
+    exportBTN.mousePressed(() => exportTiles());
+
+}
+
+function exportTiles() {
+    var outputMap = [];
+
+    let mapWidth = 0;
+    let mapHeight = 0;
+
+    let lowX = mapObjects.tiles[0].x;
+    let lowY = mapObjects.tiles[0].y;
+    let highX = mapObjects.tiles[0].x;
+    let highY = mapObjects.tiles[0].y;
+
+    //Find the lowest and highest x and y values
+    for (var i = 1; i < mapObjects.tiles.length; i++) {
+        if (mapObjects.tiles[i].x < lowX) {
+            lowX = mapObjects.tiles[i].x;
+        }
+        if (mapObjects.tiles[i].y < lowY) {
+            lowY = mapObjects.tiles[i].y;
+        }
+        if (mapObjects.tiles[i].x > highX) {
+            highX = mapObjects.tiles[i].x;
+        }
+        if (mapObjects.tiles[i].y > highY) {
+            highY = mapObjects.tiles[i].y;
+        }
+    }
+
+    //Round the values to the nearest grid size accounting for JS division error
+    lowX = Math.round(lowX / gridSize);
+    lowY = Math.round(lowY / gridSize);
+    highX = Math.round(highX / gridSize);
+    highY = Math.round(highY / gridSize);
+
+    mapWidth = highX - lowX;
+    mapHeight = highY - lowY;
+
+    //Find the locations of all tiles in the order they exist in the map
+    let curX = lowX;
+    for(var i = 0; i <= mapHeight; i++) {
+        let curX = lowX;
+        let row = '';
+        for(var j = 0; j <= mapWidth; j++) {
+            let found = false;
+            for(var k = 0; k < mapObjects.tiles.length; k++) {
+                if(Math.round(mapObjects.tiles[k].x / gridSize) == curX && Math.round(mapObjects.tiles[k].y / gridSize) == i + lowY) {
+                    row += findTypeChar(mapObjects.tiles[k].type);
+                    found = true;
+                    break;
+                }
+            }
+            if(!found) {
+                row += ' ';
+            }
+            curX++;
+        }
+        outputMap.push(row);
+    }
+
+    /*for(var i = 0; i < outputMap.length; i++) {
+        console.log(outputMap[i]);
+    }*/
+
+    //Convert outputMap to a string
+    let outputString = outputMap.join('\n');
+
+    //Create a Blob Object from the string
+    let blob = new Blob([outputString], {type: 'text/plain'});
+
+    //Create a download link
+    let link = document.createElement('a');
+    link.download = 'output.txt';
+    link.href = URL.createObjectURL(blob);
+
+    //Add the temporary link to the document for downloading
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+function importTiles() {
+    // Create the file input and hide it
+    let input = createFileInput(handleFile);
+    input.style('display', 'none');
+
+    // Create the buttons
+    let tileSelect = createSelect();
+    tileSelect.position(0, 50);
+    tileSelect.option('Wall');
+    tileSelect.option('Floor');
+
+    let importBTN = createButton('Import Map');
+    importBTN.position(140, 0);
+    importBTN.mousePressed(() => input.elt.click()); // Click the hidden file input element when the button is pressed
+    input.elt.click();
+
+    let exportBTN = createButton('Export Map');
+    exportBTN.position(140, 29);
+    exportBTN.mousePressed(() => exportTiles());
+}
+
+function handleFile(file) {
+    if (file.type === 'text') {
+        // Split the file data into lines
+        let lines = file.data.split('\n');
+        createTiles(lines);
+    } else {
+        console.log('Not a text file');
+    }
+}
+
+function createTiles(lines) {
+    // Clear the current tiles
+    mapObjects.tiles = [];
+
+    // Iterate over the lines in the file
+    for (let y = 0; y < lines.length; y++) {
+        let line = lines[y];
+
+        // Iterate over the characters in the line
+        for (let x = 0; x < line.length; x++) {
+            let char = line.charAt(x);
+
+            // Create a tile based on the character
+            let type;
+            if (char === 'W') {
+                type = 'Wall';
+            } else if (char === 'F') {
+                type = 'Floor';
+            }
+
+            if (type) {
+                mapObjects.tiles.push({
+                    x: x * gridSize,
+                    y: y * gridSize,
+                    type: type
+                });
+            }
+        }
+    }
+}
+
+//Add more tile types/make dynamic
+function findTypeChar(type) {
+    if(type == "Wall") {
+        return 'W';
+    } else if(type == "Floor") {
+        return 'F';
+    }
+
 }
 
 function windowResized() {
@@ -240,6 +401,15 @@ function mouseDragged() {
             y: currentMouseY,
             type: tileSelect.value()
         });
+    } else if (view.tool == "delete") {
+        currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
+        currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
+
+        for (var i = 0; i < mapObjects.tiles.length; i++) {
+            if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
+                mapObjects.tiles.splice(i, 1);
+            }
+        }
     }
 }
 
