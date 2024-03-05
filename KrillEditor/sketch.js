@@ -129,6 +129,68 @@ function exportTiles() {
     document.body.removeChild(link);
 }
 
+function importTiles() {
+    // Create the file input and hide it
+    let input = createFileInput(handleFile);
+    input.style('display', 'none');
+
+    // Create the buttons
+    let tileSelect = createSelect();
+    tileSelect.position(0, 50);
+    tileSelect.option('Wall');
+    tileSelect.option('Floor');
+
+    let importBTN = createButton('Import Map');
+    importBTN.position(140, 0);
+    importBTN.mousePressed(() => input.elt.click()); // Click the hidden file input element when the button is pressed
+    input.elt.click();
+
+    let exportBTN = createButton('Export Map');
+    exportBTN.position(140, 29);
+    exportBTN.mousePressed(() => exportTiles());
+}
+
+function handleFile(file) {
+    if (file.type === 'text') {
+        // Split the file data into lines
+        let lines = file.data.split('\n');
+        createTiles(lines);
+    } else {
+        console.log('Not a text file');
+    }
+}
+
+function createTiles(lines) {
+    // Clear the current tiles
+    mapObjects.tiles = [];
+
+    // Iterate over the lines in the file
+    for (let y = 0; y < lines.length; y++) {
+        let line = lines[y];
+
+        // Iterate over the characters in the line
+        for (let x = 0; x < line.length; x++) {
+            let char = line.charAt(x);
+
+            // Create a tile based on the character
+            let type;
+            if (char === 'W') {
+                type = 'Wall';
+            } else if (char === 'F') {
+                type = 'Floor';
+            }
+
+            if (type) {
+                mapObjects.tiles.push({
+                    x: x * gridSize,
+                    y: y * gridSize,
+                    type: type
+                });
+            }
+        }
+    }
+}
+
 //Add more tile types/make dynamic
 function findTypeChar(type) {
     if(type == "Wall") {
