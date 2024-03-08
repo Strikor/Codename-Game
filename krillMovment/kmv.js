@@ -2,21 +2,22 @@ let krill, enemy;      //name of sprite(s) go here
 
 function preload() {
     //                  x,   y,  w,  h    where: x, y are position on canvas 
- 	krill = new Sprite(240, 135, 64, 32);
+ 	krill = new Sprite(240, 135, 32, 64);
 	krill.spriteSheet = 'assets/krillWalk4D.png';
-	krill.anis.offset.x = 2;             //
+	krill.anis.offset.x = 0;             //
 	krill.anis.frameDelay = 10;          //controls how quickly frames are switched between
-    
+   
 
 	krill.addAnis({
-		walk: { row: 0, frames: 6 },     //row determined by height(px) of sprite(I think??)
-        standh: { row: 0, frames: 1},
+		walk: { row: 0, frameSize: [64, 32], frames: 6 },     //row determined by height(px) of sprite(I think??)
+        //standh: { row: 0, frames: 1},
         standv: { row: 1, frameSize: [32, 64], frames: 1},
 		up: { row: 1, frameSize: [32, 64], frames: 6 }
 	});
 
     krill.collider = 'dynamic'; 
 
+    krill.rotationSpeed = 0;
 	krill.changeAni('walk');
     
     
@@ -36,11 +37,15 @@ function draw() {
     krill.speed = 1.5;            //try some other speeds, I like 1.5  
 
     if (kb.pressing('left')){
+        krill.w = 64;
+        krill.h = 32;
         krill.direction = 180;        //direction of movement: R = 0, L = 180, up = -90, down = 90
         krill.changeAni('walk');
     	krill.mirror.x = true;        //since ani is right facing, need to mirror
     }
     else if (kb.pressing('right')){
+        krill.w = 64;
+        krill.h = 32;
         krill.direction = 0; 
         krill.changeAni('walk');
     	krill.mirror.x = false;
@@ -48,7 +53,7 @@ function draw() {
     else if(kb.pressing('down')){ 
         krill.direction = 90; 
         krill.changeAni('up');
-        krill.mirror.x = true;  
+        krill.mirror.y = true;  
     }
     else if(kb.pressing('up')){ 
         krill.direction = -90; 
@@ -58,7 +63,14 @@ function draw() {
     else{
         krill.speed = 0; 
         krill.changeAni('standv');
+        krill.mirror.x=false;
+        krill.mirror.y=false;
+        krill.w = 32;
+        krill.h = 64;
     } 
+
+    krill.debug = true;
+
 
 }
 
