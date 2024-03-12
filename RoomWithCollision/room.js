@@ -1,12 +1,12 @@
 
 let sheetImg; 
 let tLcorner, tRcorner, bLcorner, bRcorner, vWall, hWall; 
-let pWall, rWall, rrWall, aWall, bWall, cWall, dWall;
+let pWall, rWall, rrWall, aWall, bWall, cWall, dWall, Iht, Ihb, Ivr, Ivl, sqr;
 let room; 
 let krill; 
 
 function preload(){
-    sheetImg = loadImage('walls32.png');      //replaced with self-created graphics
+    sheetImg = loadImage('walls16.png');      //replaced with self-created graphics
     spriteImg = loadImage('krillTrim3.png');
 }
 
@@ -22,102 +22,147 @@ function setup() {
     tLcorner = new Group();
     tLcorner.collider = "static"; 
     tLcorner.spriteSheet= sheetImg; 
-    tLcorner.addAni({h:32, w: 32, row: 4, col: 3})
+    tLcorner.addAni({h:16, w: 16, row: 9, col: 7})
     tLcorner.tile = '1'; 
 
     tRcorner = new Group();
     tRcorner.collider = "static"; 
     tRcorner.spriteSheet= sheetImg; 
-    tRcorner.addAni({w:32, h:32, row:0, col:6})
+    tRcorner.addAni({h:16, w: 16, row:1, col:13})
     tRcorner.tile = '2'; 
 
     bLcorner = new Group();
     bLcorner.collider = "static"; 
     bLcorner.spriteSheet= sheetImg; 
-    bLcorner.addAni({w:32, h:32, row:6, col:0})
+    bLcorner.addAni({h:16, w: 16, row:13, col:1})
     bLcorner.tile = '3'; 
 
     bRcorner = new Group();
     bRcorner.collider = "static"; 
     bRcorner.spriteSheet= sheetImg; 
-    bRcorner.addAni({w:32, h:32, row:4, col:4})
+    bRcorner.addAni({h:16, w: 16, row:9, col:9})
     bRcorner.tile = '4'; 
 
     vWall = new Group();
     vWall.collider = "static";  
     vWall.spriteSheet= sheetImg; 
-    vWall.addAni({w:32, h:32, row:4, col:5})
+    vWall.addAni({h:16, w: 16, row:6, col:1})
     vWall.tile = 'v'; 
     
     hWall = new Group();
     hWall.collider = "static";  
     hWall.spriteSheet= sheetImg; 
-    hWall.addAni({w:32, h:32, row:5, col:4})
+    hWall.addAni({h:16, w: 16, row:3, col:6})
     hWall.tile = 'h'; 
 
     pWall = new Group(); // perpendicular
     pWall.collider = "static";
     pWall.spriteSheet=sheetImg;
-    pWall.addAni({w:32, h:32, row:6, col:3})
+    pWall.addAni({h:16, w: 16, row:13, col:7})
     pWall.tile = 'p';
 
     rWall = new Group();
     rWall.collider = "static";
     rWall.spriteSheet=sheetImg;
-    rWall.addAni({w:32, h:32, row:4, col:3})
+    rWall.addAni({h:16, w: 16, row:4, col:3})
     rWall.tile = 'r';
 
     rrWall = new Group();
     rrWall.collider = "static";
     rrWall.spriteSheet=sheetImg;
-    rrWall.addAni({w:32, h:32, row:2, col:6})
+    rrWall.addAni({h:16, w: 16, row:14, col:13})
     rrWall.tile = '>';
 
     aWall = new Group();
     aWall.collider = "static";
     aWall.spriteSheet=sheetImg;
-    aWall.addAni({w:32, h:32, row:1, col:1})
+    aWall.addAni({h:16, w: 16, row:3, col:3})
     aWall.tile = 'a';
 
     bWall = new Group();
     bWall.collider = "static";
     bWall.spriteSheet=sheetImg;
-    bWall.addAni({w:32, h:32, row:5, col:6})
+    bWall.addAni({h:16, w: 16, row:11, col:13})
     bWall.tile = 'b';
 
     cWall = new Group();
     cWall.collider = "static";
     cWall.spriteSheet=sheetImg;
-    cWall.addAni({w:32, h:32, row:6, col:5})
+    cWall.addAni({h:16, w: 16, row:13, col:11})
     cWall.tile = 'c';
+
+    Iht = new Group();
+    Iht.collider = "static";
+    Iht.spriteSheet=sheetImg;
+    Iht.addAni({h:16, w: 16, row:11, col:12})
+    Iht.tile = '-';
+
+    Ihb = new Group();
+    Ihb.collider = "static";
+    Ihb.spriteSheet=sheetImg;
+    Ihb.addAni({h:16, w: 16, row:13, col:12})
+    Ihb.tile = '_';
+
+    Ivr = new Group();
+    Ivr.collider = "static";
+    Ivr.spriteSheet=sheetImg;
+    Ivr.addAni({h:16, w: 16, row:12, col:13})
+    Ivr.tile = '+';
+
+    Ivl = new Group();
+    Ivl.collider = "static";
+    Ivl.spriteSheet=sheetImg;
+    Ivl.addAni({h:16, w: 16, row:12, col:11})
+    Ivl.tile = '*';
+
+    sqr = new Group();
+    sqr.collider = "static";
+    sqr.spriteSheet=sheetImg;
+    sqr.addAni({h:16, w: 16, row:12, col:12})
+    sqr.tile = '~';
 
     dWall = new Group();
     dWall.collider = "static";
     dWall.spriteSheet=sheetImg;
-    dWall.addAni({w:32, h:32, row:6, col:4})
+    dWall.addAni({h:16, w: 16, row:13, col:9})
     dWall.tile = 'd';
     
     room = new Tiles( 
         [
-            '1hhhhhhhhhhhhhhh2',
-            'v...............v',
-            'v...............v',
-            'v...............v',
-            'v...............v',
-            'v.........ab....v',
-            'v....rhhd.c>....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            '3hhhhphhhhhphhhh4'
+            '1hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh2',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v..............................v',
+            'v.......................a-b....v',
+            'v.......................*~+....v',
+            'v..............1hhd.....c_>....v',
+            'v..............v..........v....v',
+            'v..............v..........v....v',
+            'v..............v..........v....v',
+            'v..............v..........v....v',
+            'v..............v..........v....v',
+            'v..............v..........v....v',
+            'v..............v..........v....v',
+            'v..............v..........v....v',
+            '3hhhhhhhhhhhhhhphhhhhhhhhhphhhh4'
         ],
         15,32, //px from left of canvas, px from top of canvas
-        32,32  //h, w in px of each tile
+        16,16  //h, w in px of each tile
     ) 
 
     krill.speed = 3;
@@ -128,6 +173,7 @@ function setup() {
 }
 
 function draw() {
-    background('lightgray')  //maybe make some sort of sciency blue gradient for final product ~~(. _ .)~~
+    background('lightblue')  //maybe make some sort of sciency blue gradient for final product ~~(. _ .)~~
     //noLoop();
 }
+ 

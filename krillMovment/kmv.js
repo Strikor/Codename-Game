@@ -1,25 +1,17 @@
 let krill, enemy;      //name of sprite(s) go here
 
 function preload() {
-    //                  x,   y,  w,  h    where: x, y are position on canvas 
+    //                  x,   y,  h,  w    where: x, y are position on canvas 
  	krill = new Sprite(240, 135, 64, 32);
 	krill.spriteSheet = 'assets/krillWalk4D.png';
 	krill.anis.offset.x = 2;             //
 	krill.anis.frameDelay = 10;          //controls how quickly frames are switched between
-    
-
 	krill.addAnis({
 		walk: { row: 0, frames: 6 },     //row determined by height(px) of sprite(I think??)
         standh: { row: 0, frames: 1},
-        standv: { row: 1, frameSize: [32, 64], frames: 1},
-		up: { row: 1, frameSize: [32, 64], frames: 6 }
 	});
-
     krill.collider = 'dynamic'; 
-
 	krill.changeAni('walk');
-    
-    
 }
 
 function setup() {
@@ -90,39 +82,49 @@ function draw() {
         krill.speed = 2; // Restore normal speed otherwise
     }
 
-     if (kb.pressing('left')){
+    if (kb.pressing('left')){
+        krill.rotation = 0;
         krill.direction = 180;        //direction of movement: R = 0, L = 180, up = -90, down = 90
         krill.changeAni('walk');
     	krill.mirror.x = true;        //since ani is right facing, need to mirror
     }
     else if (kb.pressing('right')){
+        krill.rotation = 0;
         krill.direction = 0; 
         krill.changeAni('walk');
     	krill.mirror.x = false;
     } 
     else if(kb.pressing('down')){ 
+        krill.rotation = -90;           //ensure the hitBox around the sprite follows its change in direction
         krill.direction = 90; 
-        krill.changeAni('up');
-        krill.mirror.x = true;  
+        krill.changeAni('walk');
+        krill.mirror.x = true; 
     }
     else if(kb.pressing('up')){ 
+        krill.rotation = -90; 
         krill.direction = -90; 
-        krill.changeAni('up');
-        krill.mirror.x = false; 
+        krill.changeAni('walk');
+        krill.mirror.x = false;
     }
     else{
-        krill.speed = 0; 
-        krill.changeAni('standv');
+        if (krill.direction == 90){
+            krill.speed = 0; 
+            krill.rotation = 90; 
+            krill.changeAni('standh');
+            krill.mirror.x = false;
+        } 
+        else if ( krill.direction == -90){
+            krill.speed = 0; 
+            krill.rotation = 90; 
+            krill.changeAni('standh');
+            krill.mirror.x = true;
+        }
+        else{
+            krill.speed = 0; 
+            krill.rotation = 0; 
+            krill.changeAni('standh');
+        }
     } 
+    krill.rotationLock = true;          //keeps sprite from spinning when hitting wall
+    krill.debug = true; 
 }
-
-
-
-// some notes: 
-// because the spite is assymetrical the animations are of different height and width so this messes up 
-// collision, as seen with my simple wall sprite thingy, there are two ways to go about this
-// 1. keep it as is, one sprite, two different animation sizes, somehow deal with collision some other way
-// 2. have two different sprites, 1 for up/down, 1, for l/r 
-// 3. set the sprite h/w to some constant number and have the actual drawings be larger than this, thus
-//    making it so the hit box doesnt actually line up
-// I am not sure what direction to go with this so some feedback would be greatly appreciated

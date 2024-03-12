@@ -1,0 +1,21 @@
+sorry this isnt an md file i dont feel like formatting that rn
+
+anyway, in the branch titled: cleanUp I have done the following as of the commit titled: []
+
+1. I began combining rooms with collision with krill movement into a single file called devRoom, 
+    
+2. in devRoom as of 12:58 am on 3/12/24 the krill moves smoothly in 4 directions with the wasd/arrow controls, 
+   rotation is taken care of 
+
+3. the up to date wall tileSheet was redesigned to be 16x16 tiles so the collision is closer to the actual tile 
+   borders
+
+4. in addition to the devRoom folder with working wall collision and krill movement, I also moved some old files/
+   folders into a folder titled "oldStuff"
+   - once the slowDown tiles are implemented in devRoom, krillMovemnet and RoomWithCollision can be moved there 
+   as well
+
+It is my intention with devRoom that new feature branches can be built and implemented in dev room so each branch 
+can have a good foundational starting point for krill controls and walls with collisons
+
+sorry this is so poorly written IDK how it got this late
