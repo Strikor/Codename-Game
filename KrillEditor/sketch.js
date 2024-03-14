@@ -10,6 +10,8 @@ var view = {
 
 var gridSize = 64;
 
+
+
 var tmpMapObject = {
     x: 0,
     y: 0,
@@ -22,6 +24,22 @@ var mapObjects = {
     tiles: []//,
     //entities: []
 };
+
+var userObj = [];
+
+
+var propertiesBox = { 
+    propUp: false,
+    invisible: false
+
+};
+
+function  loadPropBox(){
+    propertiesBox.propUp = true;
+}
+function unloadPropBox(){
+    propertiesBox.propUp = false;
+}
 
 function preload() {
 
@@ -47,6 +65,7 @@ function setup() {
     exportBTN.position(140, 29);
 
     exportBTN.mousePressed(() => exportTiles());
+
 
 }
 
@@ -208,7 +227,16 @@ function windowResized() {
 }
 
 function draw() {
-    background(220);
+    background(250);
+
+    if(propertiesBox.propUp){
+    newShape = rect(200, 50, 150, 100);
+    //checkbox = createCheckbox(' checkbox'); //Prints infinite checkboxes
+    //checkbox.position(150, 100);
+    newShape.fill('red');
+    //newShape.textSize(10);
+    text("hi jacob!!!", 215, 100);
+    }
 
     translate(width / 2, height / 2);
     scale(view.zoom);
@@ -268,7 +296,7 @@ function draw() {
         if ((i == 0) && view.tool == "select" ||
                 (i == 1 && view.tool == "rectangle") ||
                 (i == 2 && view.tool == "touch") ||
-                (i == 3 && view.tool == null) ||
+                (i == 3 && view.tool == "Button 4") ||
                 (i == 4 && view.tool == "delete")) { // Check if button 1 or 2 is selected
 
             fill(255, 0, 0, 100); // Draw the selected button in red
@@ -334,7 +362,7 @@ function mousePressed() {
                 view.tool = "touch";
                 view.cameraLocked = true; // Unlock the camera when button 1 is clicked
             } else if (i == 3) {
-                view.tool = null;
+                view.tool = "Button 4";
                 view.cameraLocked = false; // Unlock the camera when button 1 is clicked
             } else if (i == 4) {
                 view.tool = "delete";
@@ -361,6 +389,11 @@ function mousePressed() {
         }
     } else if (view.tool == "touch") {
         // Fix a single tap not painting properly
+    } else if (view.tool == "Button 4"){
+        loadPropBox();
+    }
+    if(view.tool != "Button 4"){
+        unloadPropBox();
     }
 }
 
@@ -413,12 +446,6 @@ function mouseDragged() {
     }
 }
 
-/*mapObjects.rectangles.push({
-            x: initialMouseX,
-            y: initialMouseY,
-            width: 0,
-            height: 0
-        });*/
 
 function mouseReleased() {
     if (view.tool == "rectangle") {
