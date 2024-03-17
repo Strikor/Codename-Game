@@ -19,7 +19,7 @@ var tmpMapObject = {
 };
 
 var mapObjects = {
-    tiles: []//,
+    tiles: []
     //entities: []
 };
 
@@ -48,6 +48,9 @@ function setup() {
 
     exportBTN.mousePressed(() => exportTiles());
 
+    let testBTN = createButton('Test Map');
+    testBTN.position(140, 58); 
+    testBTN.mousePressed(() => testMap()); // Call testMap() function when the button is pressed
 }
 
 function exportTiles() {
@@ -452,4 +455,8 @@ function mouseReleased() {
 
     }
 
+}
+function testMap() {
+    exportTiles();
+   window.location.href = 'dev.html';
 }
