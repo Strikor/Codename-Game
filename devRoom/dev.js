@@ -21,7 +21,7 @@ function preload(){
 }
 
 function setup() {
-    new Canvas(540, 540, 'pixelated'); //may display better with 'pixelated x2' 
+    new Canvas(1280, 720, 'pixelated'); //may display better with 'pixelated x2' 
 	allSprites.pixelPerfect = true;
 
     tLcorner = new Group();
