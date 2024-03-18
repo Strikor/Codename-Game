@@ -1,13 +1,12 @@
 let sheetImg; 
 let tLcorner, tRcorner, bLcorner, bRcorner, vWall, hWall; 
 let pWall, rWall, rrWall, aWall, bWall, cWall, dWall;
-let room;
 
-function preload(){
-    sheetImg = loadImage('assets/walls32.png');      //replaced with self-created graphics
+function loadGroupSprites(){
+    sheetImg = loadImage('./assets/walls32.png');      //replaced with self-created graphics
 }
 
-function setup() {
+function loadGroups() {
     tLcorner = new Group();
     tLcorner.collider = "static"; 
     tLcorner.spriteSheet= sheetImg; 
@@ -86,30 +85,6 @@ function setup() {
     dWall.addAni({w:32, h:32, row:6, col:4})
     dWall.tile = 'd';
 
-    room = new Tiles( 
-        [
-            '1hhhhhhhhhhhhhhh2',
-            'v...............v',
-            'v...............v',
-            'v...............v',
-            'v...............v',
-            'v.........ab....v',
-            'v....rhhd.c>....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            'v....v.....v....v',
-            '3hhhhphhhhhphhhh4'
-        ],
-        15,32, //px from left of canvas, px from top of canvas
-        32,32  //h, w in px of each tile
-    ) 
 
-    if (typeof startGame === 'function') {
-        startGame();
-    }
+
 }
