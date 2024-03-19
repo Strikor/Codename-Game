@@ -134,12 +134,52 @@ function exportTiles() {
         outputMap.push(row);
     }
 
+    let connectedMap = new Array(outputMap.length).fill('');
+
+    for(let i = 0; i < outputMap.length; i++) {
+        for(let j = 0; j < outputMap[i].length; j++) {
+            let connections = [0, 0, 0,
+                               0, 0, 0,
+                               0, 0, 0];
+            if(outputMap[i][j] == 'W') {
+                connections[4] = 1;
+                if(i != 0 && outputMap[i - 1][j] == 'W') {
+                    connections[1] = 1;
+                }
+                if(i != outputMap.length - 1 && outputMap[i + 1][j] == 'W') {
+                    connections[7] = 1;
+                }
+                if(j != 0 && outputMap[i][j - 1] == 'W') {
+                    connections[3] = 1;
+                }
+                if(j != outputMap[i].length - 1 && outputMap[i][j + 1] == 'W') {
+                    connections[5] = 1;
+                }
+                if(i != 0 && j != 0 && outputMap[i - 1][j - 1] == 'W') {
+                    connections[0] = 1;
+                }
+                if(i != 0 && j != outputMap[i].length - 1 && outputMap[i - 1][j + 1] == 'W') {
+                    connections[2] = 1;
+                }
+                if(i != outputMap.length - 1 && j != 0 && outputMap[i + 1][j - 1] == 'W') {
+                    connections[6] = 1;
+                }
+                if(i != outputMap.length - 1 && j != outputMap[i].length - 1 && outputMap[i + 1][j + 1] == 'W') {
+                    connections[8] = 1;
+                }
+            }
+
+            connectedMap[i] += findTileChar(connections);
+            
+        }
+    }
+
     /*for(var i = 0; i < outputMap.length; i++) {
         console.log(outputMap[i]);
     }*/
 
     //Convert outputMap to a string
-    let outputString = outputMap.join('\n');
+    let outputString = connectedMap.join('\n');
 
     console.log(outputString);
 
@@ -147,7 +187,7 @@ function exportTiles() {
 }
 
 function createLink(m) {
-    let b = new Blob([outputString], {type: 'text/plain'});
+    let b = new Blob([m], {type: 'text/plain'});
 
     //Create a download link
     let link = document.createElement('a');
@@ -158,6 +198,26 @@ function createLink(m) {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+}
+
+function findTileChar(con) {
+    for (let key in connecting) {
+        let match = true;
+        for (let i = 0; i < con.length; i++) {
+            if (connecting[key][i] !== 2 && con[i] !== connecting[key][i]) {
+                match = false;
+                break;
+            }
+        }
+        if (match) {
+            return key;
+        }
+    }
+    if(con[4] == 1) {
+        return 'h';
+    } else {
+        return ' ';
+    }
 }
 
 function importTiles() {
@@ -219,7 +279,6 @@ function findTypeChar(type) {
     } else if(type == "Floor") {
         return 'F';
     }
-
 }
 
 function windowResized() {

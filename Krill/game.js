@@ -13,8 +13,8 @@ function setupGame(m) {
     
     console.log(m);
 
-    m = m.replaceAll('W', 'h');
-    m = m.replaceAll('F', '.');
+    //m = m.replaceAll('W', 'h');
+    //m = m.replaceAll('F', '.');
 
     console.log(m);
 
