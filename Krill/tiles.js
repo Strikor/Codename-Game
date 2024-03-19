@@ -1,12 +1,15 @@
 let sheetImg; 
 let tLcorner, tRcorner, bLcorner, bRcorner, vWall, hWall; 
 let pWall, rWall, rrWall, aWall, bWall, cWall, dWall;
+let room;
 
-function loadGroupSprites(){
+let connecting;
+
+function loadTileSprites(){
     sheetImg = loadImage('./assets/walls32.png');      //replaced with self-created graphics
 }
 
-function loadGroups() {
+function loadTiles() {
     tLcorner = new Group();
     tLcorner.collider = "static"; 
     tLcorner.spriteSheet= sheetImg; 
@@ -49,11 +52,13 @@ function loadGroups() {
     pWall.addAni({w:32, h:32, row:6, col:3})
     pWall.tile = 'p';
 
+    /* Redundant same as 1
     rWall = new Group();
     rWall.collider = "static";
     rWall.spriteSheet=sheetImg;
     rWall.addAni({w:32, h:32, row:4, col:3})
     rWall.tile = 'r';
+    */
 
     rrWall = new Group();
     rrWall.collider = "static";
@@ -85,6 +90,43 @@ function loadGroups() {
     dWall.addAni({w:32, h:32, row:6, col:4})
     dWall.tile = 'd';
 
-
-
+    // Connection Mapping
+    connecting = {
+        '1': [0,0,0,
+              0,1,1,
+              0,1,0],
+        '2': [0,0,0,
+              1,1,0,
+              0,1,0],
+        '3': [0,1,0,
+              0,1,1,
+              0,0,0],
+        '4': [0,1,0,
+              1,1,0,
+              0,0,0],
+        'v': [0,1,0,
+              0,1,0,
+              0,1,0],
+        'h': [0,0,0,
+              1,1,1,
+              0,0,0],
+        'p': [0,1,0,
+              1,1,1,
+              0,0,0],
+        '>': [1,1,0,
+              1,1,0,
+              0,1,0],
+        'a': [0,0,0,
+              0,1,1,
+              0,1,1],
+        'b': [0,0,0,
+              1,1,1,
+              1,1,0],
+        'c': [0,1,1,
+              0,1,1,
+              0,0,0],
+        'd': [0,0,0,
+              1,1,0,
+              0,0,0]
+    }
 }

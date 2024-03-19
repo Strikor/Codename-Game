@@ -1,5 +1,5 @@
-//Testing
-//keeps track of screen space
+let state = "editor";
+
 var view = {
     x: 0,
     y: 0,
@@ -8,7 +8,7 @@ var view = {
     cameraLocked: false
 };
 
-var gridSize = 64;
+var gridSize = 32;
 
 var tmpMapObject = {
     x: 0,
@@ -24,11 +24,11 @@ var mapObjects = {
 };
 
 function preload() {
-
+    loadTileSprites();
 }
 
 function setup() {
-    createCanvas(400, 400);
+    new Canvas(540, 540)
     windowResized();
 
     //Tile Type Selector
@@ -44,13 +44,39 @@ function setup() {
     importBTN.mousePressed(() => importTiles());
 
     let exportBTN = createButton('Export Map');
-    exportBTN.position(140, 29);
+    exportBTN.position(223, 0);
 
-    exportBTN.mousePressed(() => exportTiles());
+    exportBTN.mousePressed(() => createLink(exportTiles()));
+
+    let testBTN = createButton('Test Map');
+    testBTN.position(307, 0);
+
+    testBTN.mousePressed(() => testTiles());
 
 }
 
+function testTiles() {
+    if(state == "editor") {
+        clear();
+        noCanvas();
+        state = "game";
+        spriteImg = loadImage('./assets/krillTrim3.png');
+        loadTiles();
+        setupGame(exportTiles());
+    } else {
+        clear();
+        noCanvas();
+        room.removeAll();
+        state = "editor";
+        setup();
+    }
+    
+}
+
 function exportTiles() {
+
+    console.log("Exporting Map");
+
     var outputMap = [];
 
     let mapWidth = 0;
@@ -115,13 +141,18 @@ function exportTiles() {
     //Convert outputMap to a string
     let outputString = outputMap.join('\n');
 
-    //Create a Blob Object from the string
-    let blob = new Blob([outputString], {type: 'text/plain'});
+    console.log(outputString);
+
+    return outputString;
+}
+
+function createLink(m) {
+    let b = new Blob([outputString], {type: 'text/plain'});
 
     //Create a download link
     let link = document.createElement('a');
     link.download = 'output.txt';
-    link.href = URL.createObjectURL(blob);
+    link.href = URL.createObjectURL(b);
 
     //Add the temporary link to the document for downloading
     document.body.appendChild(link);
@@ -134,20 +165,10 @@ function importTiles() {
     let input = createFileInput(handleFile);
     input.style('display', 'none');
 
-    // Create the buttons
-    let tileSelect = createSelect();
-    tileSelect.position(0, 50);
-    tileSelect.option('Wall');
-    tileSelect.option('Floor');
-
     let importBTN = createButton('Import Map');
-    importBTN.position(140, 0);
     importBTN.mousePressed(() => input.elt.click()); // Click the hidden file input element when the button is pressed
     input.elt.click();
 
-    let exportBTN = createButton('Export Map');
-    exportBTN.position(140, 29);
-    exportBTN.mousePressed(() => exportTiles());
 }
 
 function handleFile(file) {
@@ -208,6 +229,14 @@ function windowResized() {
 }
 
 function draw() {
+    if (state == "editor") {
+        drawEditor();
+    } else {
+        drawGame();
+    }
+}
+
+function drawEditor() {
     background(220);
 
     translate(width / 2, height / 2);
@@ -428,8 +457,13 @@ function mouseReleased() {
         //Deletes any tiles that are in the same location as the new tiles
         if(tmpMapObject.width != 0) {
             for(var i = 0; i < mapObjects.tiles.length; i++) {
-                if(mapObjects.tiles[i].x == tmpMapObject.x && mapObjects.tiles[i].y == tmpMapObject.y) {
+                if(mapObjects.tiles[i].x >= tmpMapObject.x &&
+                        mapObjects.tiles[i].x < tmpMapObject.x + tmpMapObject.width &&
+                        mapObjects.tiles[i].y >= tmpMapObject.y &&
+                        mapObjects.tiles[i].y < tmpMapObject.y + tmpMapObject.height) {
+
                     mapObjects.tiles.splice(i, 1);
+                    i--;
                 }
             }
         }
