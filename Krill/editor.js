@@ -265,7 +265,9 @@ function createTiles(lines) {
                 mapObjects.tiles.push({
                     x: x * gridSize,
                     y: y * gridSize,
-                    type: type
+                    type: type,
+                    width: gridSize,
+                    height: gridSize
                 });
             }
         }

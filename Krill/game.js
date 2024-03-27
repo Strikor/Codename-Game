@@ -33,7 +33,7 @@ function setupGame(m) {
 
     let lines = m.split('\n');
 
-    room = new Tiles(lines, 15, 32, 32, 32);
+    room = new Tiles(lines, 15, 16, 16, 16);
 
     console.log("room created");
     console.log(room);
