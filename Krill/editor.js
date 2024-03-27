@@ -8,7 +8,7 @@ var view = {
     cameraLocked: false
 };
 
-var gridSize = 32;
+var gridSize = 16;       //change from 32 to 16, did not fix problem, may not be necessary
 
 var tmpMapObject = {
     x: 0,
@@ -60,7 +60,7 @@ function testTiles() {
         clear();
         noCanvas();
         state = "game";
-        spriteImg = loadImage('./assets/krillTrim3.png');
+        spriteImg = loadImage('./assets/krillWalk4D.png'); 
         loadTiles();
         setupGame(exportTiles());
     } else {
