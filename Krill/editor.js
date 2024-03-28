@@ -3,7 +3,7 @@ let state = "editor";
 var view = {
     x: 0,
     y: 0,
-    zoom: 1,
+    zoom: 2,
     tool: 'select',
     cameraLocked: false
 };
@@ -25,6 +25,8 @@ var mapObjects = {
 
 function preload() {
     loadTileSprites();
+    loadTiles();
+    spriteImg = loadImage('./assets/krillWalk4D.png'); 
 }
 
 function setup() {
@@ -56,19 +58,22 @@ function setup() {
 }
 
 function testTiles() {
-    if(state == "editor") {
+    if(state == "editor" && mapObjects != null && mapObjects.tiles.length > 0) {
         clear();
         noCanvas();
         state = "game";
-        spriteImg = loadImage('./assets/krillWalk4D.png'); 
-        loadTiles();
+        preloadGame();
         setupGame(exportTiles());
-    } else {
+        fullscreen(true);
+    } else if(state == "game") {
+        krill.remove();
+        krill = null;
         clear();
         noCanvas();
         room.removeAll();
         state = "editor";
         setup();
+        fullscreen(false);
     }
     
 }
@@ -234,14 +239,16 @@ function importTiles() {
 function handleFile(file) {
     if (file.type === 'text') {
         // Split the file data into lines
+        console.log('Text File Recieved');
         let lines = file.data.split('\n');
-        createTiles(lines);
+        pullTiles(lines);
+        
     } else {
         console.log('Not a text file');
     }
 }
 
-function createTiles(lines) {
+function pullTiles(lines) {
     // Clear the current tiles
     mapObjects.tiles = [];
 
@@ -254,14 +261,14 @@ function createTiles(lines) {
             let char = line.charAt(x);
 
             // Create a tile based on the character
-            let type;
-            if (char === 'W') {
+            let type = null;
+            if (char in connecting) {
                 type = 'Wall';
-            } else if (char === 'F') {
-                type = 'Floor';
+            } else if (char === ' ') {
+                //type = 'Floor';
             }
 
-            if (type) {
+            if (type != null) {
                 mapObjects.tiles.push({
                     x: x * gridSize,
                     y: y * gridSize,
@@ -272,6 +279,7 @@ function createTiles(lines) {
             }
         }
     }
+    
 }
 
 //Add more tile types/make dynamic
