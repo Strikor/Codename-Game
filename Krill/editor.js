@@ -66,6 +66,7 @@ function testTiles() {
         setupGame(exportTiles());
         fullscreen(true);
     } else if(state == "game") {
+        fullscreen(false);
         krill.remove();
         krill = null;
         clear();
@@ -73,7 +74,6 @@ function testTiles() {
         room.removeAll();
         state = "editor";
         setup();
-        fullscreen(false);
     }
     
 }
@@ -344,12 +344,11 @@ function drawEditor() {
     //Draw Temporary Objects
     fill(255, 0, 0);
     rect(tmpMapObject.x, tmpMapObject.y, tmpMapObject.width, tmpMapObject.height);
-    
 
-    //Draw Character
-    //keyTyped();
+    drawHud();
+}
 
-    // Draw HUD elements
+function drawHud() {
     resetMatrix();
     fill(0, 0, 0, 100);
     rect(0, 0, 140, 50);
@@ -379,7 +378,6 @@ function drawEditor() {
             text("Select", 10, buttonY + 30);
         } else if(i == 1) {
             text("Draw", 10, buttonY + 30);
-
         } else if(i == 2) {
             text("Touch", 10, buttonY + 30);
         } else if(i == 3) {
@@ -397,6 +395,9 @@ function mouseWheel(e) {
     view.zoom -= e.delta / 1000;
     view.zoom = constrain(view.zoom, 0.5, 5);
 
+    // Round view.zoom to the nearest tenth
+    view.zoom = Math.round(view.zoom * 10) / 10;
+
 }
 
 function keyTyped() {
@@ -409,6 +410,8 @@ function keyReleased() {
 
 // Fixed a problem with accelerated movement when mouse moved quickly by checking against the initial mouse position
 var initialMouseX, initialMouseY;
+// Fixed issue with draw tools drawing behind hud objects unintentionally
+var clickedOnHud = false;
 
 function mousePressed() {
     initialMouseX = mouseX;
@@ -422,6 +425,7 @@ function mousePressed() {
     for (var i = 0; i < 5; i++) {
         if (mouseX >= 0 && mouseX <= buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight) {
             console.log("Button " + (i + 1) + " was clicked");
+            clickedOnHud = true;
             if (i == 0) {
                 view.tool = "select";
                 view.cameraLocked = false; // Lock the camera when button 0 is clicked
@@ -444,9 +448,11 @@ function mousePressed() {
         }
         buttonY += buttonHeight + buttonSpacing;
     }
+    if (mouseX >= 0 && mouseX <= 140 && mouseY >= 0 && mouseY <= 75) {clickedOnHud = true;}
+    if (mouseX >= 140 && mouse <= 390 && mouseY >= 0 && mouseY <= 24) {clickedOnHud = true;}
 
     // If the rectangle tool is selected, start drawing a rectangle
-    if (view.tool == "rectangle") {
+    if (view.tool == "rectangle" && !clickedOnHud) {
         initialMouseX = Math.round(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
         initialMouseY = Math.round(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
         
@@ -457,8 +463,6 @@ function mousePressed() {
             height: 0,
             type: tileSelect.value()
         }
-    } else if (view.tool == "touch") {
-        // Fix a single tap not painting properly
     }
 }
 
@@ -477,48 +481,44 @@ function mouseDragged() {
     // If the rectangle tool is selected, update the size of the current rectangle
     var currentMouseX, currentMouseY;
 
-    if (view.tool == "rectangle") {
-        currentMouseX = Math.round(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
-        currentMouseY = Math.round(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
+    if (!clickedOnHud) {
+        if (view.tool == "rectangle") {
+            currentMouseX = Math.round(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
+            currentMouseY = Math.round(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
+            
+            tmpMapObject.width = currentMouseX - initialMouseX;
+            tmpMapObject.height = currentMouseY - initialMouseY;
         
-        tmpMapObject.width = currentMouseX - initialMouseX;
-        tmpMapObject.height = currentMouseY - initialMouseY;
+        } else if (view.tool == "touch") {
+            currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
+            currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
     
-    } else if (view.tool == "touch") {
-        currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
-        currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
-
-        for (var i = 0; i < mapObjects.tiles.length; i++) {
-            if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
-                mapObjects.tiles.splice(i, 1);
+            for (var i = 0; i < mapObjects.tiles.length; i++) {
+                if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
+                    mapObjects.tiles.splice(i, 1);
+                }
             }
-        }
-
-        mapObjects.tiles.push({
-            x: currentMouseX,
-            y: currentMouseY,
-            type: tileSelect.value()
-        });
-    } else if (view.tool == "delete") {
-        currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
-        currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
-
-        for (var i = 0; i < mapObjects.tiles.length; i++) {
-            if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
-                mapObjects.tiles.splice(i, 1);
+    
+            mapObjects.tiles.push({
+                x: currentMouseX,
+                y: currentMouseY,
+                type: tileSelect.value()
+            });
+        } else if (view.tool == "delete") {
+            currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
+            currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
+    
+            for (var i = 0; i < mapObjects.tiles.length; i++) {
+                if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
+                    mapObjects.tiles.splice(i, 1);
+                }
             }
         }
     }
 }
 
-/*mapObjects.rectangles.push({
-            x: initialMouseX,
-            y: initialMouseY,
-            width: 0,
-            height: 0
-        });*/
-
 function mouseReleased() {
+    clickedOnHud = false;
     if (view.tool == "rectangle") {
         var widthTileNum = Math.abs(tmpMapObject.width / gridSize);
         var heightTileNum = Math.abs(tmpMapObject.height / gridSize);

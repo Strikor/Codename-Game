@@ -1,12 +1,7 @@
+let buffer;
+
 var krill = null; 
 var spriteImg = null;
-
-var playerCamera = {
-    x: 0,
-    y: 0,
-    zoom: 2,
-    cameraLocked: false
-};
 
 function preload(){
     loadTileSprites();
@@ -35,7 +30,7 @@ function preloadGame() {
 }
 
 function setupGame(m) {
-    new Canvas(960, 540, 'pixelated x2'); //may display better with 'pixelated x2'
+    new Canvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
     loadTiles();
 
     let lines = m.split('\n');
@@ -47,7 +42,7 @@ function setupGame(m) {
 }
 
 function setup() {
-    new Canvas(960, 540, 'pixelated x2'); //may display better with 'pixelated x2'
+    createCanvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
     loadTiles();
     
     //default map
@@ -88,9 +83,7 @@ function setup() {
         16,16, //px from left of canvas, px from top of canvas
         16,16  //h, w in px of each tile
     );
-
     //Basically nothing else should be put here either
-    
 }
 
 function draw() {
@@ -99,14 +92,13 @@ function draw() {
 }
 
 function drawGame() {
-    background('lightgray');  //maybe make some sort of sciency blue gradient for final product ~~(. _ .)~~
-    //noLoop();
+    background('lightgray');  //maybe make some sort of sciency blue gradient for final product ~~(. _ .)~~s
 
     //translate(width / 2, height / 2);
-    playerCamera.x = krill.x - width / (2 * playerCamera.zoom);
-    playerCamera.y = krill.y - height / (2 * playerCamera.zoom);
-    scale(playerCamera.zoom);
-    translate(-playerCamera.x, -playerCamera.y);
+    camera.x = krill.x
+    camera.y = krill.y
+    //scale(playerCamera.zoom);
+    //translate(-playerCamera.x, -playerCamera.y);
 
     //Impliment a level based draw system
     
@@ -151,9 +143,11 @@ function drawGame() {
             krill.changeAni('standh');
         }
     }
+    //Fixes js rounding error with sprite position
+    krill.x = Math.round(krill.x);
+    krill.y = Math.round(krill.y);
     
     //krill.rotationLock = true;          //keeps sprite from spinning when hitting wall
     //krill.debug = true; //uncomment line as needed
     //------------------------------------------------------------------------------------------------------------
-
 }
