@@ -1,3 +1,5 @@
+let debugMode = true;
+
 var view = {
     x: 0,
     y: 0,
