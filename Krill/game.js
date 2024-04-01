@@ -2,7 +2,8 @@ let buffer;
 
 var krill = null; 
 var spriteImg = null;
-
+let krillHealth = 100; // Initial health
+const maxKrillHealth = 100; // Maximum health
 function preload(){
     loadTileSprites();
     spriteImg = loadImage('./assets/krillWalk4D.png'); 
@@ -97,6 +98,7 @@ function drawGame() {
     //translate(width / 2, height / 2);
     camera.x = krill.x
     camera.y = krill.y
+    drawHealthBar();
     //scale(playerCamera.zoom);
     //translate(-playerCamera.x, -playerCamera.y);
 
@@ -150,4 +152,27 @@ function drawGame() {
     //krill.rotationLock = true;          //keeps sprite from spinning when hitting wall
     //krill.debug = true; //uncomment line as needed
     //------------------------------------------------------------------------------------------------------------
+}
+function drawHealthBar() {
+  
+  
+    // Display health bar for the krill
+    fill('red');
+    rect(100, 10, 200, 20); // Red background
+    fill(0, 255, 0);
+    let remainingHealth1 = constrain(krillHealth, 0, 100); // Ensure health is between 0 and 100
+    rect(100, 10, remainingHealth1 * 2, 20); // Green bar representing remaining health
+    fill(0);
+    textSize(25);
+    text("krill", 10, 25);
+    //this part of the code is for testing the bar only, we will remove it later
+    if(mouseIsPressed){
+        krillHealth -= 0.5;
+        
+     }
+     if(krillHealth <0){
+        krillHealth = 0;
+       
+     }
+    
 }
