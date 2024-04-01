@@ -1,4 +1,4 @@
-let state = "game";
+let state = "editor";
 
 let buffer;
 
@@ -6,6 +6,7 @@ var krill = null;
 var spriteImg = null;
 let krillHealth = 100; // Initial health
 const maxKrillHealth = 100; // Maximum health
+
 function preload(){
     state = "title";
     loadTileSprites();

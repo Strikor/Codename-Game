@@ -1,5 +1,3 @@
-let state = "editor";
-
 var view = {
     x: 0,
     y: 0,
