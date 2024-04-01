@@ -1,3 +1,5 @@
+let state = "game";
+
 let buffer;
 
 var krill = null; 
@@ -5,9 +7,11 @@ var spriteImg = null;
 let krillHealth = 100; // Initial health
 const maxKrillHealth = 100; // Maximum health
 function preload(){
+    state = "title";
     loadTileSprites();
     spriteImg = loadImage('./assets/krillWalk4D.png'); 
-    preloadGame();
+    preloadTitle();
+    //preloadGame();
     //Basically nothing should ever be put here
     
 }
@@ -43,52 +47,61 @@ function setupGame(m) {
 }
 
 function setup() {
-    createCanvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
-    loadTiles();
+    if (state === "title") {
+        setupTitle();
+    } else if (state === "game") {
+        createCanvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
+        loadTiles();
     
-    //default map
-    room = new Tiles( 
-        [
-            '1hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh2',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v..............................v',
-            'v.......................a-b....v',
-            'v.......................*~+....v',
-            'v..............1hhd.....c_>....v',
-            'v..............v..........v....v',
-            'v..............v..........v....v',
-            'v..............v..........v....v',
-            'v..............v..........v....v',
-            'v..............v..........v....v',
-            'v..............v..........v....v',
-            'v..............v..........v....v',
-            'v..............v..........v....v',
-            '3hhhhhhhhhhhhhhphhhhhhhhhhphhhh4'
-        ],
-        16,16, //px from left of canvas, px from top of canvas
-        16,16  //h, w in px of each tile
-    );
+        //default map
+        room = new Tiles( 
+            [
+                '1hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh2',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v..............................v',
+                'v.......................a-b....v',
+                'v.......................*~+....v',
+                'v..............1hhd.....c_>....v',
+                'v..............v..........v....v',
+                'v..............v..........v....v',
+                'v..............v..........v....v',
+                'v..............v..........v....v',
+                'v..............v..........v....v',
+                'v..............v..........v....v',
+                'v..............v..........v....v',
+                'v..............v..........v....v',
+                '3hhhhhhhhhhhhhhphhhhhhhhhhphhhh4'
+            ],
+            16,16, //px from left of canvas, px from top of canvas
+            16,16  //h, w in px of each tile
+        );
+    }
+    
     //Basically nothing else should be put here either
 }
 
 function draw() {
-    drawGame();
+    if (state === "title") {
+        drawTitle();
+    } else if (state === "game") { 
+        drawGame();
+    }
     //Also don't put stuff here
 }
 
@@ -175,4 +188,10 @@ function drawHealthBar() {
        
      }
     
+}
+
+function mouseClicked() {
+    if (state === "title") {
+        mouseClickedTitle();
+    }
 }
