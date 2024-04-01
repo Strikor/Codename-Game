@@ -112,6 +112,7 @@ function drawGame() {
     //translate(width / 2, height / 2);
     camera.x = krill.x
     camera.y = krill.y
+    camera.zoom = 2;
     drawHealthBar();
     //scale(playerCamera.zoom);
     //translate(-playerCamera.x, -playerCamera.y);
