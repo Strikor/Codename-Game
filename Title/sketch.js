@@ -1,16 +1,31 @@
 let mySound;
+let backgroundImage;
+let buttonImage;
+let buttonX;
+let buttonY;
+let buttonWidth = 200;
+let buttonHeight = 50;
 
 function preload() {
     soundFormats("mp3");
-    mySound=loadSound('Krill (1).mp3');
+    mySound = loadSound('Krill (1).mp3');
+    // Load the background image
+    backgroundImage = loadImage('titlescreen.png');
+    // Load the button image
+    buttonImage = loadImage('button.png'); // Replace 'button.png' with the path to your PNG button image
 }
 
 function setup() {
-    noCanvas();
+    // Create the canvas
+    createCanvas(windowWidth, windowHeight);
     backgroundMusic();
+
+    // Set button position
+    buttonX = width / 2 - buttonWidth / 2;
+    buttonY = height / 2 - buttonHeight / 2;
 }
 
-function backgroundMusic(){
+function backgroundMusic() {
     mySound.play();
     mySound.loop();
     mySound.setVolume(0.5);
@@ -18,19 +33,21 @@ function backgroundMusic(){
 }
 
 function draw() {
-    // You can include any continuous animation or updates here if needed
+    // Draw the background image
+    image(backgroundImage, 0, 0, width, height);
     
+    // Draw the button image
+    image(buttonImage, buttonX, buttonY, buttonWidth, buttonHeight);
 }
 
-function toggleScreens() {
-    var titleScreen = select('#title-screen');
-    var levelSelectScreen = select('#level-select-screen');
-
-    titleScreen.style('display', 'none');
-    levelSelectScreen.style('display', 'block');
+function switchToNewSketch() {
+    // Replace the current sketch with the new sketch
+    window.location.href = "KrillEditor\\sketch.js";
 }
 
-function startTutorialLevel() {
-    // Add functionality to start the tutorial level
-    console.log('Starting Tutorial Level');
+function mouseClicked() {
+    // Check if the mouse is over the button when clicked
+    if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight) {
+        switchToNewSketch();
+    }
 }
