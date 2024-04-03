@@ -1,6 +1,6 @@
 let state = "editor";
 
-let buffer;
+let ents = [];
 
 var krill = null; 
 var spriteImg = null;
@@ -39,7 +39,34 @@ function setupGame(m) {
     new Canvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
     loadTiles();
 
-    let lines = m.split('\n');
+    //Larger Layers
+    let layers = m.split('\n\n');
+
+    //Map Lines
+    let lines = layers[0].split('\n');
+
+    //Entities
+    let tmpEnts = layers[1].split('\n');
+    for(let i = 0; i < tmpEnts.length; i++) {
+        let tmp = tmpEnts[i].split(' ');
+        ents.push({
+            type: tmp[0],
+            x: tmp[1],
+            y: tmp[2],
+            width: tmp[3],
+            height: tmp[4]
+        });
+    }
+
+    for(let i = 0; i < ents.length; i++) {
+        if(ents[i].type == 'krillSpawn') {
+            krill.x = ents[i].x;
+            krill.y = ents[i].y;
+            ents.splice(i, 1);
+            break;
+
+        }
+    }
 
     room = new Tiles(lines, 15, 16, 16, 16);
 
@@ -92,6 +119,20 @@ function setup() {
             16,16, //px from left of canvas, px from top of canvas
             16,16  //h, w in px of each tile
         );
+
+        
+        ents.push({type: 'krillSpawn', x: 64, y: 64, width: 16, height: 16});
+        ents.push({type: 'krillHurt', x: 272, y: 368, width: 160, height: 128});
+
+        for(let i = 0; i < ents.length; i++) {
+            if(ents[i].type == 'krillSpawn') {
+                krill.x = ents[i].x;
+                krill.y = ents[i].y;
+                ents.splice(i, 1);
+                break;
+
+            }
+        }
     }
     
     //Basically nothing else should be put here either
@@ -108,13 +149,28 @@ function draw() {
 
 function drawGame() {
     background('lightgray');  //maybe make some sort of sciency blue gradient for final product ~~(. _ .)~~s
+    console.log(krill.x + ", " + krill.y);
 
     //translate(width / 2, height / 2);
-    camera.x = krill.x
-    camera.y = krill.y
+    camera.x = krill.x + krill.width / 2;
+    camera.y = krill.y + krill.height / 2;
 
-    if(debugMode != undefined && debugMode == true){camera.zoom = 2;}
-    drawHealthBar();
+    if(debugMode != undefined && debugMode == true){
+        //camera.zoom = 2;
+
+        //Debug draw triggers
+        camera.on();
+        for (var i = 0; i < ents.length; i++) {
+            // Add entity types as needed. Sprites can also be added here
+            if (ents[i].type == "krillSpawn") {
+                fill(129,84,146, 100);
+            } else if (ents[i].type == "krillHurt") {
+                fill(70,32,85, 100);//Due to strong color the opacity needs to be even lower
+            }
+            rect(ents[i].x, ents[i].y, ents[i].width, ents[i].height);
+        }
+        camera.off();
+    }
     //scale(playerCamera.zoom);
     //translate(-playerCamera.x, -playerCamera.y);
 
@@ -164,11 +220,33 @@ function drawGame() {
     //Fixes js rounding error with sprite position
     krill.x = Math.round(krill.x);
     krill.y = Math.round(krill.y);
+
+    triggers();
     
     //krill.rotationLock = true;          //keeps sprite from spinning when hitting wall
     //krill.debug = true; //uncomment line as needed
     //------------------------------------------------------------------------------------------------------------
+
+    drawHealthBar();
 }
+
+let tmpFrameCounter = 0;//Micilanious frame counter for triggers to use
+function triggers() {
+    for(let i = 0; i < ents.length; i++) {
+        if(krill.x + krill.width > ents[i].x && krill.x < ents[i].x + ents[i].width && krill.y + krill.height > ents[i].y && krill.y < ents[i].y + ents[i].height) {
+            if(ents[i].type == 'krillHurt') {
+                tmpFrameCounter++;
+                if(tmpFrameCounter % 60 == 0) {//Every 60 frames
+                    tmpFrameCounter = 0;
+                    krillHealth -= 1;
+                }
+                
+            }
+        }
+    }
+    //console.log(krill.x + ", " + krill.y);
+}
+
 function drawHealthBar() {
   
   

@@ -19,9 +19,12 @@ var tmpMapObject = {
 };
 
 var mapObjects = {
-    tiles: []//,
-    //entities: []
+    tiles: [],
+    entities: []
 };
+
+var tileOpacity = 255;
+var entOpactiy = 127;
 
 function preload() {
     loadTileSprites();
@@ -39,6 +42,45 @@ function setup() {
 
     tileSelect.option('Wall');
     tileSelect.option('Floor');
+
+    //Layer Selector
+    layerSelect = createSelect();
+    layerSelect.position(73, 50);
+    
+    layerSelect.option('Tiles');
+    layerSelect.option('Entities');
+
+    layerSelect.changed(() => { 
+        if (layerSelect.value() == 'Entities') {
+            tileOpacity = 100;
+            entOpacity = 255;
+    
+            //clear options
+            let length = tileSelect.elt.options.length;
+            for(var i = 0; i < length; i++) {
+                tileSelect.elt.remove(0);
+            }
+            
+            //add new options
+            tileSelect.option('krillSpawn');
+            tileSelect.option('krillHurt');
+
+
+        } else {
+            tileOpacity = 255;
+            entOpacity = 100;
+
+            let length = tileSelect.elt.options.length;
+            for(var i = 0; i < length; i++) {
+                tileSelect.elt.remove(0);
+            }
+
+            tileSelect.option('Wall');
+            tileSelect.option('Floor');
+
+        } 
+    });
+
 
     let importBTN = createButton('Import Map');
     importBTN.position(140, 0);
@@ -118,7 +160,6 @@ function exportTiles() {
     mapHeight = highY - lowY;
 
     //Find the locations of all tiles in the order they exist in the map
-    let curX = lowX;
     for(var i = 0; i <= mapHeight; i++) {
         let curX = lowX;
         let row = '';
@@ -178,13 +219,25 @@ function exportTiles() {
             
         }
     }
+    outputMap = connectedMap;
 
+    outputMap.push('\n');
+
+    for(var i = 0; i < mapObjects.entities.length; i++) {
+        let type = mapObjects.entities[i].type;
+        let x = mapObjects.entities[i].x - lowX * gridSize;
+        let y = mapObjects.entities[i].y - lowY * gridSize;
+        let width = mapObjects.entities[i].width;
+        let height = mapObjects.entities[i].height;
+
+        outputMap.push(type + ' ' + x + ' ' + y + ' ' + width + ' ' + height);
+    }
     /*for(var i = 0; i < outputMap.length; i++) {
         console.log(outputMap[i]);
     }*/
 
     //Convert outputMap to a string
-    let outputString = connectedMap.join('\n');
+    let outputString = outputMap.join('\n');
 
     console.log(outputString);
 
@@ -329,23 +382,39 @@ function drawEditor() {
     }
 
     // Draw objects
+    
+    drawObjects();
+    drawHud();
+}
+
+function drawObjects() {
     for (var i = 0; i < mapObjects.tiles.length; i++) {
         var tile = mapObjects.tiles[i];
 
         // Add tile types as needed. Sprites can also be added here
         if (tile.type == "Wall") {
-            fill(0, 255, 0);
+            fill(0, 255, 0, tileOpacity);
         } else if (tile.type == "Floor") {
-            fill(0, 0, 255);
+            fill(0, 0, 255, tileOpacity);
         }
         rect(tile.x, tile.y, gridSize, gridSize);
+    }
+
+    for (var i = 0; i < mapObjects.entities.length; i++) {
+        var entity = mapObjects.entities[i];
+
+        // Add entity types as needed. Sprites can also be added here
+        if (entity.type == "krillSpawn") {
+            fill(129,84,146, entOpacity);
+        } else if (entity.type == "krillHurt") {
+            fill(70,32,85, entOpacity/2);//Due to strong color the opacity needs to be even lower
+        }
+        rect(entity.x, entity.y, entity.width, entity.height);
     }
 
     //Draw Temporary Objects
     fill(255, 0, 0);
     rect(tmpMapObject.x, tmpMapObject.y, tmpMapObject.width, tmpMapObject.height);
-
-    drawHud();
 }
 
 function drawHud() {
@@ -493,26 +562,54 @@ function mouseDragged() {
             currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
             currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
     
-            for (var i = 0; i < mapObjects.tiles.length; i++) {
-                if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
-                    mapObjects.tiles.splice(i, 1);
+            //Check if we're editing tiles or entities
+            if(layerSelect.value() == 'Tiles') {
+                for (var i = 0; i < mapObjects.tiles.length; i++) {
+                    if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
+                        mapObjects.tiles.splice(i, 1);
+                    }
                 }
+        
+                mapObjects.tiles.push({
+                    x: currentMouseX,
+                    y: currentMouseY,
+                    type: tileSelect.value()
+                });
+
+            } else if(layerSelect.value() == 'Entities') {
+                for (var i = 0; i < mapObjects.entities.length; i++) {
+                    if (currentMouseX == mapObjects.entities[i].x && currentMouseY == mapObjects.entities[i].y) {
+                        mapObjects.entities.splice(i, 1);
+                    }
+                }
+        
+                mapObjects.entities.push({
+                    x: currentMouseX,
+                    y: currentMouseY,
+                    type: tileSelect.value()
+                });
             }
-    
-            mapObjects.tiles.push({
-                x: currentMouseX,
-                y: currentMouseY,
-                type: tileSelect.value()
-            });
+            
         } else if (view.tool == "delete") {
             currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
             currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
     
-            for (var i = 0; i < mapObjects.tiles.length; i++) {
-                if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
-                    mapObjects.tiles.splice(i, 1);
+            if(layerSelect.value() == 'Tiles') {
+                for (var i = 0; i < mapObjects.tiles.length; i++) {
+                    if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
+                        mapObjects.tiles.splice(i, 1);
+                    }
                 }
+
+            } else if(layerSelect.value() == 'Entities') {
+                /*for (var i = 0; i < mapObjects.entities.length; i++) {
+                    if (currentMouseX == mapObjects.entities[i].x && currentMouseY == mapObjects.entities[i].y) {
+                        mapObjects.entities.splice(i, 1);
+                    }
+                }*/
+//THIS DOESN'T WORK WITH ENTITIES
             }
+            
         }
     }
 }
@@ -523,25 +620,50 @@ function mouseReleased() {
         var widthTileNum = Math.abs(tmpMapObject.width / gridSize);
         var heightTileNum = Math.abs(tmpMapObject.height / gridSize);
 
-        //Deletes any tiles that are in the same location as the new tiles
-        if(tmpMapObject.width != 0) {
-            for(var i = 0; i < mapObjects.tiles.length; i++) {
-                if(mapObjects.tiles[i].x >= tmpMapObject.x &&
-                        mapObjects.tiles[i].x < tmpMapObject.x + tmpMapObject.width &&
-                        mapObjects.tiles[i].y >= tmpMapObject.y &&
-                        mapObjects.tiles[i].y < tmpMapObject.y + tmpMapObject.height) {
-
-                    mapObjects.tiles.splice(i, 1);
-                    i--;
+        
+        if(tmpMapObject.width != 0 && tmpMapObject.height != 0) {
+            //Check if we're editing tiles or entities
+            //Deletes any tiles that are in the same location as the new tiles
+            if(layerSelect.value() == 'Tiles') {
+                for(var i = 0; i < mapObjects.tiles.length; i++) {
+                    if(mapObjects.tiles[i].x >= tmpMapObject.x &&
+                            mapObjects.tiles[i].x < tmpMapObject.x + tmpMapObject.width &&
+                            mapObjects.tiles[i].y >= tmpMapObject.y &&
+                            mapObjects.tiles[i].y < tmpMapObject.y + tmpMapObject.height) {
+    
+                        mapObjects.tiles.splice(i, 1);
+                        i--;
+                    }
                 }
-            }
-        }
 
-        for (var i = 0; i < heightTileNum; i++) {
-            for (var j = 0; j < widthTileNum; j++) {
-                mapObjects.tiles.push({
-                    x: (tmpMapObject.width < 0 ? tmpMapObject.x - gridSize + j * gridSize * -1 : tmpMapObject.x + j * gridSize * 1),
-                    y: (tmpMapObject.height < 0 ? tmpMapObject.y - gridSize + i * gridSize * -1 : tmpMapObject.y + i * gridSize * 1),
+            } else if(layerSelect.value() == 'Entities') {
+                //Entities can overlap
+            }
+
+            //Push new tiles
+            if(layerSelect.value() == 'Tiles') {
+                for (var i = 0; i < heightTileNum; i++) {
+                    for (var j = 0; j < widthTileNum; j++) {
+                        mapObjects.tiles.push({
+                            x: (tmpMapObject.width < 0 ? tmpMapObject.x - gridSize + j * gridSize * -1 : tmpMapObject.x + j * gridSize * 1),
+                            y: (tmpMapObject.height < 0 ? tmpMapObject.y - gridSize + i * gridSize * -1 : tmpMapObject.y + i * gridSize * 1),
+                            type: tileSelect.value()
+                        });
+                    }
+                }
+            } else if(layerSelect.value() == 'Entities') {
+                /*for (var j = 0; j < widthTileNum; j++) {
+                    mapObjects.entities.push({
+                        x: (tmpMapObject.width < 0 ? tmpMapObject.x - gridSize + j * gridSize * -1 : tmpMapObject.x + j * gridSize * 1),
+                        y: (tmpMapObject.height < 0 ? tmpMapObject.y - gridSize + i * gridSize * -1 : tmpMapObject.y + i * gridSize * 1),
+                        type: tileSelect.value()
+                    });
+                }*/
+                mapObjects.entities.push({
+                    x: (tmpMapObject.width < 0 ? tmpMapObject.x + tmpMapObject.width : tmpMapObject.x),
+                    y: (tmpMapObject.height < 0 ? tmpMapObject.y + tmpMapObject.height : tmpMapObject.y),
+                    width: Math.abs(tmpMapObject.width),
+                    height: Math.abs(tmpMapObject.height),
                     type: tileSelect.value()
                 });
             }
