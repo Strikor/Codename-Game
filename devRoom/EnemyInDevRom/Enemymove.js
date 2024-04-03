@@ -22,11 +22,20 @@ function preload() {
     krill.collider = 'dynamic';
     krill.changeAni('walk');
 
-    enemy = createSprite(400, 135, 32, 32);
+    enemy = new Sprite(400, 135, 32, 32);
+    enemy.spriteSheet = 'assets/enemyWalk.png';
+    enemy.anis.offset.x = 2;             //
+    enemy.anis.frameDelay = 10;          //controls how quickly frames are switched between
+    enemy.addAnis({
+        walk: { row: 0, frames: 6 },     //row determined by height(px) of sprite(I think??)
+        stand: { row: 0, col:3},
+    });
+    enemy.changeAni('walk');
+
     enemy.originalPosition = createVector(enemy.position.x, enemy.position.y);
     enemy.collider = 'none'; //no colissions yet
     enemy.speed = 1;
-    enemy.rotationLock = true
+    enemy.rotationLock = true;
 
     //enemy setup
     //  enemy = {
@@ -41,7 +50,7 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(1280, 720, 'pixelated'); //may display better with 'pixelated x2' 
+    createCanvas(1280, 720, 'pixelated x2'); //may display better with 'pixelated x2' 
     allSprites.pixelPerfect = true;
 
     tLcorner = new Group();
@@ -296,6 +305,50 @@ function updateEnemy() {
         chaseVector.setMag(enemy.speed);  // Set the magnitude of the vector to the enemy's speed
         enemy.velocity.x = chaseVector.x;
         enemy.velocity.y = chaseVector.y;
+        
+        //changing sprite animation along with movemnet of enemy
+        //directions>> L: vel x < 0, R: vel x > 0, U: vel y < 0, D: vel y > 0
+        //rotation: L: positive, R: negative, D: 0, U: 180, L: 90, R: -90
+        if (enemy.velocity.x < 0 && enemy.velocity.y > 0) {     
+            enemy.rotation = 45;                             
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;        
+        }
+        else if (enemy.velocity.x > 0 && enemy.velocity.y > 0) {
+            enemy.rotation = -45;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.x < 0 && enemy.velocity.y < 0) {
+            enemy.rotation = 135;           
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.x > 0 && enemy.velocity.y < 0) {
+            enemy.rotation = -135;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.x < 0) {
+            enemy.rotation = 90;
+            enemy.changeAni('walk');
+            enemy.mirror.x = true;        //since ani is right facing, need to mirror
+        }
+        else if (enemy.velocity.x > 0) {
+            enemy.rotation = -90;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.y > 0) {
+            enemy.rotation = 0;          
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.y < 0) {
+            enemy.rotation = 180;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
     } else {  // If the enemy needs to return to its original position
         // Vector pointing from the enemy to its original position
         let returnVector = p5.Vector.sub(originalPos, enemy.position);
