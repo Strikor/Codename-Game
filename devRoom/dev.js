@@ -207,25 +207,25 @@ function draw() {
     // set krill speed
     krill.speed = 2;
 
-    if (kb.pressing('left')) {
+    while (kb.pressing('left')) {
         krill.rotation = 0;
         krill.direction = 180;        //direction of movement: R = 0, L = 180, up = -90, down = 90
         krill.changeAni('walk');
         krill.mirror.x = true;        //since ani is right facing, need to mirror
     }
-    else if (kb.pressing('right')) {
+    while (kb.pressing('right')) {
         krill.rotation = 0;
         krill.direction = 0;
         krill.changeAni('walk');
         krill.mirror.x = false;
     }
-    else if (kb.pressing('down')) {
+    while (kb.pressing('down')) {
         krill.rotation = -90;           //ensure the hitBox around the sprite follows its change in direction
         krill.direction = 90;
         krill.changeAni('walk');
         krill.mirror.x = true;
     }
-    else if (kb.pressing('up')) {
+    if (kb.pressing('up')) {
         krill.rotation = -90;
         krill.direction = -90;
         krill.changeAni('walk');
