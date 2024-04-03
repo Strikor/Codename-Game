@@ -332,7 +332,7 @@ function updateEnemy() {
         else if (enemy.velocity.x < 0) {
             enemy.rotation = 90;
             enemy.changeAni('walk');
-            enemy.mirror.x = true;        //since ani is right facing, need to mirror
+            enemy.mirror.x = true;        
         }
         else if (enemy.velocity.x > 0) {
             enemy.rotation = -90;
