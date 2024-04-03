@@ -293,7 +293,24 @@ function handleFile(file) {
     if (file.type === 'text') {
         // Split the file data into lines
         console.log('Text File Recieved');
-        let lines = file.data.split('\n');
+        //Larger Layers
+        let layers = m.split('\n\n');
+
+        //Map Lines
+        let lines = layers[0].split('\n');
+
+        //Entities
+        let tmpEnts = layers[1].split('\n');
+        for(let i = 0; i < tmpEnts.length; i++) {
+            let tmp = tmpEnts[i].split(' ');
+            mapObjects.entities.push({
+                type: tmp[0],
+                x: tmp[1],
+                y: tmp[2],
+                width: tmp[3],
+                height: tmp[4]
+            });
+        }
         pullTiles(lines);
         
     } else {
@@ -407,7 +424,7 @@ function drawObjects() {
         if (entity.type == "krillSpawn") {
             fill(129,84,146, entOpacity);
         } else if (entity.type == "krillHurt") {
-            fill(70,32,85, entOpacity/2);//Due to strong color the opacity needs to be even lower
+            fill(70,32,85, (entOpacity > 100 ? entOpactiy : entOpacity/2));//Due to strong color the opacity needs to be even lower
         }
         rect(entity.x, entity.y, entity.width, entity.height);
     }
@@ -577,39 +594,35 @@ function mouseDragged() {
                 });
 
             } else if(layerSelect.value() == 'Entities') {
-                for (var i = 0; i < mapObjects.entities.length; i++) {
-                    if (currentMouseX == mapObjects.entities[i].x && currentMouseY == mapObjects.entities[i].y) {
-                        mapObjects.entities.splice(i, 1);
-                    }
-                }
         
                 mapObjects.entities.push({
                     x: currentMouseX,
                     y: currentMouseY,
+                    width: 16,
+                    height:16,
                     type: tileSelect.value()
                 });
             }
             
-        } else if (view.tool == "delete") {
+        } else if (view.tool == "delete" && layerSelect.value() == 'Tiles'){
             currentMouseX = Math.floor(((mouseX - width / 2) / view.zoom + view.x) / gridSize) * gridSize;
             currentMouseY = Math.floor(((mouseY - height / 2) / view.zoom + view.y) / gridSize) * gridSize;
     
-            if(layerSelect.value() == 'Tiles') {
-                for (var i = 0; i < mapObjects.tiles.length; i++) {
-                    if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
-                        mapObjects.tiles.splice(i, 1);
-                    }
+            for (var i = 0; i < mapObjects.tiles.length; i++) {
+                if (currentMouseX == mapObjects.tiles[i].x && currentMouseY == mapObjects.tiles[i].y) {
+                    mapObjects.tiles.splice(i, 1);
                 }
-
-            } else if(layerSelect.value() == 'Entities') {
-                /*for (var i = 0; i < mapObjects.entities.length; i++) {
-                    if (currentMouseX == mapObjects.entities[i].x && currentMouseY == mapObjects.entities[i].y) {
-                        mapObjects.entities.splice(i, 1);
-                    }
-                }*/
-//THIS DOESN'T WORK WITH ENTITIES
             }
             
+        } else if(view.tool == "delete" && layerSelect.value() == 'Entities') {
+            currentMouseX = Math.floor((mouseX - width / 2) / view.zoom + view.x);
+            currentMouseY = Math.floor((mouseY - height / 2) / view.zoom + view.y);
+    
+            for (var i = 0; i < mapObjects.entities.length; i++) {
+                if (currentMouseX > mapObjects.entities[i].x && currentMouseY > mapObjects.entities[i].y && currentMouseX < mapObjects.entities[i].x + mapObjects.entities[i].width && currentMouseY < mapObjects.entities[i].y + mapObjects.entities[i].height) {
+                    mapObjects.entities.splice(i, 1);
+                }
+            }
         }
     }
 }
