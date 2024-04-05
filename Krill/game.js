@@ -10,7 +10,7 @@ const maxKrillHealth = 100; // Maximum health
 function preload(){
     state = "title";
     loadTileSprites();
-    spriteImg = loadImage('./assets/krillWalk4D.png'); 
+    loadKrillAni();
     preloadTitle();
     //preloadGame();
     //Basically nothing should ever be put here
@@ -33,6 +33,22 @@ function preloadGame() {
     krill.direction = 0;
     krill.changeAni('walk');
 
+    //door ani preload
+    //spawn:            x,  y, 
+    door = new Sprite(510, 88, 16, 64);
+    door.spriteSheet = 'assets/door4.png';
+    door.anis.offset.x = 2;             //
+    door.anis.frameDelay = 10;          //controls how quickly frames are switched between
+    door.addAnis({
+        closed: { row: 0, frames: 6 },     //row determined by height(px) of sprite
+        open: { row: 1, frames: 6},
+        opening: {row: 2, frames: 6},
+        closing: {row: 3, frames: 5},
+    });
+    door.rotationLock = 'true';
+    door.collider = "static";
+    door.layer = 0; 
+    door.changeAni('closed'); 
 }
 
 function setupGame(m) {
@@ -86,11 +102,11 @@ function setup() {
             [
                 '1hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh2',
                 'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
+                'v..............................v', //made periods for door location
+                'v...............................', //
+                'v...............................', //
+                'v...............................', //
+                'v...............................',
                 'v..............................v',
                 'v..............................v',
                 'v..............................v',
@@ -215,6 +231,26 @@ function drawGame() {
             krill.speed = 0; 
             krill.rotation = 0; 
             krill.changeAni('standh');
+        }
+    }
+    //door open/close controls
+    if(krill.x > 440 && krill.y < 120){           //basically: if within vicinity of door
+        if(door.collider != 'none'){              //if not open, e opens, if open e closes
+            textSize(11);
+            text('press [e] to open ', door.x - 150, door.y - 32);
+            if(kb.presses('e')){
+                door.changeAni(['opening', 'open']); 
+            }
+            if (door.ani.name == 'open'){
+                door.collider = 'none'; 
+            }
+        } else if (door.collider == 'none'){
+            textSize(11);
+            text('press [e] to close', door.x - 150, door.y - 32);
+            if(kb.presses('e')){ 
+                door.collider = 'static'; 
+                door.changeAni(['closing', 'closed']); 
+            }
         }
     }
     //Fixes js rounding error with sprite position
