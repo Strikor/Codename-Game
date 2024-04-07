@@ -7,6 +7,9 @@ var spriteImg = null;
 let krillHealth = 100; // Initial health
 const maxKrillHealth = 100; // Maximum health
 
+let mapArray;
+let map;
+
 function preload(){
     state = "title";
     loadTileSprites();
@@ -14,7 +17,7 @@ function preload(){
     preloadTitle();
     //preloadGame();
     //Basically nothing should ever be put here
-    
+    mapArray = loadStrings('./assets/testMapPresent.txt');  //default map
 }
 
 function preloadGame() {
@@ -85,10 +88,12 @@ function setupGame(m) {
     }
 
     room = new Tiles(lines, 15, 16, 16, 16);
+    roomFuture = new Tiles(lines, 15, 16, 16, 16);
 
     console.log("room created");
     console.log(room);
 }
+
 
 function setup() {
     if (state === "title") {
@@ -96,42 +101,10 @@ function setup() {
     } else if (state === "game") {
         createCanvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
         loadTiles();
-    
+
         //default map
         room = new Tiles( 
-            [
-                '1hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh2',
-                'v..............................v',
-                'v..............................v', //made periods for door location
-                'v...............................', //
-                'v...............................', //
-                'v...............................', //
-                'v...............................',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v.......................a-b....v',
-                'v.......................*~+....v',
-                'v..............1hhd.....c_>....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                '3hhhhhhhhhhhhhhphhhhhhhhhhphhhh4'
-            ],
+            mapArray,
             16,16, //px from left of canvas, px from top of canvas
             16,16  //h, w in px of each tile
         );
