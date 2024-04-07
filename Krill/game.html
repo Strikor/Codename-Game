@@ -14,8 +14,23 @@
   <body>
     <main>
     </main>
+    <canvas id="gameCanvas" width="640" height="360"></canvas>
+
+  
+  <div id="gameOverModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5);">
+    <div style="background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 50%; text-align: center;">
+      
+      <p>Krill Died!</p>
+      <button id="restartButton" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; cursor: pointer;" onclick="restartGame()">Restart Game</button>
+    </div>
+  </div>
     <script src="tiles.js"></script>
     <script src="title.js"></script>
     <script src="game.js"></script>
+    <script>
+      function restartGame() {
+        location.reload(); // reload the page to restart the game
+      }
+    </script>
   </body>
 </html>

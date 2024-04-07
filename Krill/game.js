@@ -264,6 +264,7 @@ function drawGame() {
     //------------------------------------------------------------------------------------------------------------
 
     drawHealthBar();
+    checkKrillHealth();
 }
 
 let tmpFrameCounter = 0;//Micilanious frame counter for triggers to use
@@ -312,3 +313,20 @@ function mouseClicked() {
         mouseClickedTitle();
     }
 }
+
+  
+  // Function to show the modal with game over message
+  function showGameOverModal() {
+    var modal = document.getElementById("gameOverModal");
+    modal.style.display = "block"; // Display the modal
+  }
+  
+
+  
+  // Function to check krill's health and display game over modal if it's zero
+  function checkKrillHealth() {
+    if (krillHealth <= 0) {
+        noLoop();
+      showGameOverModal();
+    }
+  }
