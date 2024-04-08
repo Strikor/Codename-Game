@@ -52,6 +52,8 @@ function preloadGame() {
     door.collider = "static";
     door.layer = 0; 
     door.changeAni('closed'); 
+
+    inFuture = false;
 }
 
 function setupGame(m) {
@@ -107,6 +109,11 @@ function setup() {
             mapArray,
             16,16, //px from left of canvas, px from top of canvas
             16,16  //h, w in px of each tile
+        );
+        roomFuture = new Tiles(
+            mapArray,
+            616,16, // change to const + maxlength of mapArray[i]*16 ex: 16 + 32*16
+            16,16
         );
 
         
@@ -237,6 +244,7 @@ function drawGame() {
     //------------------------------------------------------------------------------------------------------------
 
     drawHealthBar();
+    timeTravel();
 }
 
 let tmpFrameCounter = 0;//Micilanious frame counter for triggers to use
@@ -284,4 +292,21 @@ function mouseClicked() {
     if (state === "title") {
         mouseClickedTitle();
     }
+}
+
+function timeTravel() {
+    if (!inFuture){ //in present
+        if (kb.presses('t')){
+            krill.x += 600; //change to const
+            inFuture = true;
+        }
+    } else if (inFuture) { //in future
+        if (kb.presses('t')){
+            krill.x -= 600; //change to const
+            inFuture = false;
+        }
+    } else {
+        inFuture = false;
+    }
+    
 }
