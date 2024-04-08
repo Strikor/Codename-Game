@@ -24,7 +24,7 @@ var mapObjects = {
 };
 
 var tileOpacity = 255;
-var entOpactiy = 127;
+var entOpacity = 127;
 
 function preload() {
     loadTileSprites();
@@ -294,23 +294,26 @@ function handleFile(file) {
         // Split the file data into lines
         console.log('Text File Recieved');
         //Larger Layers
-        let layers = m.split('\n\n');
+        let layers = file.data.split('\n\n');
 
         //Map Lines
         let lines = layers[0].split('\n');
 
         //Entities
-        let tmpEnts = layers[1].split('\n');
-        for(let i = 0; i < tmpEnts.length; i++) {
-            let tmp = tmpEnts[i].split(' ');
-            mapObjects.entities.push({
-                type: tmp[0],
-                x: tmp[1],
-                y: tmp[2],
-                width: tmp[3],
-                height: tmp[4]
-            });
+        if(layers[1] != undefined) {
+            let tmpEnts = layers[1].split('\n');
+            for(let i = 0; i < tmpEnts.length; i++) {
+                let tmp = tmpEnts[i].split(' ');
+                mapObjects.entities.push({
+                    type: tmp[0],
+                    x: tmp[1],
+                    y: tmp[2],
+                    width: tmp[3],
+                    height: tmp[4]
+                });
+            }
         }
+        
         pullTiles(lines);
         
     } else {
@@ -424,7 +427,7 @@ function drawObjects() {
         if (entity.type == "krillSpawn") {
             fill(129,84,146, entOpacity);
         } else if (entity.type == "krillHurt") {
-            fill(70,32,85, (entOpacity > 100 ? entOpactiy : entOpacity/2));//Due to strong color the opacity needs to be even lower
+            fill(70,32,85, (entOpacity > 100 ? entOpacity : entOpacity/2));//Due to strong color the opacity needs to be even lower
         }
         rect(entity.x, entity.y, entity.width, entity.height);
     }
