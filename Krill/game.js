@@ -31,6 +31,7 @@ function preloadGame() {
     krill.layer = 1; 
     krill.collider = 'dynamic'; 
     krill.direction = 0;
+    krill.speed = 2;
     krill.changeAni('walk');
 
     //door ani preload
@@ -181,7 +182,11 @@ function drawGame() {
             if (ents[i].type == "krillSpawn") {
                 fill(129,84,146, 100);
             } else if (ents[i].type == "krillHurt") {
-                fill(70,32,85, 100);//Due to strong color the opacity needs to be even lower
+                fill(70,32,85, 100);
+            } else if (ents[i].type == "krillGoal") {
+                fill(201,179,32, 100);
+            } else if (ents[i].type == "slowTile") {
+                fill(0, 119, 190, 100);
             }
             rect(ents[i].x, ents[i].y, ents[i].width, ents[i].height);
         }
@@ -193,7 +198,6 @@ function drawGame() {
     //Impliment a level based draw system
     
     //Krill movement controls, must be in draw fxn ----------------------------------------------------------------
-    krill.speed = 2; 
     if (kb.pressing('left')){
         krill.rotation = 0;
         krill.direction = 180;        //direction of movement: R = 0, L = 180, up = -90, down = 90
@@ -215,20 +219,16 @@ function drawGame() {
         krill.changeAni('walk');
         krill.mirror.x = false;
     } else{
+        krill.speed = 0; 
         if (krill.direction == 90){
-            krill.speed = 0; 
             krill.rotation = 90; 
             krill.changeAni('standh');
             krill.mirror.x = false;
-        } 
-        else if ( krill.direction == -90){
-            krill.speed = 0; 
+        } else if ( krill.direction == -90){
             krill.rotation = 90; 
             krill.changeAni('standh');
             krill.mirror.x = true;
-        }
-        else{
-            krill.speed = 0; 
+        } else{
             krill.rotation = 0; 
             krill.changeAni('standh');
         }
@@ -277,6 +277,16 @@ function triggers() {
                     krillHealth -= 1;
                 }
                 
+            } else if(ents[i].type == 'krillGoal') {
+                console.log("You win!");
+                //Add win condition here
+
+            } else if(ents[i].type == 'slowTile') {
+                krill.speed = 1;
+
+            } else {//This is the default tile, when not triggering set back to defaults
+                krill.speed = 2;
+                tmpFrameCounter = 0;
             }
         }
     }

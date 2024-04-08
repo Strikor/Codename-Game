@@ -8,7 +8,7 @@ var view = {
     cameraLocked: false
 };
 
-var gridSize = 16;       //change from 32 to 16, did not fix problem, may not be necessary
+var gridSize = 16;
 
 var tmpMapObject = {
     x: 0,
@@ -64,6 +64,8 @@ function setup() {
             //add new options
             tileSelect.option('krillSpawn');
             tileSelect.option('krillHurt');
+            tileSelect.option('krillGoal');
+            tileSelect.option('slowTile');
 
 
         } else {
@@ -428,6 +430,10 @@ function drawObjects() {
             fill(129,84,146, entOpacity);
         } else if (entity.type == "krillHurt") {
             fill(70,32,85, (entOpacity > 100 ? entOpacity : entOpacity/2));//Due to strong color the opacity needs to be even lower
+        } else if (entity.type == "krillGoal") {
+            fill(201,179,32, entOpacity);
+        } else if (entity.type == "slowTile") {
+            fill(0, 119, 190, entOpacity);
         }
         rect(entity.x, entity.y, entity.width, entity.height);
     }
