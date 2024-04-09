@@ -7,6 +7,13 @@ var spriteImg = null;
 let krillHealth = 100; // Initial health
 const maxKrillHealth = 100; // Maximum health
 
+//let statements for enemy
+let enemy;
+let allWallGroups = [];
+let detectionRange = 200;  
+
+
+
 function preload(){
     state = "title";
     loadTileSprites();
@@ -49,6 +56,23 @@ function preloadGame() {
     door.collider = "static";
     door.layer = 0; 
     door.changeAni('closed'); 
+
+    //enemy sprite setup
+    enemy = new Sprite(400, 135, 32, 32);
+    enemy.spriteSheet = 'assets/enemyWalk.png';
+    enemy.anis.offset.x = 2;             //
+    enemy.anis.frameDelay = 10;          //controls how quickly frames are switched between
+    enemy.addAnis({
+        walk: { row: 0, frames: 6 },     //row determined by height(px) of sprite(I think??)
+        stand: { row: 0, col:3},
+    });
+    enemy.changeAni('stand');
+
+    enemy.originalPosition = createVector(enemy.position.x, enemy.position.y);
+    enemy.collider = 'none'; //no colissions yet
+    enemy.speed = 1;
+    enemy.rotationLock = true;
+
 }
 
 function setupGame(m) {
@@ -150,7 +174,6 @@ function setup() {
             }
         }
     }
-    
     //Basically nothing else should be put here either
 }
 
@@ -258,7 +281,8 @@ function drawGame() {
     krill.y = Math.round(krill.y);
 
     triggers();
-    
+    updateEnemy(); //calling enemy update function
+
     //krill.rotationLock = true;          //keeps sprite from spinning when hitting wall
     //krill.debug = true; //uncomment line as needed
     //------------------------------------------------------------------------------------------------------------
@@ -310,5 +334,71 @@ function drawHealthBar() {
 function mouseClicked() {
     if (state === "title") {
         mouseClickedTitle();
+    }
+}
+
+//function update enemy, somethings not working but im not sure why ->>sophia
+function updateEnemy() {
+    let distanceToKrill = dist(enemy.position.x, enemy.position.y, krill.position.x, krill.position.y);
+    // let distanceToOriginal = dist(enemy.position.x, enemy.position.y, enemy.originalPosition.x, enemy.originalPosition.y);
+
+    // Create vectors for positions
+    let krillPos = createVector(krill.position.x, krill.position.y);
+    let originalPos = createVector(enemy.originalPosition.x, enemy.originalPosition.y);
+
+    if (distanceToKrill < 200) {  // If the Krill is within the chase range
+        // Vector pointing from the enemy to the Krill
+        let chaseVector = p5.Vector.sub(krillPos, enemy.position);
+        chaseVector.setMag(enemy.speed);  // Set the magnitude of the vector to the enemy's speed
+        enemy.velocity.x = chaseVector.x;
+        enemy.velocity.y = chaseVector.y;
+        
+        //changing sprite animation along with movement of enemy
+        if (enemy.velocity.x < 0 && enemy.velocity.y > 0) {     
+            enemy.rotation = 45;                             
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;        
+        }
+        else if (enemy.velocity.x > 0 && enemy.velocity.y > 0) {
+            enemy.rotation = -45;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.x < 0 && enemy.velocity.y < 0) {
+            enemy.rotation = 135;           
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.x > 0 && enemy.velocity.y < 0) {
+            enemy.rotation = -135;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.x < 0) {
+            enemy.rotation = 90;
+            enemy.changeAni('walk');
+            enemy.mirror.x = true;        
+        }
+        else if (enemy.velocity.x > 0) {
+            enemy.rotation = -90;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.y > 0) {
+            enemy.rotation = 0;          
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.y < 0) {
+            enemy.rotation = 180;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+    } else {  // If the enemy needs to return to its original position
+        // Vector pointing from the enemy to its original position
+        let returnVector = p5.Vector.sub(originalPos, enemy.position);
+        returnVector.setMag(enemy.speed);  // Set the magnitude of the vector to the enemy's speed
+        enemy.velocity.x = returnVector.x;
+        enemy.velocity.y = returnVector.y;
     }
 }
