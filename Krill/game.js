@@ -58,6 +58,7 @@ function preloadGame() {
     door.layer = 0; 
     door.changeAni('closed'); 
 
+    /* this part works, update enemy/movement isnt working as of 4/10/24 4:30pm
     //enemy ani preload
     enemy = new Sprite(400, 135, 32, 32);
     enemy.spriteSheet = 'assets/enemyWalk.png';
@@ -73,7 +74,7 @@ function preloadGame() {
     enemy.collider = 'none'; //no colissions yet
     enemy.speed = 1;
     enemy.rotationLock = true;
-
+ */
     inFuture = false;
 }
 
@@ -261,12 +262,13 @@ function drawGame() {
             }
         }
     }
-    updateEnemy(); //not sure what isn't working
+    //updateEnemy(); //not working as of 4/10/24 4:30pm
     triggers();
     drawHealthBar();
     timeTravel();
 }
 
+//non-working state 4/10/24 4:30pm
 //function update enemy, for some reason enemy is not moving at all, tried a few things nothing worked :(
 function updateEnemy() {
     let distanceToKrill = dist(enemy.position.x, enemy.position.y, krill.position.x, krill.position.y);
