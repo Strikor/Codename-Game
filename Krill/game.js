@@ -7,6 +7,14 @@ var spriteImg = null;
 let krillHealth = 100; // Initial health
 const maxKrillHealth = 100; // Maximum health
 
+let mapArray;
+let map;
+
+//let statements for enemy
+let enemy;
+let allWallGroups = [];
+let detectionRange = 200;  
+
 function preload(){
     state = "title";
     loadTileSprites();
@@ -14,7 +22,7 @@ function preload(){
     preloadTitle();
     //preloadGame();
     //Basically nothing should ever be put here
-    
+    mapArray = loadStrings('./assets/testMapPresent.txt');  //default map
 }
 
 function preloadGame() {
@@ -50,6 +58,25 @@ function preloadGame() {
     door.collider = "static";
     door.layer = 0; 
     door.changeAni('closed'); 
+
+    /* this part works, update enemy/movement isnt working as of 4/10/24 4:30pm
+    //enemy ani preload
+    enemy = new Sprite(400, 135, 32, 32);
+    enemy.spriteSheet = 'assets/enemyWalk.png';
+    enemy.anis.offset.x = 2;             //
+    enemy.anis.frameDelay = 10;          //controls how quickly frames are switched between
+    enemy.addAnis({
+        walk: { row: 0, frames: 6 },     //row determined by height(px) of sprite(I think??)
+        stand: { row: 0, frames: 1},
+    });
+    enemy.changeAni('stand');
+
+    enemy.originalPosition = createVector(enemy.position.x, enemy.position.y);
+    enemy.collider = 'none'; //no colissions yet
+    enemy.speed = 1;
+    enemy.rotationLock = true;
+ */
+    inFuture = false;
 }
 
 function setupGame(m) {
@@ -86,10 +113,12 @@ function setupGame(m) {
     }
 
     room = new Tiles(lines, 15, 16, 16, 16);
+    roomFuture = new Tiles(lines, 15, 16, 16, 16);
 
     console.log("room created");
     console.log(room);
 }
+
 
 function setup() {
     if (state === "title") {
@@ -97,44 +126,17 @@ function setup() {
     } else if (state === "game") {
         createCanvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
         loadTiles();
-    
+
         //default map
         room = new Tiles( 
-            [
-                '1hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh2',
-                'v..............................v',
-                'v..............................v', //made periods for door location
-                'v...............................', //
-                'v...............................', //
-                'v...............................', //
-                'v...............................',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v..............................v',
-                'v.......................a-b....v',
-                'v.......................*~+....v',
-                'v..............1hhd.....c_>....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                'v..............v..........v....v',
-                '3hhhhhhhhhhhhhhphhhhhhhhhhphhhh4'
-            ],
+            mapArray,
             16,16, //px from left of canvas, px from top of canvas
             16,16  //h, w in px of each tile
+        );
+        roomFuture = new Tiles(
+            mapArray,
+            616,16, // change to const + maxlength of mapArray[i]*16 ex: 16 + 32*16
+            16,16
         );
 
         
@@ -196,7 +198,7 @@ function drawGame() {
     //translate(-playerCamera.x, -playerCamera.y);
 
     //Impliment a level based draw system
-    
+
     //Krill movement controls, must be in draw fxn ----------------------------------------------------------------
     if (kb.pressing('left')){
         krill.rotation = 0;
@@ -233,6 +235,13 @@ function drawGame() {
             krill.changeAni('standh');
         }
     }
+    //Fixes js rounding error with sprite position
+    krill.x = Math.round(krill.x);
+    krill.y = Math.round(krill.y);
+    //krill.rotationLock = true;          //keeps sprite from spinning when hitting wall
+    //krill.debug = true; //uncomment line as needed
+    //------------------------------------------------------------------------------------------------------------
+
     //door open/close controls
     if(krill.x > 440 && krill.y < 120){           //basically: if within vicinity of door
         if(door.collider != 'none'){              //if not open, e opens, if open e closes
@@ -253,17 +262,77 @@ function drawGame() {
             }
         }
     }
-    //Fixes js rounding error with sprite position
-    krill.x = Math.round(krill.x);
-    krill.y = Math.round(krill.y);
-
+    //updateEnemy(); //not working as of 4/10/24 4:30pm
     triggers();
-    
-    //krill.rotationLock = true;          //keeps sprite from spinning when hitting wall
-    //krill.debug = true; //uncomment line as needed
-    //------------------------------------------------------------------------------------------------------------
-
     drawHealthBar();
+    timeTravel();
+}
+
+//non-working state 4/10/24 4:30pm
+//function update enemy, for some reason enemy is not moving at all, tried a few things nothing worked :(
+function updateEnemy() {
+    let distanceToKrill = dist(enemy.position.x, enemy.position.y, krill.position.x, krill.position.y);
+    // let distanceToOriginal = dist(enemy.position.x, enemy.position.y, enemy.originalPosition.x, enemy.originalPosition.y);
+
+    // Create vectors for positions
+    let krillPos = createVector(krill.position.x, krill.position.y);
+    let originalPos = createVector(enemy.originalPosition.x, enemy.originalPosition.y);
+
+    if (distanceToKrill < 200) {  // If the Krill is within the chase range
+        // Vector pointing from the enemy to the Krill
+        let chaseVector = p5.Vector.sub(krillPos, enemy.position);
+        chaseVector.setMag(enemy.speed);  // Set the magnitude of the vector to the enemy's speed
+        enemy.velocity.x = chaseVector.x;
+        enemy.velocity.y = chaseVector.y;
+        
+        //changing sprite animation along with movement of enemy
+        if (enemy.velocity.x < 0 && enemy.velocity.y > 0) {     
+            enemy.rotation = 45;                             
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;        
+        }
+        else if (enemy.velocity.x > 0 && enemy.velocity.y > 0) {
+            enemy.rotation = -45;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.x < 0 && enemy.velocity.y < 0) {
+            enemy.rotation = 135;           
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.x > 0 && enemy.velocity.y < 0) {
+            enemy.rotation = -135;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.x < 0) {
+            enemy.rotation = 90;
+            enemy.changeAni('walk');
+            enemy.mirror.x = true;        
+        }
+        else if (enemy.velocity.x > 0) {
+            enemy.rotation = -90;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.y > 0) {
+            enemy.rotation = 0;          
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+        else if (enemy.velocity.y < 0) {
+            enemy.rotation = 180;
+            enemy.changeAni('walk');
+            enemy.mirror.x = false;
+        }
+    } else {  // If the enemy needs to return to its original position
+        // Vector pointing from the enemy to its original position
+        let returnVector = p5.Vector.sub(originalPos, enemy.position);
+        returnVector.setMag(enemy.speed);  // Set the magnitude of the vector to the enemy's speed
+        enemy.velocity.x = returnVector.x;
+        enemy.velocity.y = returnVector.y;
+    }
 }
 
 let tmpFrameCounter = 0;//Micilanious frame counter for triggers to use
@@ -322,3 +391,21 @@ function mouseClicked() {
         mouseClickedTitle();
     }
 }
+
+function timeTravel() {
+    if (!inFuture){ //in present
+        if (kb.presses('t')){
+            krill.x += 600; //change to const
+            inFuture = true;
+        }
+    } else if (inFuture) { //in future
+        if (kb.presses('t')){
+            krill.x -= 600; //change to const
+            inFuture = false;
+        }
+    } else {
+        inFuture = false;
+    }
+    
+}
+
