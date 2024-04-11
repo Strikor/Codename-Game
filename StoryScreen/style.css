@@ -5,7 +5,7 @@ html, body {
     align-items: center;
     height: 100vh;
     image-rendering: pixelated;
-    background-image: url('StoryScreeb.png');
+    background-image: url('StoryScreen.png');
     background-repeat: no-repeat;
     background-size:cover;
 }

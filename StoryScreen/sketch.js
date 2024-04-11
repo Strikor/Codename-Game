@@ -10,7 +10,7 @@ function preload() {
     soundFormats("mp3");
     mySound = loadSound('Krill (1).mp3');
     // Load the background image
-    backgroundImage = loadImage('StoryScreen.png');
+    backgroundImage = loadImage('./StoryScreen.png');
     // Load the button image
     buttonImage = loadImage('button.png'); // Replace 'button.png' with the path to your PNG button image
 }
