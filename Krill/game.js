@@ -41,6 +41,7 @@ function preloadGame() {
     krill.direction = 0;
     krill.speed = 2;
     krill.changeAni('walk');
+    krill.status = 'alive';
 
     //door ani preload
     //spawn:            x,  y, 
@@ -200,6 +201,12 @@ function drawGame() {
     //Impliment a level based draw system
 
     //Krill movement controls, must be in draw fxn ----------------------------------------------------------------
+    if (krill.status == 'slowed') {
+        krill.speed = 1;
+    } else {
+        krill.speed = 2;
+    }
+    
     if (kb.pressing('left')){
         krill.rotation = 0;
         krill.direction = 180;        //direction of movement: R = 0, L = 180, up = -90, down = 90
@@ -220,7 +227,7 @@ function drawGame() {
         krill.direction = -90; 
         krill.changeAni('walk');
         krill.mirror.x = false;
-    } else{
+    } else {
         krill.speed = 0; 
         if (krill.direction == 90){
             krill.rotation = 90; 
@@ -244,6 +251,7 @@ function drawGame() {
 
     //door open/close controls
     if(krill.x > 440 && krill.y < 120){           //basically: if within vicinity of door
+        camera.on();
         if(door.collider != 'none'){              //if not open, e opens, if open e closes
             textSize(11);
             text('press [e] to open ', door.x - 150, door.y - 32);
@@ -261,11 +269,40 @@ function drawGame() {
                 door.changeAni(['closing', 'closed']); 
             }
         }
+        camera.off();
     }
     //updateEnemy(); //not working as of 4/10/24 4:30pm
-    triggers();
     drawHealthBar();
     timeTravel();
+    triggers();
+}
+
+let tmpFrameCounter = 0;//Micilanious frame counter for triggers to use
+function triggers() {
+    for(let i = 0; i < ents.length; i++) {
+        if(ents.length != 0 && krill.x + krill.width > ents[i].x && krill.x < ents[i].x + ents[i].width && krill.y + krill.height > ents[i].y && krill.y < ents[i].y + ents[i].height) {
+            if(ents[i].type == 'krillHurt') {
+                tmpFrameCounter++;
+                if(tmpFrameCounter % 60 == 0) {//Every 60 frames
+                    tmpFrameCounter = 0;
+                    krillHealth -= 1;
+                }
+                
+            } else if(ents[i].type == 'krillGoal') {
+                console.log("You win!");
+                //Add win condition here
+
+            } else if(ents[i].type == 'slowTile') {
+                krill.status = 'slowed';
+
+            }
+        } else {//This is the default tile, when not triggering set back to defaults
+            krill.status = 'alive';
+            tmpFrameCounter = 0;
+            console.log("Default tile");
+        }
+    }
+    console.log(krill.speed);
 }
 
 //non-working state 4/10/24 4:30pm
@@ -333,33 +370,6 @@ function updateEnemy() {
         enemy.velocity.x = returnVector.x;
         enemy.velocity.y = returnVector.y;
     }
-}
-
-let tmpFrameCounter = 0;//Micilanious frame counter for triggers to use
-function triggers() {
-    for(let i = 0; i < ents.length; i++) {
-        if(krill.x + krill.width > ents[i].x && krill.x < ents[i].x + ents[i].width && krill.y + krill.height > ents[i].y && krill.y < ents[i].y + ents[i].height) {
-            if(ents[i].type == 'krillHurt') {
-                tmpFrameCounter++;
-                if(tmpFrameCounter % 60 == 0) {//Every 60 frames
-                    tmpFrameCounter = 0;
-                    krillHealth -= 1;
-                }
-                
-            } else if(ents[i].type == 'krillGoal') {
-                console.log("You win!");
-                //Add win condition here
-
-            } else if(ents[i].type == 'slowTile') {
-                krill.speed = 1;
-
-            } else {//This is the default tile, when not triggering set back to defaults
-                krill.speed = 2;
-                tmpFrameCounter = 0;
-            }
-        }
-    }
-    //console.log(krill.x + ", " + krill.y);
 }
 
 function drawHealthBar() {
