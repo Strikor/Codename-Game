@@ -272,9 +272,12 @@ function drawGame() {
         camera.off();
     }
     //updateEnemy(); //not working as of 4/10/24 4:30pm
-    drawHealthBar();
     timeTravel();
     triggers();
+}
+
+function postDraw() {
+    drawHealthBar();
 }
 
 let tmpFrameCounter = 0;//Micilanious frame counter for triggers to use
