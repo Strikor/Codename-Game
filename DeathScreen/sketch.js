@@ -21,8 +21,8 @@ function setup() {
     backgroundMusic();
 
     // Set button position
-    buttonX = width / 2 - buttonWidth / 2;
-    buttonY = height / 2 - buttonHeight / 2;
+    buttonX = width / 1.25 - buttonWidth / 2;
+    buttonY = height / 1.25 - buttonHeight / 2;
 }
 
 function backgroundMusic() {
@@ -42,12 +42,12 @@ function draw() {
 
 function switchToNewSketch() {
     // Replace the current sketch with the new sketch
-    window.location.href = "KrillEditor\\sketch.js";
+  window.location.href = "KrillEditor\\sketch.js";
 }
 
 function mouseClicked() {
     // Check if the mouse is over the button when clicked
-    if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight) {
-        switchToNewSketch();
+  if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight) {
+       switchToNewSketch();
     }
 }

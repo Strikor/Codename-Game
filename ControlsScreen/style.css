@@ -21,7 +21,7 @@ h1 {
 button {
     padding: 10px 20px;
     font-size: 16px;
-    background-image:url('button.png'); /*get button background to be transparent */
+    background-image:url('button.png'); 
     background-repeat: no-repeat;
     background-size: cover;
     width: 100px;
@@ -38,3 +38,4 @@ button {
     top: 85%;
    
 }
+
