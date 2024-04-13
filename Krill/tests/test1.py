@@ -21,7 +21,7 @@ def test_title_start_button():
   #  assert width > 100  
    # assert height > 100
 
-    time.sleep(5)
+    time.sleep(3)
 
 #    buttonWidth = 200
  #   buttonHeight = 50
@@ -54,13 +54,67 @@ def test_title_start_button():
         .click(startButton)\
         .perform()
     
-    ActionChains(browser)\
-        .send_keys(Keys.ARROW_RIGHT)\
-        .perform()\
-        .send_keys(Keys.ARROW_DOWN)\
-        .perform()
-
+    ## move RIGHT for 2.6 seconds (going toward room)
+    ActionChains(browser).key_down(Keys.ARROW_RIGHT).perform()
+    time.sleep(2.6)
+    ActionChains(browser).key_up(Keys.ARROW_RIGHT).perform()
     
+    ## move DOWN for 5 seconds (toward room, collision with wall)
+    ActionChains(browser).key_down(Keys.ARROW_DOWN).perform()
+    time.sleep(4)
+    ActionChains(browser).key_up(Keys.ARROW_DOWN).perform()
+    #time.sleep(3)
+
+    ## wall collision to the LEFT
+    ActionChains(browser).key_down(Keys.ARROW_LEFT).perform()
+    time.sleep(1.25)
+    ActionChains(browser).key_up(Keys.ARROW_LEFT).perform()
+
+    ## right to leave room check "d" (WASD)
+    ActionChains(browser).key_down("d").perform()
+    time.sleep(0.5)
+    ActionChains(browser).key_up("d").perform()
+
+    ## UP toward door 
+    ActionChains(browser).key_down(Keys.ARROW_UP).perform()
+    time.sleep(3.25)
+    ActionChains(browser).key_up(Keys.ARROW_UP).perform()
+
+    ## to and through door (RIGHT, "e")
+    ActionChains(browser).key_down(Keys.ARROW_RIGHT).perform()
+    time.sleep(1)
+    ActionChains(browser).send_keys("e").perform()
+    time.sleep(2)
+    ActionChains(browser).key_up(Keys.ARROW_RIGHT).perform()
+
+    ## close door ("e") check "s" (WASD)
+    ActionChains(browser).send_keys("e").perform()
+    ActionChains(browser).send_keys("s").perform()
+    time.sleep(1)
+
+    ## go DOWN in room
+    ActionChains(browser).key_down(Keys.ARROW_DOWN).perform()
+    time.sleep(2.5)
+    ActionChains(browser).key_up(Keys.ARROW_DOWN).perform()
+
+    ## check "a" (WASD) left
+    ActionChains(browser).send_keys("a").perform()
+    time.sleep(1)
+
+    ## check "w" (WASD) up
+    ActionChains(browser).key_down("w").perform()
+    time.sleep(2.2)
+    ActionChains(browser).key_up("w").perform()
+    time.sleep(1)
+
+    ## check time travel present to future
+    ActionChains(browser).send_keys("t").perform()
+    time.sleep(2)
+
+    ## check time travel future to present
+    ActionChains(browser).send_keys("t").perform()  
+
+    ## hang out for 5 sec
     time.sleep(5)
 
     browser.close()

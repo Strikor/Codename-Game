@@ -6,6 +6,7 @@ var krill = null;
 var spriteImg = null;
 let krillHealth = 100; // Initial health
 const maxKrillHealth = 100; // Maximum health
+const futureOffset = 100;  //Pixels from present map to future map
 
 let mapArray;
 let map;
@@ -78,6 +79,9 @@ function preloadGame() {
     enemy.rotationLock = true;
  */
     inFuture = false;
+    findMaxRoomWidth();
+    offsetR = futureOffset + maxRoomWidth;
+    offsetR *= 16; //pixels
 }
 
 function setupGame(m) {
@@ -118,6 +122,9 @@ function setupGame(m) {
 
     console.log("room created");
     console.log(room);
+
+    findMaxRoomWidth();
+    console.log("max room width: ", maxRoomWidth);
 }
 
 
@@ -134,9 +141,12 @@ function setup() {
             16,16, //px from left of canvas, px from top of canvas
             16,16  //h, w in px of each tile
         );
+
+
+        //console.log(maxRoomWidth);
         roomFuture = new Tiles(
             mapArray,
-            616,16, // change to const + maxlength of mapArray[i]*16 ex: 16 + 32*16
+            offsetR,16, // change to const + maxlength of mapArray[i]*16 ex: 16 + 32*16
             16,16
         );
 
@@ -405,15 +415,39 @@ function mouseClicked() {
     }
 }
 
+function findMaxRoomWidth(){
+/*
+    //find width of room
+    roomHeight = mapArray.length(); //roomHeight
+    let max = 0;
+    for (i=0; i<roomHeight; ++i){ //iterate through lines
+        let rowLength = mapArray[i];
+        if (rowLength > max){
+            max = rowLength;
+        } else { max = max; }
+    }
+    maxRoomWidth = max;
+    */
+
+    let max = mapArray[0].length;
+    for (let i = 1; i < mapArray.length; ++i) {
+        let stringLength = mapArray[i].length;
+        if (stringLength > max) {
+            max = stringLength;
+        }
+    }
+    maxRoomWidth = max;
+}
+
 function timeTravel() {
     if (!inFuture){ //in present
         if (kb.presses('t')){
-            krill.x += 600; //change to const
+            krill.x += offsetR -16; //change to var
             inFuture = true;
         }
     } else if (inFuture) { //in future
         if (kb.presses('t')){
-            krill.x -= 600; //change to const
+            krill.x -= offsetR -16; //change to var
             inFuture = false;
         }
     } else {
