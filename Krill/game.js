@@ -1,5 +1,4 @@
 let state = "editor";
-
 let ents = [];
 
 var krill = null; 
@@ -419,3 +418,9 @@ function timeTravel() {
     
 }
 
+module.exports = {
+    state, 
+    preload, 
+    setup, 
+    draw, 
+} 

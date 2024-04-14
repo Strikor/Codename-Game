@@ -165,3 +165,9 @@ function loadTiles() {
               2,0,2]
     }
 }
+
+module.exports = {
+      loadKrillAni,
+      loadTileSprites,
+      loadTiles
+}
