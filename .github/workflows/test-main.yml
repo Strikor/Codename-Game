@@ -4,7 +4,7 @@ on:
   #  branches: [main, dev, test-main-fr]
   #pull_request:
   #  branches: [main, dev, test-main-fr]
-  workflow_dispatch: null
+  workflow_dispatch: 
 jobs:
   test:
     runs-on: ubuntu-latest
