@@ -1,9 +1,9 @@
 name: test-main
 on: 
-  #push:
-  #  branches: [main, dev, test-main-fr]
-  #pull_request:
-  #  branches: [main, dev, test-main-fr]
+  push:
+    branches: [test-main-fr]
+  pull_request:
+    branches: [test-main-fr]
   workflow_dispatch: 
 jobs:
   test:
