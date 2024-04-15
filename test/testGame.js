@@ -4,8 +4,8 @@ const expect = require('chai').assert;
 const { JSDOM } = require('jsdom');
 const {loadImage} = require('p5');
 */
-let {state, preload, setup, draw} = require('../game local/game');
-const {loadTileSprites, loadKrillAni, loadTiles} = require('../game local/tiles');
+let {state, preload, setup, draw} = require('../Krill/game');
+const {loadTileSprites, loadKrillAni, loadTiles} = require('../Krill/tiles');
 
 
 describe('Game file', function(){
