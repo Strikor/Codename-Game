@@ -15,7 +15,7 @@ jobs:
 
       - name: Setup Node 
         uses: actions/setup-node@v3
-          with:
+        with:
           node-version: 20
           cache: npm
 
