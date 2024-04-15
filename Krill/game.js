@@ -419,3 +419,9 @@ function timeTravel() {
     
 }
 
+module.exports = {
+    state, 
+    preload, 
+    setup, 
+    draw, 
+} 
