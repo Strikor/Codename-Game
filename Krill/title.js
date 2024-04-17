@@ -3,8 +3,8 @@ let backgroundImage;
 let buttonImage;
 let buttonX;
 let buttonY;
-let buttonWidth = 200;
-let buttonHeight = 50;
+let buttonWidth = 195;
+let buttonHeight = 96;
 let button;
 
 function preloadTitle() {
@@ -17,10 +17,10 @@ function preloadTitle() {
 
 function setupTitle() {
     // Create the canvas
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(windowWidth, windowHeight, 'pixelated');
     backgroundMusic();
     
-    button = createImg('assets/title/button.png', 'start_button'); 
+    button = createImg('assets/title/button3.png', 'start_button'); 
     button.size(buttonWidth, buttonHeight)
     button.id('start_button');
 

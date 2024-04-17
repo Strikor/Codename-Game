@@ -260,7 +260,7 @@ function drawGame() {
     //------------------------------------------------------------------------------------------------------------
 
     //door open/close controls
-    if(krill.x > 440 && krill.y < 120){           //basically: if within vicinity of door
+    if(krill.x > 440 && krill.x < 600 && krill.y < 120){           //basically: if within vicinity of door
         camera.on();
         if(door.collider != 'none'){              //if not open, e opens, if open e closes
             textSize(11);
