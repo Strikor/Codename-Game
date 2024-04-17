@@ -9,10 +9,6 @@ function loadTileSprites(){
     sheetImg = loadImage('./assets/walls16.png');      //replaced with self-created graphics
 }
 
-function loadKrillAni(){
-    spriteImg = loadImage('./assets/krillWalk4D.png'); 
-}
-
 function loadTiles() {
     tLcorner = new Group();
     tLcorner.collider = "static"; 
