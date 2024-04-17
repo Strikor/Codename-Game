@@ -23,11 +23,15 @@ function preload(){
     //preloadGame();
     //Basically nothing should ever be put here
     mapArray = loadStrings('./assets/testMapPresent.txt');  //default map
+
+    mapArrayLVL1P = loadStrings('./assets/mapLVL1P.txt');
 }
 
 function preloadGame() {
     krillAniDefine(); //rewrote as function line 412
     door1AniDefine(); //rewrote as function line 431
+    door2AniDefine();
+
     // this part works, update enemy/movement isnt working as of 4/10/24 4:30pm
     /*
     enemyAniDefine(); //untested as function
@@ -72,6 +76,7 @@ function setupGame(m) {
     }
 
     room = new Tiles(lines, 15, 16, 16, 16);
+    room.layer = 0; 
     roomFuture = new Tiles(lines, 15, 16, 16, 16);
 
     console.log("room created");
@@ -91,7 +96,7 @@ function setup() {
 
         //default map
         room = new Tiles( 
-            mapArray,
+            mapArrayLVL1P,
             16,16, //px from left of canvas, px from top of canvas
             16,16  //h, w in px of each tile
         );
@@ -99,14 +104,14 @@ function setup() {
 
         //console.log(maxRoomWidth);
         roomFuture = new Tiles(
-            mapArray,
+            mapArrayLVL1P,
             offsetR,16, // change to const + maxlength of mapArray[i]*16 ex: 16 + 32*16
             16,16
         );
 
         
         ents.push({type: 'krillSpawn', x: 64, y: 64, width: 16, height: 16});
-        ents.push({type: 'krillHurt', x: 272, y: 368, width: 160, height: 128});
+        ents.push({type: 'krillHurt', x: 272, y: 368, width: 160, height: 128}); //needs to be updated with map
 
         for(let i = 0; i < ents.length; i++) {
             if(ents[i].type == 'krillSpawn') {
@@ -177,9 +182,10 @@ function drawGame() {
     //krill.rotationLock = true;          
     //krill.debug = true; 
     
-    //door open/close controls
+    //door1 open/close controls
     camera.on();    //keeps text where I want it
-    door1Movement(); 
+    door1Movement();
+    door2Movement(); 
     camera.off();
 
     //updateEnemy(); //not working as of 4/10/24 4:30pm
@@ -350,42 +356,84 @@ function krillMovement(){
     }
 }
 
+//doors, so many doors omg they operate differently so they need to be dif sprites
 function door1AniDefine(){
     //door ani preload
     //spawn:            x,  y, 
-    door = new Sprite(510, 88, 16, 64);
-    door.spriteSheet = 'assets/door4.png';
-    door.anis.offset.x = 2;             //
-    door.anis.frameDelay = 10;          //controls how quickly frames are switched between
-    door.addAnis({
+    door1 = new Sprite(302, 344, 16, 64);
+    door1.spriteSheet = 'assets/door4.png';
+    door1.anis.offset.x = 2;             //
+    door1.anis.frameDelay = 10;          //controls how quickly frames are switched between
+    door1.addAnis({
         closed: { row: 0, frames: 6 },     //row determined by height(px) of sprite
         open: { row: 1, frames: 6},
         opening: {row: 2, frames: 6},
         closing: {row: 3, frames: 5},
     });
-    door.rotationLock = 'true';
-    door.collider = "static";
-    door.layer = 0; 
-    door.changeAni('closed'); 
+    door1.rotationLock = 'true';
+    door1.collider = "static";
+    door1.layer = 0; 
+    door1.changeAni('closed'); 
 }
 
 function door1Movement(){
-    if(abs(krill.y - door.y) < 30 && abs(door.x - krill.x) < 90){           //basically: if within vicinity of door
-        if(door.collider != 'none'){              //if not open, e opens, if open e closes
+    if(abs(krill.y - door1.y) < 30 && abs(door1.x - krill.x) < 90){           //basically: if within vicinity of door
+        if(door1.collider != 'none'){              //if not open, e opens, if open e closes
             textSize(11);
-            text('press [e] to open ', door.x - 150, door.y - 32);
+            text('press [e] to open ', door1.x - 150, door1.y - 32);
             if(kb.presses('e')){
-                door.changeAni(['opening', 'open']); 
+                door1.changeAni(['opening', 'open']); 
             }
-            if (door.ani.name == 'open'){
-                door.collider = 'none'; 
+            if (door1.ani.name == 'open'){
+                door1.collider = 'none'; 
             }
-        } else if (door.collider == 'none'){
+        } else if (door1.collider == 'none'){
             textSize(11);
-            text('press [e] to close', door.x - 150, door.y - 32);
+            text('press [e] to close', door1.x - 150, door1.y - 32);
             if(kb.presses('e')){ 
-                door.collider = 'static'; 
-                door.changeAni(['closing', 'closed']); 
+                door1.collider = 'static'; 
+                door1.changeAni(['closing', 'closed']); 
+            }
+        }
+    }
+}
+
+function door2AniDefine(){
+    //door ani preload
+    //spawn:            x,  y, 
+    door2 = new Sprite(398, 344, 16, 64);
+    door2.spriteSheet = 'assets/door4.png';
+    door2.anis.offset.x = 2;             //
+    door2.anis.frameDelay = 10;          //controls how quickly frames are switched between
+    door2.addAnis({
+        closed: { row: 0, frames: 6 },     //row determined by height(px) of sprite
+        open: { row: 1, frames: 6},
+        opening: {row: 2, frames: 6},
+        closing: {row: 3, frames: 5},
+    });
+    door2.rotationLock = 'true';
+    door2.collider = "static";
+    door2.layer = 0; 
+    door2.changeAni('closed'); 
+}
+
+function door2Movement(){
+    if(abs(krill.y - door2.y) < 30 && abs(door2.x - krill.x) < 90){           //basically: if within vicinity of door
+        if(door2.collider != 'none'){              //if not open, e opens, if open e closes
+            textSize(11);
+            text('press [e] to open ', door2.x + 30, door2.y - 32);
+            if(kb.presses('e')){
+                door2.changeAni(['opening', 'open']); 
+            }
+            if (door2.ani.name == 'open'){
+                door2.collider = 'none'; 
+            }
+        } else if (door2.collider == 'none'){
+            textSize(11);
+            text('press [e] to close', door2.x + 30, door2.y - 32);
+            if(kb.presses('e')){ 
+                door2.collider = 'static'; 
+                door2.changeAni(['closing', 'closed']); 
             }
         }
     }
