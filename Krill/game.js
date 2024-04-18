@@ -30,7 +30,7 @@ function preload(){
 function preloadGame() {
     krillAniDefine(); //rewrote as function line 412
     door1AniDefine(); //rewrote as function line 431
-    door2AniDefine();
+    door2AniDefine(); //each door will be dif sprite
 
     // this part works, update enemy/movement isnt working as of 4/10/24 4:30pm
     /*
@@ -225,8 +225,6 @@ function triggers() {
     console.log(krill.speed);
 }
 
-//non-working state 4/10/24 4:30pm
-//function update enemy, for some reason enemy is not moving at all, tried a few things nothing worked :(
 
 function drawHealthBar() {
     // Display health bar for the krill
@@ -398,6 +396,7 @@ function door1Movement(){
     }
 }
 
+//so far just same mechanic dif spawn point
 function door2AniDefine(){
     //door ani preload
     //spawn:            x,  y, 
@@ -439,6 +438,8 @@ function door2Movement(){
     }
 }
 
+//non-working state 4/10/24 4:30pm
+//function update enemy, for some reason enemy is not moving at all, tried a few things nothing worked :(
 function enemyAniDefine(){
     //enemy ani preload
     enemy = new Sprite(400, 135, 32, 32);

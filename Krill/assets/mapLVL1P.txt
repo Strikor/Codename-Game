@@ -1,4 +1,4 @@
-1hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh2
+1hhhhhhhhhhhhhhhhh?hhhhh?hhhhhhhhhhhh2
 v                 v     v            v
 v                 v     v            v
 v                 v     v            v
@@ -24,15 +24,15 @@ v                                    v
 v                 v     v            v
 v                 v     v            v
 v                 v     v            v
-hhhhhhhhhhhhhhhhhh4     hhhhhhhhhhhhhh
+@hhhhhhhhhhhhhhhhh4     @hhhhhhhhhhhh!
 v                       v            v
 v                       v            v
-v                       h            v
+v                       v            v
 v                                    v
 v                                    v
 v                                    v
 v                                    v
-4                       h            v
+4                       v            v
                         v            v
                         v            v
                         v            v
@@ -45,7 +45,7 @@ v                       v            v
 v                       v            v
 v                       v            v
 v                       v            v
-hhhhhhhhhhhhhhhhhhhhhhhhphhhhhd    hhh
+@hhhhhhhhhhhhhhhhhhhhhhhphhhhhh    hh!
 v                                    v
 v                                    v
 v                                    v
