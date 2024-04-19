@@ -181,7 +181,6 @@ function loadTiles() {
     }
 }
 module.exports = {
-      loadKrillAni,
       loadTileSprites,
       loadTiles
 }
