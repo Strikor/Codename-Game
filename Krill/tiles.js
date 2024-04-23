@@ -1,6 +1,7 @@
-let sheetImg; 
+let sheetImg, floorSheet; 
 let tLcorner, tRcorner, bLcorner, bRcorner, vWall, hWall; 
 let pWall, rWall, rrWall, aWall, bWall, cWall, dWall, conL, conR, conD;
+let wood, square; 
 let room;
 
 let connecting;
@@ -8,6 +9,7 @@ let connecting;
 //chang to recieve string, then recall load
 function loadTileSprites(){
     sheetImg = loadImage('./assets/walls16.png');      //replaced with self-created graphics
+    floorSheet = loadImage('./assets/floorDO.png'); 
 }
 
 function loadTiles() {
@@ -139,6 +141,21 @@ function loadTiles() {
     conD.spriteSheet=sheetImg;
     conD.addAni({h:16, w: 16, row:1, col:5})
     conD.tile = '?';
+
+    //floor
+    wood = new Group();
+    wood.collider = "none";
+    wood.spriteSheet=floorSheet;
+    wood.addAni({h:32, w: 32, row:1, col: 0})
+    wood.tile = '`';
+   
+
+    square = new Group();
+    square.collider = "none";
+    square.spriteSheet=floorSheet;
+    square.addAni({h:32, w: 32, row:0, col: 1})
+    square.tile = '/';
+  
 
     // Connection Mapping
     connecting = {

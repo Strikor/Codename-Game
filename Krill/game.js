@@ -25,12 +25,14 @@ function preload(){
     mapArray = loadStrings('./assets/testMapPresent.txt');  //default map
 
     mapArrayLVL1P = loadStrings('./assets/mapLVL1P.txt');
+    floorMap = loadStrings('./assets/floorMap.txt'); 
 }
 
 function preloadGame() {
     krillAniDefine(); //rewrote as function line 412
     door1AniDefine(); //rewrote as function line 431
     door2AniDefine(); //each door will be dif sprite
+    door3AniDefine();
 
     // this part works, update enemy/movement isnt working as of 4/10/24 4:30pm
     /*
@@ -76,8 +78,11 @@ function setupGame(m) {
     }
 
     room = new Tiles(lines, 15, 16, 16, 16);
-    room.layer = 0; 
+    room.layer = 1; 
     roomFuture = new Tiles(lines, 15, 16, 16, 16);
+
+    floor = new Tiles(lines, 32,32,32,32); 
+    floor.layer = 0; 
 
     console.log("room created");
     console.log(room);
@@ -94,13 +99,20 @@ function setup() {
         createCanvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
         loadTiles();
 
+        floor = new Tiles(
+            floorMap, 
+            32,32, 
+            32,32
+        )
+        floor.layer = 0; 
+
         //default map
         room = new Tiles( 
             mapArrayLVL1P,
             16,16, //px from left of canvas, px from top of canvas
             16,16  //h, w in px of each tile
         );
-
+        room.layer = 1;
 
         //console.log(maxRoomWidth);
         roomFuture = new Tiles(
@@ -186,6 +198,7 @@ function drawGame() {
     camera.on();    //keeps text where I want it
     door1Movement();
     door2Movement(); 
+    door3Movement();
     camera.off();
 
     //updateEnemy(); //not working as of 4/10/24 4:30pm
@@ -296,6 +309,7 @@ function timeTravel() {
 }
 
 //sprite functionality below \/\/\/\/\/
+//krill layer = 2
 function krillAniDefine(){
     //krill ani preload
     //                  x,   y,  h,  w    where: x, y are position on canvas 
@@ -307,7 +321,7 @@ function krillAniDefine(){
         walk: { row: 0, frames: 6 },     //row determined by height(px) of sprite(I think??)
         standh: { row: 0, frames: 1},
     });
-    krill.layer = 1; 
+    krill.layer = 2; 
     krill.collider = 'dynamic'; 
     krill.direction = 0;
     krill.speed = 2;
@@ -355,10 +369,11 @@ function krillMovement(){
 }
 
 //doors, so many doors omg they operate differently so they need to be dif sprites
+// door layer = 1, below krill
 function door1AniDefine(){
     //door ani preload
     //spawn:            x,  y, 
-    door1 = new Sprite(302, 344, 16, 64);
+    door1 = new Sprite(446, 344, 16, 64);
     door1.spriteSheet = 'assets/door4.png';
     door1.anis.offset.x = 2;             //
     door1.anis.frameDelay = 10;          //controls how quickly frames are switched between
@@ -370,10 +385,11 @@ function door1AniDefine(){
     });
     door1.rotationLock = 'true';
     door1.collider = "static";
-    door1.layer = 0; 
+    door1.layer = 1; 
     door1.changeAni('closed'); 
 }
 
+//all door movement needs text to display on top of canvas, prob needs to be html-ified
 function door1Movement(){
     if(abs(krill.y - door1.y) < 30 && abs(door1.x - krill.x) < 90){           //basically: if within vicinity of door
         if(door1.collider != 'none'){              //if not open, e opens, if open e closes
@@ -400,7 +416,7 @@ function door1Movement(){
 function door2AniDefine(){
     //door ani preload
     //spawn:            x,  y, 
-    door2 = new Sprite(398, 344, 16, 64);
+    door2 = new Sprite(590, 104, 16, 64);
     door2.spriteSheet = 'assets/door4.png';
     door2.anis.offset.x = 2;             //
     door2.anis.frameDelay = 10;          //controls how quickly frames are switched between
@@ -412,7 +428,7 @@ function door2AniDefine(){
     });
     door2.rotationLock = 'true';
     door2.collider = "static";
-    door2.layer = 0; 
+    door2.layer = 1; 
     door2.changeAni('closed'); 
 }
 
@@ -433,6 +449,48 @@ function door2Movement(){
             if(kb.presses('e')){ 
                 door2.collider = 'static'; 
                 door2.changeAni(['closing', 'closed']); 
+            }
+        }
+    }
+}
+
+//so far just same mechanic dif spawn point
+function door3AniDefine(){
+    //door ani preload
+    //spawn:            x,  y, 
+    door3 = new Sprite(590, 520, 16, 64);
+    door3.spriteSheet = 'assets/door4.png';
+    door3.anis.offset.x = 2;             //
+    door3.anis.frameDelay = 10;          //controls how quickly frames are switched between
+    door3.addAnis({
+        closed: { row: 0, frames: 6 },     //row determined by height(px) of sprite
+        open: { row: 1, frames: 6},
+        opening: {row: 2, frames: 6},
+        closing: {row: 3, frames: 5},
+    });
+    door3.rotationLock = 'true';
+    door3.collider = "static";
+    door3.layer = 1; 
+    door3.changeAni('closed'); 
+}
+
+function door3Movement(){
+    if(abs(krill.y - door3.y) < 30 && abs(door3.x - krill.x) < 90){           //basically: if within vicinity of door
+        if(door3.collider != 'none'){              //if not open, e opens, if open e closes
+            textSize(11);
+            text('press [e] to open ', door3.x + 30, door3.y - 32);
+            if(kb.presses('e')){
+                door3.changeAni(['opening', 'open']); 
+            }
+            if (door3.ani.name == 'open'){
+                door3.collider = 'none'; 
+            }
+        } else if (door3.collider == 'none'){
+            textSize(11);
+            text('press [e] to close', door3.x + 30, door3.y - 32);
+            if(kb.presses('e')){ 
+                door3.collider = 'static'; 
+                door3.changeAni(['closing', 'closed']); 
             }
         }
     }

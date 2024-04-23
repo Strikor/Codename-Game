@@ -1,67 +1,61 @@
-1hhhhhhhhhhhhhhhhh?hhhhh?hhhhhhhhhhhh2
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                 v     v            v
-v                 v     v            v
-v                 v     v            v
-@hhhhhhhhhhhhhhhhh4     @hhhhhhhhhhhh!
-v                       v            v
-v                       v            v
-v                       v            v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-4                       v            v
-                        v            v
-                        v            v
-                        v            v
-                        v            v
-2                       v            v
-v                       v            v
-v                       v            v
-v                       v            v
-v                       v            v
-v                       v            v
-v                       v            v
-v                       v            v
-@hhhhhhhhhhhhhhhhhhhhhhhphhhhhh    hh!
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-v                                    v
-3hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh4
+1hhhhhhhhhhhhhhhhhhhhhhhhhh?hhhhhhhh?hhhhhhhhhhhhhhhhhhhhhhhhhhh2
+v                          v        v                           v
+v                          v        v                           v
+v                          v        v                           v
+v                          v                                    v
+v                          v                        1hhhhhh     v          
+v                          v                        v           v
+v                          v                        v           v
+v                          v        v               v           v
+v                          v        v               v           v
+v                          v        v               v           v
+v                          v        v               v           v
+v                          v        v               v           
+v                          v        v               v           
+v                          v        v               v           
+v                          v        v               v           
+v                          v        v               v           v
+v                          v        v               v           v
+v                          v        v               v           v
+v                                   v               v           v
+v                                   v               v           v
+v                                   v               3hhhhhh     v
+v                                   v                           v
+v                          v        v                           v
+v                          v        v                           v
+v                          v        v                           v
+@hhhhhhhhhhhhhhhhhhhhhhhhhh4        @hhhhhhhhhhhhhhhhhhhhhhhhhhh!
+v                                   v                           v
+v                                   v                           v
+v                                   v                           v
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v
+v                                   v                           v
+v                                   v                           v
+v                                   v                           v
+v                                   v                           v
+v                                   v                           v
+v                                   v                           v
+v                                   v                           v
+v                                   v                           v
+v                                   v                           v
+v                                   v                           v
+@hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhphhhhhhhhhhhhhhh     hhhhhhh!
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v  
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v
+v                                                               v
+3hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh4
