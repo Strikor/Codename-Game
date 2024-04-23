@@ -5,7 +5,7 @@ const { JSDOM } = require('jsdom');
 const {loadImage} = require('p5');
 */
 let {state, preload, setup, draw} = require('../Krill/game');
-const {loadTileSprites, loadKrillAni, loadTiles} = require('../Krill/tiles');
+const {loadTileSprites, loadTiles} = require('../Krill/tiles');
 
 
 describe('Game file', function(){

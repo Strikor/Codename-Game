@@ -1,16 +1,15 @@
-let sheetImg; 
+let sheetImg, floorSheet; 
 let tLcorner, tRcorner, bLcorner, bRcorner, vWall, hWall; 
-let pWall, rWall, rrWall, aWall, bWall, cWall, dWall;
+let pWall, rWall, rrWall, aWall, bWall, cWall, dWall, conL, conR, conD;
+let wood, square; 
 let room;
 
 let connecting;
 
+//chang to recieve string, then recall load
 function loadTileSprites(){
     sheetImg = loadImage('./assets/walls16.png');      //replaced with self-created graphics
-}
-
-function loadKrillAni(){
-    spriteImg = loadImage('./assets/krillWalk4D.png'); 
+    floorSheet = loadImage('./assets/floorDO.png'); 
 }
 
 function loadTiles() {
@@ -125,6 +124,39 @@ function loadTiles() {
     sqr.addAni({h:16, w: 16, row:12, col:12})
     sqr.tile = '~';
 
+    conL = new Group();
+    conL.collider = "static";
+    conL.spriteSheet=sheetImg;
+    conL.addAni({h:16, w: 16, row:5, col:1})
+    conL.tile = '@';
+
+    conR = new Group();
+    conR.collider = "static";
+    conR.spriteSheet=sheetImg;
+    conR.addAni({h:16, w: 16, row:7, col:13})
+    conR.tile = '!';
+
+    conD = new Group();
+    conD.collider = "static";
+    conD.spriteSheet=sheetImg;
+    conD.addAni({h:16, w: 16, row:1, col:5})
+    conD.tile = '?';
+
+    //floor
+    wood = new Group();
+    wood.collider = "none";
+    wood.spriteSheet=floorSheet;
+    wood.addAni({h:32, w: 32, row:1, col: 0})
+    wood.tile = '`';
+   
+
+    square = new Group();
+    square.collider = "none";
+    square.spriteSheet=floorSheet;
+    square.addAni({h:32, w: 32, row:0, col: 1})
+    square.tile = '/';
+  
+
     // Connection Mapping
     connecting = {
         '1': [2,0,2,
@@ -166,7 +198,6 @@ function loadTiles() {
     }
 }
 module.exports = {
-      loadKrillAni,
       loadTileSprites,
       loadTiles
 }
