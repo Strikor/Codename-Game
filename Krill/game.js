@@ -1,5 +1,6 @@
 let state = "editor";
 
+//computer screen puzzle stuffs
 let compStat = "notComp";
 let sprSh, indicators; 
 let doorUnlock, D1, D2, D3, D4, exit;
@@ -7,8 +8,8 @@ let D1locked = true;
 let D2locked = true;
 
 let ents = [];
-
 var krill = null; 
+let speed = 0;
 var spriteImg = null;
 let krillHealth = 100; // Initial health
 const maxKrillHealth = 100; // Maximum health
@@ -22,6 +23,8 @@ let enemy;
 let allWallGroups = [];
 let detectionRange = 200;  
 
+
+
 function preload(){
     state = "title";
     loadTileSprites();
@@ -29,23 +32,22 @@ function preload(){
     //preloadGame();
     //Basically nothing should ever be put here
     mapArray = loadStrings('./assets/testMapPresent.txt');  //default map
-
     mapArrayLVL1P = loadStrings('./assets/mapLVL1P.txt');
     floorMap = loadStrings('./assets/floorMap.txt'); 
+    //loading images for sprite ani
     sprSh = loadImage('assets/compScreen.png');
     indicators = loadImage('assets/indicators.png');
 }
 
 function preloadGame() {
-    krillAniDefine(); //rewrote as function line 412
-    door1AniDefine(); //rewrote as function line 431
-    door2AniDefine(); //each door will be dif sprite
+    //ani defines for sprites
+    krillAniDefine(); 
+    door1AniDefine(); 
+    door2AniDefine(); 
     door3AniDefine();
-
     deskAniDefine();
     setUpCompScreen();
     setUpDB();
-    // this part works, update enemy/movement isnt working as of 4/10/24 4:30pm
     /*
     enemyAniDefine(); //untested as function
     */
@@ -145,7 +147,6 @@ function setup() {
             }
         }
     }
-    
     //Basically nothing else should be put here either
 }
 
@@ -168,7 +169,6 @@ function drawGame() {
 
     if(debugMode != undefined && debugMode == true){
         //camera.zoom = 2;
-
         //Debug draw triggers
         camera.on();
         for (var i = 0; i < ents.length; i++) {
@@ -221,22 +221,21 @@ function drawGame() {
         } 
     } 
     
-    if (krill.status == 'slowed') {
-        krill.speed = 1;
-    } else {
-        krill.speed = 2;
-    }
+    //else defaults to 0;
+    if (krill.status != 'slowed') {
+        speed = 2;
+    } 
     //Krill movement controls
     if(compStat == "comp" ) { 
-        krill.speed = 0; 
         krill.collider = 'n'; 
     } else { 
+        krill.speed = speed;
         krill.collider = 'd';
         krillMovement(); 
     }
 
     //Fixes js rounding error with sprite position
-    krill.x = Math.round(krill.x);
+    krill.x = Math.round(krill.x);       //causes problems when krill speed >2
     krill.y = Math.round(krill.y);
     //krill.rotationLock = true;          
     //krill.debug = true; 
@@ -246,6 +245,9 @@ function drawGame() {
     triggers();
 }
 
+
+
+//function definitions\/\/\/\/\/
 function postDraw() {
     drawHealthBar();
 }
@@ -277,7 +279,6 @@ function triggers() {
     }
     console.log(krill.speed);
 }
-
 
 function drawHealthBar() {
     // Display health bar for the krill
@@ -364,11 +365,9 @@ function krillAniDefine(){
     krill.layer = 2; 
     krill.collider = 'dynamic'; 
     krill.direction = 0;
-    krill.speed = 2;
     krill.changeAni('walk');
     krill.status = 'alive';
 }
-
 function krillMovement(){
     //Krill movement controls, 4 directional
     if (kb.pressing('left')){
@@ -428,7 +427,6 @@ function door1AniDefine(){
     door1.layer = 1; 
     door1.changeAni('closed'); 
 }
-//all door movement needs text to display on top of canvas, prob needs to be html-ified
 function door1Movement(){
     if(abs(krill.y - door1.y) < 30 && abs(door1.x - krill.x) < 90){           //basically: if within vicinity of door
         if(door1.collider != 'none' && !D1locked){              //if not open, e opens, if open e closes
@@ -527,18 +525,19 @@ function door3Movement(){
     }
 }
 
+//computerScreen.layer = 5, arbitrary, just needs to be above krill and tiles
 function setUpCompScreen() {
     computerScreen = new Sprite(desk.x + 50, desk.y + 13, 300, 300); 
     computerScreen.spriteSheet =sprSh; 
     computerScreen.addAnis({
       screen: {row: 0, frames: 1, h:156, w: 300}});
-    computerScreen.layer = 0; 
     computerScreen.collider = 'n';
     computerScreen.changeAni('screen');
     computerScreen.layer = 5; 
     computerScreen.visible = false;
 }
 
+//doorUnlock buttons, layer = 6, abover compScreen
 function setUpDB(){
     doorUnlock = new Group();  
     doorUnlock.spriteSheet = indicators;
@@ -588,6 +587,7 @@ function controls(spr, locked){
 }
 
 //maybe turn into a group of sprites for all tables/furniture
+//layer = 1, same as door
 function deskAniDefine(){
     desk = new Sprite(58, 330, 48, 128);
     desk.spriteSheet = 'assets/desk.png';
