@@ -1,5 +1,11 @@
 let state = "editor";
 
+let compStat = "notComp";
+let sprSh, indicators; 
+let doorUnlock, D1, D2, D3, D4, exit;
+let D1locked = true;
+let D2locked = true;
+
 let ents = [];
 
 var krill = null; 
@@ -26,6 +32,8 @@ function preload(){
 
     mapArrayLVL1P = loadStrings('./assets/mapLVL1P.txt');
     floorMap = loadStrings('./assets/floorMap.txt'); 
+    sprSh = loadImage('assets/compScreen.png');
+    indicators = loadImage('assets/indicators.png');
 }
 
 function preloadGame() {
@@ -34,6 +42,9 @@ function preloadGame() {
     door2AniDefine(); //each door will be dif sprite
     door3AniDefine();
 
+    deskAniDefine();
+    setUpCompScreen();
+    setUpDB();
     // this part works, update enemy/movement isnt working as of 4/10/24 4:30pm
     /*
     enemyAniDefine(); //untested as function
@@ -47,7 +58,6 @@ function preloadGame() {
 function setupGame(m) {
     new Canvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
     loadTiles();
-
     //Larger Layers
     let layers = m.split('\n\n');
 
@@ -181,26 +191,56 @@ function drawGame() {
 
     //Impliment a level based draw system
 
-    if (krill.status == 'slowed') {
-        krill.speed = 1;
-    } else {
-        krill.speed = 2;
-    }
-    //Krill movement controls
-    krillMovement(); //now a function! line 39
-    //Fixes js rounding error with sprite position
-    krill.x = Math.round(krill.x);
-    krill.y = Math.round(krill.y);
-    //krill.rotationLock = true;          
-    //krill.debug = true; 
-    
     //door1 open/close controls
     camera.on();    //keeps text where I want it
     door1Movement();
     door2Movement(); 
     door3Movement();
     camera.off();
+    
+    //computerInteraction
+    if(abs(krill.y - desk.y) < 30 && abs(desk.x - krill.x) < 90){
+        if (compStat != "comp" && kb.presses('e')){
+            compStat = "comp";
+            setUpDB();
+            setUpCompScreen(); 
+        }
+        if(compStat == "comp" && kb.presses('x')){
+            compStat = "notComp"; 
+        }
+        if(compStat == "comp"){ 
+            doorUnlock.visible = true;
+            doorUnlock.collider = 's';
+            computerScreen.visible = true; 
+            D1locked = controls(D1, D1locked);
+            D2locked = controls(D2, D2locked);
+        }
+        else if (compStat == "notComp"){
+            doorUnlock.life = 0;
+            computerScreen.life = 0;
+        } 
+    } 
+    
+    if (krill.status == 'slowed') {
+        krill.speed = 1;
+    } else {
+        krill.speed = 2;
+    }
+    //Krill movement controls
+    if(compStat == "comp" ) { 
+        krill.speed = 0; 
+        krill.collider = 'n'; 
+    } else { 
+        krill.collider = 'd';
+        krillMovement(); 
+    }
 
+    //Fixes js rounding error with sprite position
+    krill.x = Math.round(krill.x);
+    krill.y = Math.round(krill.y);
+    //krill.rotationLock = true;          
+    //krill.debug = true; 
+    
     //updateEnemy(); //not working as of 4/10/24 4:30pm
     timeTravel();
     triggers();
@@ -388,22 +428,21 @@ function door1AniDefine(){
     door1.layer = 1; 
     door1.changeAni('closed'); 
 }
-
 //all door movement needs text to display on top of canvas, prob needs to be html-ified
 function door1Movement(){
     if(abs(krill.y - door1.y) < 30 && abs(door1.x - krill.x) < 90){           //basically: if within vicinity of door
-        if(door1.collider != 'none'){              //if not open, e opens, if open e closes
-            textSize(11);
-            text('press [e] to open ', door1.x - 150, door1.y - 32);
+        if(door1.collider != 'none' && !D1locked){              //if not open, e opens, if open e closes
             if(kb.presses('e')){
                 door1.changeAni(['opening', 'open']); 
             }
             if (door1.ani.name == 'open'){
                 door1.collider = 'none'; 
             }
+        }else if(door1.collider != 'none' && D1locked){
+            if(kb.presses('e')){
+                //do nothing 
+            }
         } else if (door1.collider == 'none'){
-            textSize(11);
-            text('press [e] to close', door1.x - 150, door1.y - 32);
             if(kb.presses('e')){ 
                 door1.collider = 'static'; 
                 door1.changeAni(['closing', 'closed']); 
@@ -412,7 +451,6 @@ function door1Movement(){
     }
 }
 
-//so far just same mechanic dif spawn point
 function door2AniDefine(){
     //door ani preload
     //spawn:            x,  y, 
@@ -431,7 +469,6 @@ function door2AniDefine(){
     door2.layer = 1; 
     door2.changeAni('closed'); 
 }
-
 function door2Movement(){
     if(abs(krill.y - door2.y) < 30 && abs(door2.x - krill.x) < 90){           //basically: if within vicinity of door
         if(door2.collider != 'none'){              //if not open, e opens, if open e closes
@@ -454,7 +491,6 @@ function door2Movement(){
     }
 }
 
-//so far just same mechanic dif spawn point
 function door3AniDefine(){
     //door ani preload
     //spawn:            x,  y, 
@@ -473,12 +509,9 @@ function door3AniDefine(){
     door3.layer = 1; 
     door3.changeAni('closed'); 
 }
-
 function door3Movement(){
     if(abs(krill.y - door3.y) < 30 && abs(door3.x - krill.x) < 90){           //basically: if within vicinity of door
         if(door3.collider != 'none'){              //if not open, e opens, if open e closes
-            textSize(11);
-            text('press [e] to open ', door3.x + 30, door3.y - 32);
             if(kb.presses('e')){
                 door3.changeAni(['opening', 'open']); 
             }
@@ -486,14 +519,85 @@ function door3Movement(){
                 door3.collider = 'none'; 
             }
         } else if (door3.collider == 'none'){
-            textSize(11);
-            text('press [e] to close', door3.x + 30, door3.y - 32);
             if(kb.presses('e')){ 
                 door3.collider = 'static'; 
                 door3.changeAni(['closing', 'closed']); 
             }
         }
     }
+}
+
+function setUpCompScreen() {
+    computerScreen = new Sprite(desk.x + 50, desk.y + 13, 300, 300); 
+    computerScreen.spriteSheet =sprSh; 
+    computerScreen.addAnis({
+      screen: {row: 0, frames: 1, h:156, w: 300}});
+    computerScreen.layer = 0; 
+    computerScreen.collider = 'n';
+    computerScreen.changeAni('screen');
+    computerScreen.layer = 5; 
+    computerScreen.visible = false;
+}
+
+function setUpDB(){
+    doorUnlock = new Group();  
+    doorUnlock.spriteSheet = indicators;
+    doorUnlock.addAnis({
+      nL: {row: 0, frames: 1, h:9, w:48},
+      nU: {row: 1, frames: 1, h:9, w:48},
+      yL: {row: 2, frames: 1, h:9, w:48},
+      yU: {row: 3, frames: 1, h:9, w:48}
+      
+    })
+    doorUnlock.visible = false;
+    doorUnlock.collider = 'n';
+    
+    D1 = new doorUnlock.Sprite(); 
+    D1.x = desk.x + 61;
+    D1.y = desk.y - 15;
+    D1.layer = 6; 
+    D1.changeAni('nL'); 
+    
+    D2 = new doorUnlock.Sprite(); 
+    D2.x = desk.x + 61;
+    D2.y = desk.y - 4;
+    D1.layer = 6; 
+    D2.changeAni('nL'); 
+}
+
+function controls(spr, locked){
+    doorUnlock.visible = true;
+    computerScreen.visible = true; 
+    if(spr.mouse.hovering() && locked){
+      spr.changeAni('yL');
+    } else if(spr.mouse.hovering() && !locked){
+      spr.changeAni('yU');
+    } else if(!spr.mouse.hovering() && !locked){
+      spr.changeAni('nU');
+    } else if(!spr.mouse.hovering() && locked){
+      spr.changeAni('nL');
+    }
+    if(locked == true && spr.mouse.presses()){
+      spr.changeAni('yU'); 
+      locked = false; 
+    }else if(locked == false && spr.mouse.presses()){
+      spr.changeAni('yL'); 
+      locked = true; 
+    }
+    return locked; 
+}
+
+//maybe turn into a group of sprites for all tables/furniture
+function deskAniDefine(){
+    desk = new Sprite(58, 330, 48, 128);
+    desk.spriteSheet = 'assets/desk.png';
+    desk.addAnis({
+        desk: { row: 0, frames: 1 },    
+    });
+    desk.rotationLock = 'true';
+    desk.collider = "static";
+    desk.layer = 1; 
+    desk.changeAni('desk'); 
 }
 
 //non-working state 4/10/24 4:30pm
