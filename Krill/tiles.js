@@ -1,7 +1,7 @@
 let sheetImg, floorSheet; 
 let tLcorner, tRcorner, bLcorner, bRcorner, vWall, hWall; 
 let pWall, rWall, rrWall, aWall, bWall, cWall, dWall, conL, conR, conD;
-let wood, square; 
+let wood, square, rugCorner; 
 let room;
 
 let connecting;
@@ -9,7 +9,7 @@ let connecting;
 //chang to recieve string, then recall load
 function loadTileSprites(){
     sheetImg = loadImage('./assets/walls16.png');      //replaced with self-created graphics
-    floorSheet = loadImage('./assets/floorDO.png'); 
+    floorSheet = loadImage('./assets/floor.png'); 
 }
 
 function loadTiles() {
@@ -156,6 +156,47 @@ function loadTiles() {
     square.addAni({h:32, w: 32, row:0, col: 1})
     square.tile = '/';
   
+    square1 = new Group();
+    square1.collider = "none";
+    square1.spriteSheet=floorSheet;
+    square1.addAni({h:32, w: 32, row:0, col: 2})
+    square1.tile = 'o';
+
+    rug1 = new Group();
+    rug1.collider = "none";
+    rug1.spriteSheet=floorSheet;
+    rug1.addAni({h:32, w: 32, row:2, col: 0})
+    rug1.tile = 'Z';
+
+    rug2 = new Group();
+    rug2.collider = "none";
+    rug2.spriteSheet=floorSheet;
+    rug2.addAni({h:32, w: 32, row:2, col: 2});
+    rug2.tile = 'X';
+
+    rug3 = new Group();
+    rug3.collider = "none";
+    rug3.spriteSheet=floorSheet;
+    rug3.addAni({h:32, w: 32, row:2, col: 1});
+    rug3.tile = 'A';
+
+    rug4 = new Group();
+    rug4.collider = "none";
+    rug4.spriteSheet=floorSheet;
+    rug4.addAni({h:32, w: 32, row:2, col: 3});
+    rug4.tile = 'A';
+
+    red = new Group();
+    red.collider = "none";
+    red.spriteSheet = floorSheet;
+    red.addAni({h:32, w: 32, row:3, col: 1});
+    red.tile = 'q';
+
+    rugCorner =  new Group();
+    rugCorner.collider = "none";
+    rugCorner.spriteSheet = floorSheet;
+    rugCorner.addAni({h:32, w: 32, row:3, col: 0})
+    rugCorner.tile = 'j';
 
     // Connection Mapping
     connecting = {

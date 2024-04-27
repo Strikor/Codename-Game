@@ -3,9 +3,18 @@ let state = "editor";
 //computer screen puzzle stuffs
 let compStat = "notComp";
 let sprSh, indicators; 
-let doorUnlock, D1, D2, D3, D4, exit;
-let D1locked = true;
+let doorUnlock, D1, D2;
+let D1locked = false;
 let D2locked = true;
+
+let fspr, comp, desk1, chair1, chair2, chair3, couch1, desk2, desk3, table1; 
+let compX = 58;
+let compY = 320;
+
+let doorspr, door, door1, door2, door3, door4, exit;
+//used in ents.push line 155
+let kSx = 200; 
+let kSy = 200; 
 
 let ents = [];
 var krill = null; 
@@ -14,6 +23,8 @@ var spriteImg = null;
 let krillHealth = 100; // Initial health
 const maxKrillHealth = 100; // Maximum health
 const futureOffset = 100;  //Pixels from present map to future map
+let numJumps = 0; //iterated when player jumps to future
+let test = 0; 
 
 let mapArray;
 let map;
@@ -37,17 +48,34 @@ function preload(){
     //loading images for sprite ani
     sprSh = loadImage('assets/compScreen.png');
     indicators = loadImage('assets/indicators.png');
+    fspr = loadImage('assets/desk.png');
+    doorspr = loadImage('assets/door4.png');
 }
 
 function preloadGame() {
     //ani defines for sprites
     krillAniDefine(); 
-    door1AniDefine(); 
-    door2AniDefine(); 
-    door3AniDefine();
-    deskAniDefine();
-    setUpCompScreen();
+    doorAniDefine(); 
+    door1 = doorSpawn(462, 344, 0); 
+    door2 = doorSpawn(622, 104, 0);
+    door3 = doorSpawn(622, 520, 0); 
+    door4 = doorSpawn(904, 718, 90);
+    exit = doorSpawn(1070, 232, 0);    //win door
+
+    setUpCompScreen();     
     setUpDB();
+
+    //makes sure furniture is spawned only once
+    furnitureAniDefine();
+    comp = furnitureSpawn(0, compX, compY, 0); 
+    desk1 = furnitureSpawn(1, compX, compY - 220, 0); 
+    chair = furnitureSpawn(7, compX + 60, compY - 50, 0); 
+    table1 = furnitureSpawn(6, desk1.x + 328, desk1.y - 4, 0); 
+    chair1 = furnitureSpawn(4, desk1.x + 48, desk1.y, 0 ); 
+    chair2 = furnitureSpawn(4, table1.x - 98, table1.y, 180);
+    chair3 = furnitureSpawn(4, table1.x, table1.y + 92, 90);
+    couch1 = furnitureSpawn(5, comp.x + 148, 400, 90);
+    sTable = furnitureSpawn(8, (couch1.x + 80), couch1.y -8, 180); 
     /*
     enemyAniDefine(); //untested as function
     */
@@ -134,7 +162,7 @@ function setup() {
         );
 
         
-        ents.push({type: 'krillSpawn', x: 64, y: 64, width: 16, height: 16});
+        ents.push({type: 'krillSpawn', x: kSx, y: kSy, width: 16, height: 16});
         ents.push({type: 'krillHurt', x: 272, y: 368, width: 160, height: 128}); //needs to be updated with map
 
         for(let i = 0; i < ents.length; i++) {
@@ -191,21 +219,28 @@ function drawGame() {
 
     //Impliment a level based draw system
 
+    //furniture killing in future
+    if (inFuture){
+        //move furniture spawn to future
+    } 
+ 
     //door1 open/close controls
     camera.on();    //keeps text where I want it
-    door1Movement();
-    door2Movement(); 
-    door3Movement();
+    doorMovementLock(door1, D1locked);
+    doorMovementLock(door2, D2locked);
+    doorMovementNoLock(door3);
+    doorMovementNoLock(door4);
+    doorMovementNoLock(exit);  //win door movement 
     camera.off();
     
-    //computerInteraction
-    if(abs(krill.y - desk.y) < 30 && abs(desk.x - krill.x) < 90){
-        if (compStat != "comp" && kb.presses('e')){
+    //computerInteraction, if not in future
+    if(abs(krill.y - compY) < 30 && abs(compX - krill.x) < 90){
+        if (compStat != "comp" && kb.pressed('e')){
             compStat = "comp";
+            setUpCompScreen();
             setUpDB();
-            setUpCompScreen(); 
         }
-        if(compStat == "comp" && kb.presses('x')){
+        if(compStat == "comp" && kb.pressed('x')){
             compStat = "notComp"; 
         }
         if(compStat == "comp"){ 
@@ -221,6 +256,7 @@ function drawGame() {
         } 
     } 
     
+    //table1.text = krill.x + ' ' + krill.y;
     //else defaults to 0;
     if (krill.status != 'slowed') {
         speed = 2;
@@ -334,12 +370,13 @@ function findMaxRoomWidth(){
 
 function timeTravel() {
     if (!inFuture){ //in present
-        if (kb.presses('t')){
+        if (kb.pressed('t')){
             krill.x += offsetR -16; //change to var
             inFuture = true;
+            numJumps++;             //helpful to keep track
         }
     } else if (inFuture) { //in future
-        if (kb.presses('t')){
+        if (kb.pressed('t')){
             krill.x -= offsetR -16; //change to var
             inFuture = false;
         }
@@ -353,8 +390,7 @@ function timeTravel() {
 //krill layer = 2
 function krillAniDefine(){
     //krill ani preload
-    //                  x,   y,  h,  w    where: x, y are position on canvas 
-    krill = new Sprite(240, 135, 64, 32);
+    krill = new Sprite();
     krill.spriteSheet = './assets/krillWalk4D.png';
     krill.anis.offset.x = 2;             //
     krill.anis.frameDelay = 10;          //controls how quickly frames are switched between
@@ -362,6 +398,8 @@ function krillAniDefine(){
         walk: { row: 0, frames: 6 },     //row determined by height(px) of sprite(I think??)
         standh: { row: 0, frames: 1},
     });
+    krill.h = 32;
+    krill.w = 64;
     krill.layer = 2; 
     krill.collider = 'dynamic'; 
     krill.direction = 0;
@@ -409,125 +447,88 @@ function krillMovement(){
 
 //doors, so many doors omg they operate differently so they need to be dif sprites
 // door layer = 1, below krill
-function door1AniDefine(){
+function doorAniDefine(){
     //door ani preload
-    //spawn:            x,  y, 
-    door1 = new Sprite(446, 344, 16, 64);
-    door1.spriteSheet = 'assets/door4.png';
-    door1.anis.offset.x = 2;             //
-    door1.anis.frameDelay = 10;          //controls how quickly frames are switched between
-    door1.addAnis({
-        closed: { row: 0, frames: 6 },     //row determined by height(px) of sprite
-        open: { row: 1, frames: 6},
-        opening: {row: 2, frames: 6},
-        closing: {row: 3, frames: 5},
+    door = new Group();
+    door.spriteSheet = doorspr;
+    door.anis.offset.x = 2;             //
+    door.anis.frameDelay = 2;          //controls how quickly frames are switched between
+    door.addAnis({
+        closed: { row: 0, frames: 6, frameDelay: 5, h: 64, w:16},     //row determined by height(px) of sprite
+        open: { row: 1, frames: 6, frameDelay: 5, h: 64, w:16},
+        opening: {row: 2, frames: 6, h: 64, w:16},
+        closing: {row: 3, frames: 5, h: 64, w:16},
     });
-    door1.rotationLock = 'true';
-    door1.collider = "static";
-    door1.layer = 1; 
-    door1.changeAni('closed'); 
+    door.rotationLock = 'true';
+    door.collider = "static";
 }
-function door1Movement(){
-    if(abs(krill.y - door1.y) < 30 && abs(door1.x - krill.x) < 90){           //basically: if within vicinity of door
-        if(door1.collider != 'none' && !D1locked){              //if not open, e opens, if open e closes
+
+//standardized door placement
+function doorSpawn(x, y, direction){
+    thing = new door.Sprite();
+    thing.x = x; 
+    thing.y = y; 
+    thing.rotation = direction; 
+    thing.rotationLock = 'true';
+    thing.collider = "static";
+    thing.layer = 1;   
+    thing.changeAni('closed'); 
+    return thing; 
+}
+
+//for doors with bool locks that need unlocked with the computer
+function doorMovementLock(spr, lock){
+    if(abs(krill.y - spr.y) < 30 && abs(spr.x - krill.x) < 90){           //basically: if within vicinity of door
+        if(spr.collider != 'none' && !lock){              //if not open, e opens, if open e closes
             if(kb.presses('e')){
-                door1.changeAni(['opening', 'open']); 
+                spr.changeAni(['opening', 'open']); 
             }
-            if (door1.ani.name == 'open'){
-                door1.collider = 'none'; 
+            if (spr.ani.name == 'open'){
+                spr.collider = 'none'; 
             }
-        }else if(door1.collider != 'none' && D1locked){
+        }else if(spr.collider != 'none' && lock){
             if(kb.presses('e')){
                 //do nothing 
             }
-        } else if (door1.collider == 'none'){
+        } else if (spr.collider == 'none'){
             if(kb.presses('e')){ 
-                door1.collider = 'static'; 
-                door1.changeAni(['closing', 'closed']); 
+                spr.collider = 'static'; 
+                spr.changeAni(['closing', 'closed']); 
             }
         }
     }
 }
 
-function door2AniDefine(){
-    //door ani preload
-    //spawn:            x,  y, 
-    door2 = new Sprite(590, 104, 16, 64);
-    door2.spriteSheet = 'assets/door4.png';
-    door2.anis.offset.x = 2;             //
-    door2.anis.frameDelay = 10;          //controls how quickly frames are switched between
-    door2.addAnis({
-        closed: { row: 0, frames: 6 },     //row determined by height(px) of sprite
-        open: { row: 1, frames: 6},
-        opening: {row: 2, frames: 6},
-        closing: {row: 3, frames: 5},
-    });
-    door2.rotationLock = 'true';
-    door2.collider = "static";
-    door2.layer = 1; 
-    door2.changeAni('closed'); 
-}
-function door2Movement(){
-    if(abs(krill.y - door2.y) < 30 && abs(door2.x - krill.x) < 90){           //basically: if within vicinity of door
-        if(door2.collider != 'none'){              //if not open, e opens, if open e closes
-            textSize(11);
-            text('press [e] to open ', door2.x + 30, door2.y - 32);
-            if(kb.presses('e')){
-                door2.changeAni(['opening', 'open']); 
-            }
-            if (door2.ani.name == 'open'){
-                door2.collider = 'none'; 
-            }
-        } else if (door2.collider == 'none'){
-            textSize(11);
-            text('press [e] to close', door2.x + 30, door2.y - 32);
-            if(kb.presses('e')){ 
-                door2.collider = 'static'; 
-                door2.changeAni(['closing', 'closed']); 
-            }
-        }
+//doors with no locks
+let val1, val2;
+function doorMovementNoLock(spr){
+    if(spr.rotation != 0){
+        val1 = 90;
+        val2 = 30;
+    } else {
+        val1 = 30;
+        val2 = 90; 
     }
-}
-
-function door3AniDefine(){
-    //door ani preload
-    //spawn:            x,  y, 
-    door3 = new Sprite(590, 520, 16, 64);
-    door3.spriteSheet = 'assets/door4.png';
-    door3.anis.offset.x = 2;             //
-    door3.anis.frameDelay = 10;          //controls how quickly frames are switched between
-    door3.addAnis({
-        closed: { row: 0, frames: 6 },     //row determined by height(px) of sprite
-        open: { row: 1, frames: 6},
-        opening: {row: 2, frames: 6},
-        closing: {row: 3, frames: 5},
-    });
-    door3.rotationLock = 'true';
-    door3.collider = "static";
-    door3.layer = 1; 
-    door3.changeAni('closed'); 
-}
-function door3Movement(){
-    if(abs(krill.y - door3.y) < 30 && abs(door3.x - krill.x) < 90){           //basically: if within vicinity of door
-        if(door3.collider != 'none'){              //if not open, e opens, if open e closes
+    if(abs(krill.y - spr.y) < val1 && abs(spr.x - krill.x) < val2){           //basically: if within vicinity of door
+        if(spr.collider != 'none'){              //if not open, e opens, if open e closes
             if(kb.presses('e')){
-                door3.changeAni(['opening', 'open']); 
+                spr.changeAni(['opening', 'open']); 
             }
-            if (door3.ani.name == 'open'){
-                door3.collider = 'none'; 
+            if (spr.ani.name == 'open'){
+                spr.collider = 'none'; 
             }
-        } else if (door3.collider == 'none'){
+        } else if (spr.collider == 'none'){
             if(kb.presses('e')){ 
-                door3.collider = 'static'; 
-                door3.changeAni(['closing', 'closed']); 
+                spr.collider = 'static'; 
+                spr.changeAni(['closing', 'closed']); 
             }
         }
     }
 }
 
 //computerScreen.layer = 5, arbitrary, just needs to be above krill and tiles
-function setUpCompScreen() {
-    computerScreen = new Sprite(desk.x + 50, desk.y + 13, 300, 300); 
+function setUpCompScreen(){
+    computerScreen = new Sprite(compX + 50, compY + 13, 300, 300); 
     computerScreen.spriteSheet =sprSh; 
     computerScreen.addAnis({
       screen: {row: 0, frames: 1, h:156, w: 300}});
@@ -537,7 +538,7 @@ function setUpCompScreen() {
     computerScreen.visible = false;
 }
 
-//doorUnlock buttons, layer = 6, abover compScreen
+//doorUnlock buttons, layer = 6, above compScreen
 function setUpDB(){
     doorUnlock = new Group();  
     doorUnlock.spriteSheet = indicators;
@@ -550,16 +551,17 @@ function setUpDB(){
     })
     doorUnlock.visible = false;
     doorUnlock.collider = 'n';
-    
+    doorUnlock.anis.frameDelay = 5; 
+
     D1 = new doorUnlock.Sprite(); 
-    D1.x = desk.x + 61;
-    D1.y = desk.y - 15;
+    D1.x = compX + 61;
+    D1.y = compY - 15;
     D1.layer = 6; 
     D1.changeAni('nL'); 
     
     D2 = new doorUnlock.Sprite(); 
-    D2.x = desk.x + 61;
-    D2.y = desk.y - 4;
+    D2.x = compX + 61;
+    D2.y = compY - 4;
     D1.layer = 6; 
     D2.changeAni('nL'); 
 }
@@ -588,18 +590,69 @@ function controls(spr, locked){
 
 //maybe turn into a group of sprites for all tables/furniture
 //layer = 1, same as door
-function deskAniDefine(){
-    desk = new Sprite(58, 330, 48, 128);
-    desk.spriteSheet = 'assets/desk.png';
-    desk.addAnis({
-        desk: { row: 0, frames: 1 },    
-    });
-    desk.rotationLock = 'true';
-    desk.collider = "static";
-    desk.layer = 1; 
-    desk.changeAni('desk'); 
+function furnitureAniDefine(){
+    furniture = new Group();  
+    furniture.spriteSheet = fspr;
+    furniture.addAnis({
+      comp: { row: 0, frames: 1, h:128, w:48 },
+      desk1: { row: 1, frames: 1, h:128, w:48},
+      desk2: { row: 2, frames: 1, h:128, w:48},
+      desk3: { row: 0, col: 1, frames: 1, h:128, w:48},
+      chairs: { row: 1, col: 1, frames: 1, h:128, w:48},
+      chair: { row: 3, col: 3, frames: 1, h:48, w:48},
+      sTable: { row: 3, col: 4, frames: 1, h:48, w:48},
+      couch: { row: 1, col: 2, frames: 1, h:128, w:48},
+      table: { row: 0, col: 1, frames: 1, h:128, w:144},
+    })
+    furniture.collider = 's';
 }
-
+function furnitureSpawn(type, x, y, direction){
+    item = new furniture.Sprite();
+    item.x = x; 
+    item.y = y; 
+    item.rotation = direction;
+    item.rotationLock = 'true';
+    item.collider = "static";
+    item.layer = 1;   
+    switch(type) {
+        case 0:
+            item.changeAni('comp'); 
+            break;
+        case 1:
+            item.changeAni('desk1'); 
+            break;
+        case 2:
+            item.changeAni('desk2'); 
+            break;
+        case 3:
+            item.changeAni('desk3'); 
+            break;
+        case 4:
+            item.changeAni('chairs'); 
+            break;
+        case 5:
+            item.changeAni('couch'); 
+            break;
+        case 6:
+            item.h = 128; 
+            item.w = 144; 
+            item.changeAni('table'); 
+            break;
+        case 7:
+            item.h = 48; 
+            item.w = 48; 
+            item.changeAni('chair');  
+            break;
+        case 8:
+            item.h = 48; 
+            item.w = 48; 
+            item.changeAni('sTable');  
+            break;      
+        default:
+            item.changeAni('desk1'); 
+    }
+    return item;
+}
 //non-working state 4/10/24 4:30pm
 //function update enemy, for some reason enemy is not moving at all, tried a few things nothing worked :(
 function enemyAniDefine(){
