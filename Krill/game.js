@@ -76,6 +76,7 @@ function preloadGame() {
     chair3 = furnitureSpawn(4, table1.x, table1.y + 92, 90);
     couch1 = furnitureSpawn(5, comp.x + 148, 400, 90);
     sTable = furnitureSpawn(8, (couch1.x + 80), couch1.y -8, 180); 
+
     /*
     enemyAniDefine(); //untested as function
     */
@@ -220,9 +221,6 @@ function drawGame() {
     //Impliment a level based draw system
 
     //furniture killing in future
-    if (inFuture){
-        //move furniture spawn to future
-    } 
  
     //door1 open/close controls
     camera.on();    //keeps text where I want it
@@ -374,10 +372,12 @@ function timeTravel() {
             krill.x += offsetR -16; //change to var
             inFuture = true;
             numJumps++;             //helpful to keep track
+            //desk1.x += (offsetR -16); 
         }
     } else if (inFuture) { //in future
         if (kb.pressed('t')){
             krill.x -= offsetR -16; //change to var
+            //desk1.x -= (offsetR - 16);        furniture can move to future, no need to respawn
             inFuture = false;
         }
     } else {
