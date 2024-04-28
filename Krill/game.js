@@ -17,8 +17,8 @@ let doorspr, door, door1, door2, door3, door4, exit;
 const doorArray = []; 
 
 //used in ents.push line 155
-let kSx = 200; 
-let kSy = 200; 
+let kSx = 500; 
+let kSy = 600; 
 
 let ents = [];
 var krill = null; 
@@ -59,6 +59,7 @@ function preload(){
 function preloadGame() {
     //ani defines for sprites
     krillAniDefine(); 
+    
     doorAniDefine(); 
     doorArray.push(door1 = doorSpawn(462, 344, 0)); 
     doorArray.push(door2 = doorSpawn(622, 104, 0));
@@ -71,15 +72,39 @@ function preloadGame() {
 
     //makes sure furniture is spawned only once
     furnitureAniDefine();
-    furnArray.push(comp = furnitureSpawn(0, compX, compY, 0)); 
-    furnArray.push(desk1 = furnitureSpawn(1, compX, compY - 220, 0)); 
-    furnArray.push(chair = furnitureSpawn(7, compX + 60, compY - 50, 0)); 
-    furnArray.push(table1 = furnitureSpawn(6, desk1.x + 328, desk1.y - 4, 0)); 
-    furnArray.push(chair1 = furnitureSpawn(4, desk1.x + 48, desk1.y, 0 )); 
+    //lab01: corner of wall = 16, 16
+    furnArray.push(comp = furnitureSpawn(0, 58, 320, 0)); 
+    furnArray.push(chair = furnitureSpawn(7, comp.x + 46, comp.y - 48, 0)); 
+    furnArray.push(desk1 = furnitureSpawn(1, 58, 100, 0)); 
+    furnArray.push(chair1 = furnitureSpawn(4, desk1.x + 48, desk1.y, 0)); 
+    furnArray.push(table1 = furnitureSpawn(6, 386, 96, 0)); 
     furnArray.push(chair2 = furnitureSpawn(4, table1.x - 98, table1.y, 180));
     furnArray.push(chair3 = furnitureSpawn(4, table1.x, table1.y + 92, 90));
-    furnArray.push(couch1 = furnitureSpawn(5, comp.x + 148, 400, 90));
-    furnArray.push(sTable = furnitureSpawn(8, (couch1.x + 80), couch1.y -8, 180)); 
+    furnArray.push(couch1 = furnitureSpawn(5, 206, 400, 90));
+    furnArray.push(sTable = furnitureSpawn(8, (couch1.x + 80), couch1.y -8, 180));
+    
+    //hall: TL corner of wall = 464, 16 
+    furnArray.push(sTable1 = furnitureSpawn(8, 545, 48, 0)); 
+    
+    //room attached to hall/office: TL corner of wall = 16, 432
+    furnArray.push(oDesk1 = furnitureSpawn(1, 100, 468, 90));
+    furnArray.push(oChair1 = furnitureSpawn(4, oDesk1.x, oDesk1.y + 48, 90));
+    furnArray.push(oDesk2 = furnitureSpawn(2, oDesk1.x + 132, oDesk1.y, 90));
+    furnArray.push(oChair2 = furnitureSpawn(7, oDesk2.x - 32, oDesk2.y + 45, 90));
+    oDesk2.mirror.y = true;
+    furnArray.push(oDesk3 = furnitureSpawn(3, oDesk2.x + 87, 508, -180));
+    furnArray.push(oChair3 = furnitureSpawn(7, oDesk3.x - 48, oDesk3.y + 23, 180));
+    furnArray.push(oDesk4 = furnitureSpawn(2, 60, 644, 0));
+    furnArray.push(oChair4 = furnitureSpawn(7, oDesk4.x + 48, oDesk4.y - 40, 0));
+    furnArray.push(oDesk5 = furnitureSpawn(0, oDesk4.x + 87, oDesk4.y + 40, -90));
+    furnArray.push(oChair5 = furnitureSpawn(7, oDesk5.x, oDesk4.y -8, -90));
+    furnArray.push(oCouch = furnitureSpawn(5, oDesk5.x + 328, oDesk5.y + 12, 90));
+    furnArray.push(oTable = furnitureSpawn(8, oCouch.x + 80, oCouch.y - 8, 90));
+    furnArray.push(oChair6 = furnitureSpawn(7, oTable.x, oTable.y - 48, 0));
+
+    //lobby: TL corner of wall = 624, 16
+    //Lab02: TL corner of wall = 624, 432
+    //K.R.I.L.: TL corner of wall = 16, 720
     /*
     enemyAniDefine(); //untested as function
     */
@@ -261,7 +286,8 @@ function drawGame() {
         speed = 2;
     } 
     //Krill movement controls
-    if(compStat == "comp" ) { 
+    if(compStat == "comp" ) {
+        krill.speed = 0;  
         krill.collider = 'n'; 
     } else { 
         krill.speed = speed;
