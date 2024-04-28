@@ -165,7 +165,7 @@ function setup() {
     if (state === "title") {
         setupTitle();
     } else if (state === "game") {
-        createCanvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
+        createCanvas(640, 360, 'pixelated '); //may display better with 'pixelated x2'
         loadTiles();
 
         floor = new Tiles(
