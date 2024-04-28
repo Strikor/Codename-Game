@@ -48,6 +48,7 @@ function preload(){
     //Basically nothing should ever be put here
     mapArray = loadStrings('./assets/testMapPresent.txt');  //default map
     mapArrayLVL1P = loadStrings('./assets/mapLVL1P.txt');
+    mapArrayLVL1F = loadStrings('./assets/mapLVL1F.txt'); 
     floorMap = loadStrings('./assets/floorMap.txt'); 
     //loading images for sprite ani
     sprSh = loadImage('assets/compScreen.png');
@@ -185,7 +186,7 @@ function setup() {
 
         //console.log(maxRoomWidth);
         roomFuture = new Tiles(
-            mapArrayLVL1P,
+            mapArrayLVL1F,
             offsetR,16, // change to const + maxlength of mapArray[i]*16 ex: 16 + 32*16
             16,16
         );

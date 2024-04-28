@@ -6,14 +6,18 @@ let room;
 var dim;
 let connecting;
 
+let ftLcorner, ftRcorner, fbLcorner, fbRcorner, fvWall,  fhWall,  fpWall,  fconL,   fconR,   fconD;   
+
 //chang to recieve string, then recall load
 function loadTileSprites(){
     sheetImg = loadImage('assets/walls16.png');      //replaced with self-created graphics
+    futureWallImg = loadImage('assets/walls16FB.png'); 
     floorSheet = loadImage('assets/floor.png'); 
 }
 
 function loadTiles(){
     //walls
+    
     tLcorner = tileMaker('1', 9, 7, 's', sheetImg); 
     tRcorner = tileMaker('2', 1, 13, 's', sheetImg); 
     bLcorner = tileMaker('3', 13, 1, 's', sheetImg); 
@@ -21,20 +25,32 @@ function loadTiles(){
     vWall = tileMaker('v', 6, 1, 's', sheetImg); 
     hWall = tileMaker('h', 3, 6, 's', sheetImg); 
     pWall = tileMaker('p', 13, 7, 's', sheetImg); 
-    rrWall = tileMaker('>', 14, 13, 's', sheetImg); 
-    aWall = tileMaker('a', 3, 3, 's', sheetImg); 
-    bWall = tileMaker('b', 11, 13, 's', sheetImg); 
-    cWall = tileMaker('c', 13, 11, 's', sheetImg); 
-    dWall = tileMaker('d', 13, 9, 's', sheetImg); 
+    //rrWall = tileMaker('>', 14, 13, 's', sheetImg); 
+    //aWall = tileMaker('a', 3, 3, 's', sheetImg); 
+    //bWall = tileMaker('b', 11, 13, 's', sheetImg); 
+    //cWall = tileMaker('c', 13, 11, 's', sheetImg); 
+    //dWall = tileMaker('d', 13, 9, 's', sheetImg); 
     //tile connections unmapped below, needed for switch from 32px tiles to 16px \/\/\/\/
-    Iht = tileMaker('-', 11, 12, 's', sheetImg); 
-    Ihb = tileMaker('_', 13, 12, 's', sheetImg); 
-    Ivr = tileMaker('+', 12, 13, 's', sheetImg); 
-    Ivl = tileMaker('*', 12, 11, 's', sheetImg); 
-    sqr = tileMaker('~', 12, 12, 's', sheetImg); 
+    //Iht = tileMaker('-', 11, 12, 's', sheetImg); 
+    //Ihb = tileMaker('_', 13, 12, 's', sheetImg); 
+    //Ivr = tileMaker('+', 12, 13, 's', sheetImg); 
+    //Ivl = tileMaker('*', 12, 11, 's', sheetImg); 
+    //sqr = tileMaker('~', 12, 12, 's', sheetImg); 
     conL = tileMaker('@', 5, 1, 's', sheetImg); 
     conR = tileMaker('!', 7, 13, 's', sheetImg); 
     conD = tileMaker('?', 1, 5, 's', sheetImg); 
+
+    //future walls
+    ftLcorner = tileMaker('5', 9,  7,  's',  futureWallImg); 
+    ftRcorner = tileMaker('6', 1,  13, 's',  futureWallImg); 
+    fbLcorner = tileMaker('7', 13, 1,  's',  futureWallImg); 
+    fbRcorner = tileMaker('8', 9,  9,  's',  futureWallImg); 
+    fvWall =    tileMaker('l', 6,  1,  's',  futureWallImg); 
+    fhWall =    tileMaker('m', 3,  6,  's',  futureWallImg); 
+    fpWall =    tileMaker('n', 13, 7,  's',  futureWallImg); 
+    fconL =     tileMaker('e', 5,  1,  's',  futureWallImg); 
+    fconR =     tileMaker('i', 7,  13, 's',  futureWallImg); 
+    fconD =     tileMaker('k', 1,  5,  's',  futureWallImg); 
 
     //floors
     wood = tileMaker('`', 1, 0, 'n', floorSheet); 
