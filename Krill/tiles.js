@@ -1,4 +1,4 @@
-let sheetImg, floorSheet; 
+let sheetImg, floorSheet, fs, ps; 
 let tLcorner, tRcorner, bLcorner, bRcorner, vWall, hWall; 
 let pWall, rWall, rrWall, aWall, bWall, cWall, dWall, conL, conR, conD;
 let wood, square, rugCorner; 
@@ -8,16 +8,16 @@ let connecting;
 
 //chang to recieve string, then recall load
 function loadTileSprites(){
-    sheetImg = loadImage('./assets/walls16.png');      //replaced with self-created graphics
-    floorSheet = loadImage('./assets/floor.png'); 
+    sheetImg = loadImage('assets/walls16.png');      //replaced with self-created graphics
+    floorSheet = loadImage('assets/floor.png'); 
 }
 
-function loadTiles() {
+function loadTiles(){
     tLcorner = new Group();
     tLcorner.collider = "static"; 
     tLcorner.spriteSheet= sheetImg; 
-    tLcorner.addAni({h:16, w: 16, row: 9, col: 7})
-    tLcorner.tile = '1'; 
+    tLcorner.addAni({h:16, w: 16, row: 9, col: 7});
+    tLcorner.tile = '1';
 
     tRcorner = new Group();
     tRcorner.collider = "static"; 

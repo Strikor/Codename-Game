@@ -1,3 +1,4 @@
+
 let state = "editor";
 
 //computer screen puzzle stuffs
@@ -8,10 +9,13 @@ let D1locked = false;
 let D2locked = true;
 
 let fspr, comp, desk1, chair1, chair2, chair3, couch1, desk2, desk3, table1; 
+const furnArray = []; 
 let compX = 58;
 let compY = 320;
 
 let doorspr, door, door1, door2, door3, door4, exit;
+const doorArray = []; 
+
 //used in ents.push line 155
 let kSx = 200; 
 let kSy = 200; 
@@ -56,27 +60,26 @@ function preloadGame() {
     //ani defines for sprites
     krillAniDefine(); 
     doorAniDefine(); 
-    door1 = doorSpawn(462, 344, 0); 
-    door2 = doorSpawn(622, 104, 0);
-    door3 = doorSpawn(622, 520, 0); 
-    door4 = doorSpawn(904, 718, 90);
-    exit = doorSpawn(1070, 232, 0);    //win door
+    doorArray.push(door1 = doorSpawn(462, 344, 0)); 
+    doorArray.push(door2 = doorSpawn(622, 104, 0));
+    doorArray.push(door3 = doorSpawn(622, 520, 0)); 
+    doorArray.push(door4 = doorSpawn(904, 718, 90));
+    doorArray.push(exit = doorSpawn(1070, 232, 0));    //win door
 
     setUpCompScreen();     
     setUpDB();
 
     //makes sure furniture is spawned only once
     furnitureAniDefine();
-    comp = furnitureSpawn(0, compX, compY, 0); 
-    desk1 = furnitureSpawn(1, compX, compY - 220, 0); 
-    chair = furnitureSpawn(7, compX + 60, compY - 50, 0); 
-    table1 = furnitureSpawn(6, desk1.x + 328, desk1.y - 4, 0); 
-    chair1 = furnitureSpawn(4, desk1.x + 48, desk1.y, 0 ); 
-    chair2 = furnitureSpawn(4, table1.x - 98, table1.y, 180);
-    chair3 = furnitureSpawn(4, table1.x, table1.y + 92, 90);
-    couch1 = furnitureSpawn(5, comp.x + 148, 400, 90);
-    sTable = furnitureSpawn(8, (couch1.x + 80), couch1.y -8, 180); 
-
+    furnArray.push(comp = furnitureSpawn(0, compX, compY, 0)); 
+    furnArray.push(desk1 = furnitureSpawn(1, compX, compY - 220, 0)); 
+    furnArray.push(chair = furnitureSpawn(7, compX + 60, compY - 50, 0)); 
+    furnArray.push(table1 = furnitureSpawn(6, desk1.x + 328, desk1.y - 4, 0)); 
+    furnArray.push(chair1 = furnitureSpawn(4, desk1.x + 48, desk1.y, 0 )); 
+    furnArray.push(chair2 = furnitureSpawn(4, table1.x - 98, table1.y, 180));
+    furnArray.push(chair3 = furnitureSpawn(4, table1.x, table1.y + 92, 90));
+    furnArray.push(couch1 = furnitureSpawn(5, comp.x + 148, 400, 90));
+    furnArray.push(sTable = furnitureSpawn(8, (couch1.x + 80), couch1.y -8, 180)); 
     /*
     enemyAniDefine(); //untested as function
     */
@@ -144,7 +147,7 @@ function setup() {
             floorMap, 
             32,32, 
             32,32
-        )
+        );
         floor.layer = 0; 
 
         //default map
@@ -189,9 +192,8 @@ function draw() {
 }
 
 function drawGame() {
-    background('lightgray');  //maybe make some sort of sciency blue gradient for final product ~~(. _ .)~~s
+    background('black');  //maybe make some sort of sciency blue gradient for final product ~~(. _ .)~~s
     console.log(krill.x + ", " + krill.y);
-
     //translate(width / 2, height / 2);
     camera.x = krill.x + krill.width / 2;
     camera.y = krill.y + krill.height / 2;
@@ -219,9 +221,8 @@ function drawGame() {
     //translate(-playerCamera.x, -playerCamera.y);
 
     //Impliment a level based draw system
-
-    //furniture killing in future
- 
+    
+    
     //door1 open/close controls
     camera.on();    //keeps text where I want it
     doorMovementLock(door1, D1locked);
@@ -372,12 +373,22 @@ function timeTravel() {
             krill.x += offsetR -16; //change to var
             inFuture = true;
             numJumps++;             //helpful to keep track
-            //desk1.x += (offsetR -16); 
+            furnArray.forEach(element => {       //moves all furniture to future
+                element.x += (offsetR -16);
+            });
+            doorArray.forEach(element => {       //moves all doors to future
+                element.x += (offsetR -16);
+            });
         }
     } else if (inFuture) { //in future
         if (kb.pressed('t')){
             krill.x -= offsetR -16; //change to var
-            //desk1.x -= (offsetR - 16);        furniture can move to future, no need to respawn
+            furnArray.forEach(element => {      //moves all furniture back to present
+                element.x -= (offsetR -16);
+            }); 
+            doorArray.forEach(element => {      //moves all door back to present
+                element.x -= (offsetR -16);
+            });
             inFuture = false;
         }
     } else {
