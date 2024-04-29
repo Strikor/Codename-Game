@@ -55,13 +55,18 @@ function loadTiles(){
     //floors
     wood = tileMaker('`', 1, 0, 'n', floorSheet); 
     square = tileMaker('/', 0, 1, 'n', floorSheet);
+    squareHoleL = tileMaker('G', 0, 3, 's', floorSheet);
+    squareHoleR = tileMaker('H', 1, 3, 's', floorSheet);
     square1 = tileMaker('o', 0, 2, 'n', floorSheet);
+    square1HoleL = tileMaker('Q', 2, 3, 's', floorSheet);
+    square1HoleR = tileMaker('W', 3, 3, 's', floorSheet);
     rug1 = tileMaker('Z', 2, 0, 'n', floorSheet);
     rug2 = tileMaker('X', 2, 2, 'n', floorSheet);
     rug3 = tileMaker('A', 2, 1, 'n', floorSheet);
     rug4 = tileMaker('B', 3, 2, 'n', floorSheet);
     red = tileMaker('q', 3, 1, 'n', floorSheet);
     rugCorner =  tileMaker('j', 3, 0, 'n', floorSheet);
+    
 
     // Connection Mapping
     connecting = {

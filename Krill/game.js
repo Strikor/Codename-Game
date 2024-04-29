@@ -17,8 +17,8 @@ let doorspr, door, door1, door2, door3, door4, exit;
 const doorArray = []; 
 
 //used in ents.push line 155
-let kSx = 500; 
-let kSy = 600; 
+let kSx = 80; 
+let kSy = 750; 
 
 let ents = [];
 var krill = null; 
@@ -50,6 +50,7 @@ function preload(){
     mapArrayLVL1P = loadStrings('./assets/mapLVL1P.txt');
     mapArrayLVL1F = loadStrings('./assets/mapLVL1F.txt'); 
     floorMap = loadStrings('./assets/floorMap.txt'); 
+    floorMapF = loadStrings('./assets/floorFuture.txt');
     //loading images for sprite ani
     sprSh = loadImage('assets/compScreen.png');
     indicators = loadImage('assets/indicators.png');
@@ -175,6 +176,13 @@ function setup() {
             32,32
         );
         floor.layer = 0; 
+
+        floorF = new Tiles(
+            floorMapF, 
+            (offsetR + 16), 32, 
+            32,32
+        );
+        floorF.layer = 0; 
 
         //default map
         room = new Tiles( 
