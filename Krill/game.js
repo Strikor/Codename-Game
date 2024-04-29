@@ -167,7 +167,7 @@ function setup() {
     if (state === "title") {
         setupTitle();
     } else if (state === "game") {
-        createCanvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
+        createCanvas(640, 360, 'pixelated'); //may display better with 'pixelated x2'
         loadTiles();
 
         floor = new Tiles(
@@ -292,8 +292,9 @@ function drawGame() {
     //table1.text = krill.x + ' ' + krill.y;
     //else defaults to 0;
     if (krill.status != 'slowed') {
-        speed = 2;
-    } 
+        speed = 3;
+    }
+
     //Krill movement controls
     if(compStat == "comp" ) {
         krill.speed = 0;  
@@ -305,8 +306,8 @@ function drawGame() {
     }
 
     //Fixes js rounding error with sprite position
-    krill.x = Math.round(krill.x);       //causes problems when krill speed >2
-    krill.y = Math.round(krill.y);
+    //krill.x = Math.round(krill.x);       //causes problems when krill speed >2
+    //krill.y = Math.round(krill.y);
     //krill.rotationLock = true;          
     //krill.debug = true; 
     
@@ -409,8 +410,10 @@ function timeTravel() {
             inFuture = true;
             numJumps++;             //helpful to keep track
             furnArray.forEach(element => {       //moves all furniture to future
-                element.x += (offsetR -16);
-                element.changeAni(element.ani.name + 'F'); 
+                if (element != oCouch && element != chair3){
+                    element.x += (offsetR -16);
+                    element.changeAni(element.ani.name + 'F'); 
+                }
             });
             doorArray.forEach(element => {       //moves all doors to future
                 element.x += (offsetR -16);
@@ -420,8 +423,10 @@ function timeTravel() {
         if (kb.pressed('t')){
             krill.x -= offsetR -16; //change to var
             furnArray.forEach(element => {      //moves all furniture back to present
-                element.x -= (offsetR -16);
-                element.changeAni(element.ani.name.substring(0, element.ani.name.length - 1)); 
+                if(element != oCouch && element != chair3){
+                    element.x -= (offsetR -16);
+                    element.changeAni(element.ani.name.substring(0, element.ani.name.length - 1)); 
+                }
             }); 
             doorArray.forEach(element => {      //moves all door back to present
                 element.x -= (offsetR -16);
