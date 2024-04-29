@@ -42,7 +42,7 @@ function draw() {
 
 function switchToNewSketch() {
     // Replace the current sketch with the new sketch
-    window.location.href = "KrillEditor\\sketch.js";
+    window.location.href = "StoryScreen\\sketch.js";
 }
 
 function mouseClicked() {
