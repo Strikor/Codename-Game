@@ -21,8 +21,8 @@ function setup() {
     backgroundMusic();
 
     // Set button position
-    buttonX = width / 2 - buttonWidth / 2;
-    buttonY = height / 2 - buttonHeight / 2;
+    buttonX = width / 1.2 - buttonWidth / 1.2;
+    buttonY = height / 1.25 - buttonHeight / 1.25;
 }
 
 function backgroundMusic() {
