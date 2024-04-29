@@ -167,7 +167,7 @@ function setup() {
     if (state === "title") {
         setupTitle();
     } else if (state === "game") {
-        createCanvas(640, 360, 'pixelated x3'); //may display better with 'pixelated x2'
+        createCanvas(640, 360, 'pixelated'); //may display better with 'pixelated x2'
         loadTiles();
 
         floor = new Tiles(
@@ -409,8 +409,10 @@ function timeTravel() {
             inFuture = true;
             numJumps++;             //helpful to keep track
             furnArray.forEach(element => {       //moves all furniture to future
-                element.x += (offsetR -16);
-                element.changeAni(element.ani.name + 'F'); 
+                if (element != oCouch && element != chair3){
+                    element.x += (offsetR -16);
+                    element.changeAni(element.ani.name + 'F'); 
+                }
             });
             doorArray.forEach(element => {       //moves all doors to future
                 element.x += (offsetR -16);
@@ -420,8 +422,10 @@ function timeTravel() {
         if (kb.pressed('t')){
             krill.x -= offsetR -16; //change to var
             furnArray.forEach(element => {      //moves all furniture back to present
-                element.x -= (offsetR -16);
-                element.changeAni(element.ani.name.substring(0, element.ani.name.length - 1)); 
+                if(element != oCouch && element != chair3){
+                    element.x -= (offsetR -16);
+                    element.changeAni(element.ani.name.substring(0, element.ani.name.length - 1)); 
+                }
             }); 
             doorArray.forEach(element => {      //moves all door back to present
                 element.x -= (offsetR -16);
