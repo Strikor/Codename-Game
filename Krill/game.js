@@ -53,7 +53,7 @@ function preload(){
     //loading images for sprite ani
     sprSh = loadImage('assets/compScreen.png');
     indicators = loadImage('assets/indicators.png');
-    fspr = loadImage('assets/desk.png');
+    fspr = loadImage('assets/deskF.png');
     doorspr = loadImage('assets/door4.png');
 }
 
@@ -402,6 +402,7 @@ function timeTravel() {
             numJumps++;             //helpful to keep track
             furnArray.forEach(element => {       //moves all furniture to future
                 element.x += (offsetR -16);
+                element.changeAni(element.ani.name + 'F'); 
             });
             doorArray.forEach(element => {       //moves all doors to future
                 element.x += (offsetR -16);
@@ -412,6 +413,7 @@ function timeTravel() {
             krill.x -= offsetR -16; //change to var
             furnArray.forEach(element => {      //moves all furniture back to present
                 element.x -= (offsetR -16);
+                element.changeAni(element.ani.name.substring(0, element.ani.name.length - 1)); 
             }); 
             doorArray.forEach(element => {      //moves all door back to present
                 element.x -= (offsetR -16);
@@ -633,14 +635,23 @@ function furnitureAniDefine(){
     furniture.spriteSheet = fspr;
     furniture.addAnis({
       comp: { row: 0, frames: 1, h:128, w:48 },
+      compF: {row: 0, col: 1, frames: 1, h:128, w:48 },
       desk1: { row: 1, frames: 1, h:128, w:48},
+      desk1F: {row: 1, col: 1, frames: 1, h:128, w:48 },
       desk2: { row: 2, frames: 1, h:128, w:48},
-      desk3: { row: 0, col: 1, frames: 1, h:128, w:48},
-      chairs: { row: 1, col: 1, frames: 1, h:128, w:48},
-      chair: { row: 3, col: 3, frames: 1, h:48, w:48},
-      sTable: { row: 3, col: 4, frames: 1, h:48, w:48},
-      couch: { row: 1, col: 2, frames: 1, h:128, w:48},
+      desk2F: {row: 2, col: 1, frames: 1, h:128, w:48 },
+      desk3: { row: 0, col: 2, frames: 1, h:128, w:48},
+      desk3F: {row: 0, col: 9, frames: 1, h:128, w:48 },
+      chairs: { row: 1, col: 2, frames: 1, h:128, w:48},
+      chairsF: { row: 1, col: 3, frames: 1, h:128, w:48},
+      chair: { row: 3, col: 6, frames: 1, h:48, w:48},
+      chairF: { row: 3, col: 7, frames: 1, h:48, w:48},
+      sTable: { row: 3, col: 8, frames: 1, h:48, w:48},
+      sTableF: { row: 3, col: 9, frames: 1, h:48, w:48},
+      couch: { row: 1, col: 4, frames: 1, h:128, w:48},
+      couchF: { row: 1, col: 5, frames: 1, h:128, w:48},
       table: { row: 0, col: 1, frames: 1, h:128, w:144},
+      tableF: { row: 0, col: 2, frames: 1, h:128, w:144},
     })
     furniture.collider = 's';
 }
