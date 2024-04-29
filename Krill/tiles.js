@@ -39,6 +39,12 @@ function loadTiles(){
     conL = tileMaker('@', 5, 1, 's', sheetImg); 
     conR = tileMaker('!', 7, 13, 's', sheetImg); 
     conD = tileMaker('?', 1, 5, 's', sheetImg); 
+    kCage1=   tileMaker('T', 1, 15, 's', sheetImg); 
+    kCage2 =  tileMaker('Y', 1, 17, 's', sheetImg); 
+    kcage3 =  tileMaker('S', 3, 15, 's', sheetImg); 
+    kCage4 =  tileMaker('N', 3, 17, 's', sheetImg); 
+    kCageh =  tileMaker('U', 1, 16, 's', sheetImg); 
+    kCagev =  tileMaker('D', 2, 15, 's', sheetImg); 
 
     //future walls
     ftLcorner = tileMaker('5', 9,  7,  's',  futureWallImg); 

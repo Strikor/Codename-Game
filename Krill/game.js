@@ -292,8 +292,9 @@ function drawGame() {
     //table1.text = krill.x + ' ' + krill.y;
     //else defaults to 0;
     if (krill.status != 'slowed') {
-        speed = 2;
-    } 
+        speed = 3;
+    }
+
     //Krill movement controls
     if(compStat == "comp" ) {
         krill.speed = 0;  
@@ -305,8 +306,8 @@ function drawGame() {
     }
 
     //Fixes js rounding error with sprite position
-    krill.x = Math.round(krill.x);       //causes problems when krill speed >2
-    krill.y = Math.round(krill.y);
+    //krill.x = Math.round(krill.x);       //causes problems when krill speed >2
+    //krill.y = Math.round(krill.y);
     //krill.rotationLock = true;          
     //krill.debug = true; 
     
