@@ -1,4 +1,3 @@
-
 let state = "editor";
 
 //computer screen puzzle stuffs
