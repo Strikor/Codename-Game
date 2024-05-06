@@ -57,13 +57,13 @@ function mouseClickedTitle() {
     // Check if the mouse is over the button when clicked
     if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight) {
 
-        state = "game";        
+        state = "controls";        
         hideButton();
         clear();
         noCanvas();
         mySound.stop();        
-        preloadGame();
-        setup();        
+        preloadControls();
+        setupControls();        
 
     }
 }
