@@ -9,25 +9,41 @@ let {sheetImg} = require('../Krill/tiles');
 let {view} = require('../Krill/editor');
 
 
+//testing Game and Tile files using the chai assert library 
 describe('Game file', function(){
     describe('Before any function call', function(){
-        it('state should be initialized to "editor"', function(){ 
-            assert.equal(state, 'editor');
+        describe('State Variable', function(){
+            it('should exist', function(){ 
+                assert.exists(state);  
+            });
+            it('should be initialized to "editor"', function(){ 
+                assert.equal(state, 'editor');
+            });
+
         });
     });
 });
 
 describe('Tiles file', function(){
     describe('Before any function call', function(){
-        it('sheetImg variable should be undefined', function(){ 
-            assert.equal(sheetImg, undefined);
+        describe('SheetImg variable', function(){
+            it('should exist', function(){ 
+                assert.exists(sheetImg);  
+            });
+            it('should be undefined', function(){ 
+                assert.equal(sheetImg, undefined);
+            });
         });
     });
 });
 
+//testing the editor file using the chai expect library
 describe('Editor file', function(){
     describe('Before any function call', function(){
         describe('View Variable', function(){
+            it('should exist', function(){ 
+                assert.exists(view);  
+            });
             it('should have the property [x] and its value should be [0]', function(){ 
                 expect(view).to.have.property('x', 0); 
             });
