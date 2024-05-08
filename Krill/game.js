@@ -62,7 +62,8 @@ function preload(){
     loadTileSprites();
     preloadTitle();
     preloadGameSounds();
-    
+    preloadControls();
+    preloadStoryScreen();
     //preloadGame();
     //Basically nothing should ever be put here
     mapArray = loadStrings('./assets/testMapPresent.txt');  //default map
@@ -189,7 +190,14 @@ function loadEnemies() {
 function setup() {
     if (state === "title") {
         setupTitle();
-    } else if (state === "game") {
+    } 
+    if (state === "controls") {
+        setupControls();
+    } 
+    if (state === "story") {
+        setupStoryScreen();
+    } 
+    else if (state === "game") {
         createCanvas(640, 360, 'pixelated'); //may display better with 'pixelated x2'
         loadTiles();
         loadEnemies();
@@ -246,7 +254,14 @@ function setup() {
 function draw() {
     if (state === "title") {
         drawTitle();
-    } else if (state === "game") {
+    } 
+    if (state === "controls") {
+        drawControls();
+    } 
+    if (state === "story") {
+        drawStoryScreen();
+    } 
+    else if (state === "game") { 
         drawGame();
     }
     //Also don't put stuff here
@@ -403,6 +418,12 @@ function drawHealthBar() {
 function mouseClicked() {
     if (state === "title") {
         mouseClickedTitle();
+    }
+    if (state === "story") {
+        mouseClickedStoryScreen();
+    }
+    if (state === "controls") {
+        mouseClickedControls();
     }
 }
 

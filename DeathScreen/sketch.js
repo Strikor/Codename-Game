@@ -10,7 +10,7 @@ function preload() {
     soundFormats("mp3");
     mySound = loadSound('Krill (1).mp3');
     // Load the background image
-    backgroundImage = loadImage('titlescreen.png');
+    backgroundImage = loadImage('DeathScreen.png');
     // Load the button image
     buttonImage = loadImage('button.png'); // Replace 'button.png' with the path to your PNG button image
 }
@@ -21,8 +21,8 @@ function setup() {
     backgroundMusic();
 
     // Set button position
-    buttonX = width / 1.2 - buttonWidth / 1.2;
-    buttonY = height / 1.25 - buttonHeight / 1.25;
+    buttonX = width / 1.25 - buttonWidth / 2;
+    buttonY = height / 1.25 - buttonHeight / 2;
 }
 
 function backgroundMusic() {
@@ -42,12 +42,12 @@ function draw() {
 
 function switchToNewSketch() {
     // Replace the current sketch with the new sketch
-    window.location.href = "StoryScreen\\sketch.js";
+  window.location.href = "Krill\\game.js";
 }
 
 function mouseClicked() {
     // Check if the mouse is over the button when clicked
-    if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight) {
-        switchToNewSketch();
+  if (mouseX > buttonX && mouseX < buttonX + buttonWidth && mouseY > buttonY && mouseY < buttonY + buttonHeight) {
+       switchToNewSketch();
     }
 }
