@@ -1,15 +1,14 @@
+//Very Basic Tests for Javascript files in the Repo
+//essentially checking that values are read from each javascript file
+
+//using assert chai library, checking value of one variable from each javascript file before any function calls
 const assert = require('chai').assert;
-const expect = require('chai').assert; 
-/* dont fix problem, still installed
-const { JSDOM } = require('jsdom');
-const {loadImage} = require('p5');
-*/
-let {state, preload, setup, draw} = require('../Krill/game');
+let {state} = require('../Krill/game');
 const {sheetImg} = require('../Krill/tiles');
 
 
 describe('Game file', function(){
-    describe('Before Preload', function(){
+    describe('Before any function call', function(){
         it('state should be initialized to "editor"', function(){ 
             assert.equal(state, 'editor');
         });
@@ -17,8 +16,8 @@ describe('Game file', function(){
 });
 
 describe('Tiles file', function(){
-    describe('Before loadTilesSprites()', function(){
-        it('sheetImg variable should be undefined before any function call', function(){ 
+    describe('Before any function call', function(){
+        it('sheetImg variable should be undefined', function(){ 
             assert.equal(sheetImg, undefined);
         });
     });
