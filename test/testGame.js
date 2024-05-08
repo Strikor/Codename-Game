@@ -27,8 +27,8 @@ describe('Tiles file', function(){
 
 describe('Editor file', function(){
     describe('Before any function call', function(){
-        it('A [view] object should have the properties x,y,z', function(){ 
-            expect(view).to.be.ok; 
+        it('view variable should have the property [x] and its value should be [0]', function(){ 
+            expect(view).to.have.property('x', 0); 
         });
     });
 });
