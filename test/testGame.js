@@ -24,6 +24,7 @@ describe('Game file', function(){
     });
 });
 
+//something wrong?
 describe('Tiles file', function(){
     describe('Before any function call', function(){
         describe('SheetImg variable', function(){
