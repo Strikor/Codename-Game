@@ -70,16 +70,16 @@ describe('Title file', function(){
             it('should exist', function(){ 
                 assert.exists(buttonHeight);  
             });
-            it('should be equal to [195]', function(){ 
-                expect(buttonHeight).to.equal(195); 
+            it('should be equal to [96]', function(){ 
+                expect(buttonHeight).to.equal(96); 
             });
         });
-        describe('ButtonWidtht variable', function(){
+        describe('ButtonWidth variable', function(){
             it('should exist', function(){ 
                 assert.exists(buttonWidth);  
             });
-            it('should be equal to [96]', function(){ 
-                expect(buttonWidth).to.equal(96); 
+            it('should be equal to [195]', function(){ 
+                expect(buttonWidth).to.equal(195); 
             });
         });
     });
