@@ -7,6 +7,7 @@ const expect = require('chai').expect;
 let {state} = require('../Krill/game');
 let {sheetImg} = require('../Krill/tiles');
 let {view} = require('../Krill/editor');
+let {buttonHeight, buttonWidth} = require('../Krill/title'); 
 
 
 //testing Game and Tile files using the chai assert library 
@@ -24,12 +25,11 @@ describe('Game file', function(){
     });
 });
 
-//something wrong?
 describe('Tiles file', function(){
     describe('Before any function call', function(){
         describe('SheetImg variable', function(){
             it('should not exist', function(){ 
-                assert.notExists(sheetImg, 'only declared, initialized with a value in loadTileSprite() function');  
+                assert.notExists(sheetImg);  //not initialized until after loadTileSprites function, so its undefined
             });
             it('should be undefined', function(){ 
                 assert.equal(sheetImg, undefined);
@@ -64,6 +64,26 @@ describe('Editor file', function(){
     });
 });
 
+describe('Title file', function(){
+    describe('Before any function call', function(){
+        describe('ButtonHeight variable', function(){
+            it('should exist', function(){ 
+                assert.Exists(buttonHeight);  
+            });
+            it('should be equal to [195]', function(){ 
+                expect(buttonHeight).to.equal(195); 
+            });
+        });
+        describe('ButtonWidtht variable', function(){
+            it('should exist', function(){ 
+                assert.Exists(buttonWidth);  
+            });
+            it('should be equal to [96]', function(){ 
+                expect(buttonWidth).to.equal(96); 
+            });
+        });
+    });
+});
 
 
 
