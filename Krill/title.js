@@ -71,3 +71,8 @@ function mouseClickedTitle() {
 function hideButton() {
     button.remove();
 }
+
+module.exports = {
+    buttonWidth,
+    buttonHeight
+}

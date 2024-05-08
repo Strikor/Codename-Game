@@ -116,7 +116,8 @@ function loadTiles(){
 }
 module.exports = {
       loadTileSprites,
-      loadTiles
+      loadTiles, 
+      sheetImg
 }
 
 
