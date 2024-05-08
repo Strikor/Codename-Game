@@ -27,8 +27,8 @@ describe('Game file', function(){
 describe('Tiles file', function(){
     describe('Before any function call', function(){
         describe('SheetImg variable', function(){
-            it('should exist', function(){ 
-                assert.exists(sheetImg);  
+            it('should not exist', function(){ 
+                assert.notExists(sheetImg, 'only declared, initialized with a value in loadTileSprite() function');  
             });
             it('should be undefined', function(){ 
                 assert.equal(sheetImg, undefined);
