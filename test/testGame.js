@@ -27,8 +27,22 @@ describe('Tiles file', function(){
 
 describe('Editor file', function(){
     describe('Before any function call', function(){
-        it('view variable should have the property [x] and its value should be [0]', function(){ 
-            expect(view).to.have.property('x', 100); 
+        describe('View Variable', function(){
+            it('should have the property [x] and its value should be [0]', function(){ 
+                expect(view).to.have.property('x', 0); 
+            });
+            it('should have the property [y] and its value should be [0]', function(){ 
+                expect(view).to.have.property('y', 0); 
+            });
+            it('should have the property [zoom] and its value should be [2]', function(){ 
+                expect(view).to.have.property('zoom', 2); 
+            });
+            it('should have the property [tool] and its value should be [select]', function(){ 
+                expect(view).to.have.property('tool', 'select'); 
+            });
+            it('should have the property [tool] and its value should be [false]', function(){ 
+                expect(view).to.have.property('cameraLocked', false); 
+            });
         });
     });
 });
