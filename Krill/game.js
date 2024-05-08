@@ -190,7 +190,7 @@ function setup() {
         setupTitle();
     } else if (state === "game") {
         createCanvas(640, 360, 'pixelated'); //may display better with 'pixelated x2'
-        loadTiles()
+        loadTiles();
         floor = new Tiles(
             floorMap, 
             32,32, 
