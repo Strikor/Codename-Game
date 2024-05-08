@@ -5,7 +5,7 @@ const { JSDOM } = require('jsdom');
 const {loadImage} = require('p5');
 */
 let {state, preload, setup, draw} = require('../Krill/game');
-const {loadTileSprites, loadTiles} = require('../Krill/tiles');
+const {sheetImg} = require('../Krill/tiles');
 
 
 describe('Game file', function(){
@@ -14,12 +14,12 @@ describe('Game file', function(){
             assert.equal(state, 'editor');
         });
     });
-    /* calling preload causes problems, like idk how to test anything useful since its all instide the p5 functions which have a million dependencies
-    preload();
-    describe('After Preload', function(){
-        it('state should be initialized to "title"', function(){ 
-            assert.equal(state, 'title');
+});
+
+describe('Tiles file', function(){
+    describe('Before loadTilesSprites()', function(){
+        it('sheetImg variable should be undefined', function(){ 
+            expect(sheetImg).to.be.undefined;
         });
     });
-    */
 });
