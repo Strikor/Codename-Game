@@ -1,0 +1,22 @@
+name: test-main
+on: 
+  push:
+    branches: [add_more_Tests, dev, main]
+  pull_request:
+    branches: [add_more_Tests, dev, main]
+  workflow_dispatch: 
+jobs:
+  modelTests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Model Tests
+        run: npm test

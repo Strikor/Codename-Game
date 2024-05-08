@@ -1,0 +1,26 @@
+{
+  "name": "codename-game",
+  "version": "1.0.0",
+  "description": "Basic Chai/Mocha Test",
+  "main": "game.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Strikor/Codename-Game.git"
+  },
+  "author": "Sophia Testa",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Strikor/Codename-Game/issues"
+  },
+  "homepage": "https://github.com/Strikor/Codename-Game#readme",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^10.4.0"
+  }
+}
