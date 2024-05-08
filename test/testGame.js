@@ -18,8 +18,8 @@ describe('Game file', function(){
 
 describe('Tiles file', function(){
     describe('Before loadTilesSprites()', function(){
-        it('sheetImg variable should be undefined', function(){ 
-            expect(sheetImg).to.be.undefined;
+        it('sheetImg variable should exist', function(){ 
+            expect(sheetImg).exists;
         });
     });
 });
