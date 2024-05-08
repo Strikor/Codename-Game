@@ -700,3 +700,7 @@ function mouseReleased() {
     }
 
 }
+
+module.exports = {
+    view
+}

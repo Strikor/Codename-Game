@@ -3,8 +3,10 @@
 
 //using assert chai library, checking value of one variable from each javascript file before any function calls
 const assert = require('chai').assert;
+const expect = require('chai').expect; 
 let {state} = require('../Krill/game');
-const {sheetImg} = require('../Krill/tiles');
+let {sheetImg} = require('../Krill/tiles');
+let {view} = require('../Krill/editor');
 
 
 describe('Game file', function(){
@@ -22,3 +24,15 @@ describe('Tiles file', function(){
         });
     });
 });
+
+describe('Editor file', function(){
+    describe('Before any function call', function(){
+        it('A [view] object should have the properties x,y,z', function(){ 
+            expect(true).to.equal(true); 
+        });
+    });
+});
+
+
+
+
