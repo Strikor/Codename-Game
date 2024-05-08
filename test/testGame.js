@@ -68,7 +68,7 @@ describe('Title file', function(){
     describe('Before any function call', function(){
         describe('ButtonHeight variable', function(){
             it('should exist', function(){ 
-                assert.Exists(buttonHeight);  
+                assert.exists(buttonHeight);  
             });
             it('should be equal to [195]', function(){ 
                 expect(buttonHeight).to.equal(195); 
@@ -76,7 +76,7 @@ describe('Title file', function(){
         });
         describe('ButtonWidtht variable', function(){
             it('should exist', function(){ 
-                assert.Exists(buttonWidth);  
+                assert.exists(buttonWidth);  
             });
             it('should be equal to [96]', function(){ 
                 expect(buttonWidth).to.equal(96); 
