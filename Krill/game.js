@@ -33,17 +33,39 @@ let test = 0;
 let mapArray;
 let map;
 
+let Level1Music;
+let DeathSound;
+let TimeTravelSound;
+let AlarmSound;
+let LevelCompleteSound;
+let MeowSound;
+
 //let statements for enemy
 let enemy;
 let allWallGroups = [];
 let detectionRange = 200;  
 
+function preloadGameSounds(){
+    Level1Music = loadSound('/archive/GameSounds/CodeNameKrill-Level1Music.mp3');
+    DeathSound = loadSound('/archive/GameSounds/CodeNameKrill-DeathSound.mp3');
+    TimeTravelSound = loadSound('/archive/GameSounds/CodeNameKrill-TimeTravlingSound.mp3');
+    AlarmSound = loadSound('/archive/GameSounds/Danger Alarm Sound Effect.mp3');
+    LevelCompleteSound = loadSound('/archive/GameSounds/Krill-level-completed.mp3');
+    MeowSound = loadSound('/archive/GameSounds/meowsoundsforKrill.mp3');
+}
 
+function level1musicloop(){
+    Level1Music.play();
+    Level1Music.loop();
+    Level1Music.setVolume(0.2);
+}
 
 function preload(){
     state = "title";
     loadTileSprites();
     preloadTitle();
+    preloadGameSounds();
+    
     //preloadGame();
     //Basically nothing should ever be put here
     mapArray = loadStrings('./assets/testMapPresent.txt');  //default map
@@ -169,7 +191,6 @@ function setup() {
     } else if (state === "game") {
         createCanvas(640, 360, 'pixelated'); //may display better with 'pixelated x2'
         loadTiles();
-
         floor = new Tiles(
             floorMap, 
             32,32, 
@@ -177,13 +198,14 @@ function setup() {
         );
         floor.layer = 0; 
 
+
         floorF = new Tiles(
             floorMapF, 
             (offsetR + 16), 32, 
             32,32
         );
         floorF.layer = 0; 
-
+ 
         //default map
         room = new Tiles( 
             mapArrayLVL1P,
@@ -212,7 +234,9 @@ function setup() {
 
             }
         }
+        level1musicloop();
     }
+    
     //Basically nothing else should be put here either
 }
 
@@ -408,6 +432,11 @@ function timeTravel() {
         if (kb.pressed('t')){
             krill.x += offsetR -16; //change to var
             inFuture = true;
+            if(Level1Music.isPlaying()){
+                Level1Music.stop();
+                TimeTravelSound.play();
+            }
+            level1musicloop();
             numJumps++;             //helpful to keep track
             furnArray.forEach(element => {       //moves all furniture to future
                 if (element != oCouch && element != chair3){
@@ -422,6 +451,13 @@ function timeTravel() {
     } else if (inFuture) { //in future
         if (kb.pressed('t')){
             krill.x -= offsetR -16; //change to var
+            if(Level1Music.isPlaying()){
+                Level1Music.stop();
+                TimeTravelSound.play();
+            }
+            Level1Music.play();
+            Level1Music.loop();
+            Level1Music.setVolume(0.2);
             furnArray.forEach(element => {      //moves all furniture back to present
                 if(element != oCouch && element != chair3){
                     element.x -= (offsetR -16);
