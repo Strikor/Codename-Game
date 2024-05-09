@@ -52,9 +52,9 @@ function preloadGameSounds(){
 }
 
 function level1musicloop(){
-    Level1Music.play();
-    Level1Music.loop();
-    Level1Music.setVolume(0.2);
+    //Level1Music.play();
+    //Level1Music.loop();
+    //Level1Music.setVolume(0.2);
 }
 
 function preload(){
@@ -458,9 +458,9 @@ function timeTravel() {
                 Level1Music.stop();
                 TimeTravelSound.play();
             }*/
-            Level1Music.play();
-            Level1Music.loop();
-            Level1Music.setVolume(0.2);
+            //Level1Music.play();
+            //Level1Music.loop();
+            //Level1Music.setVolume(0.2);
             furnArray.forEach(element => {      //moves all furniture back to present
                 if(element != oCouch && element != chair3){
                     element.x -= (offsetR -16);
