@@ -43,12 +43,12 @@ let MeowSound;
 var enemies = [];
 
 function preloadGameSounds(){
-    Level1Music = loadSound('/archive/GameSounds/CodeNameKrill-Level1Music.mp3');
-    DeathSound = loadSound('/archive/GameSounds/CodeNameKrill-DeathSound.mp3');
-    TimeTravelSound = loadSound('/archive/GameSounds/CodeNameKrill-TimeTravlingSound.mp3');
-    AlarmSound = loadSound('/archive/GameSounds/Danger Alarm Sound Effect.mp3');
-    LevelCompleteSound = loadSound('/archive/GameSounds/Krill-level-completed.mp3');
-    MeowSound = loadSound('/archive/GameSounds/meowsoundsforKrill.mp3');
+    //Level1Music = loadSound('/archive/GameSounds/CodeNameKrill-Level1Music.mp3');
+    //DeathSound = loadSound('/archive/GameSounds/CodeNameKrill-DeathSound.mp3');
+    //TimeTravelSound = loadSound('/archive/GameSounds/CodeNameKrill-TimeTravlingSound.mp3');
+    //AlarmSound = loadSound('/archive/GameSounds/Danger Alarm Sound Effect.mp3');
+    //LevelCompleteSound = loadSound('/archive/GameSounds/Krill-level-completed.mp3');
+    //MeowSound = loadSound('/archive/GameSounds/meowsoundsforKrill.mp3');
 }
 
 function level1musicloop(){
