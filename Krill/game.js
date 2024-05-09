@@ -435,10 +435,10 @@ function timeTravel() {
         if (kb.pressed('t')) {
             krill.x += offsetR - 16; //change to var
             inFuture = true;
-            if(Level1Music.isPlaying()){
+            /*if(Level1Music.isPlaying()){
                 Level1Music.stop();
                 TimeTravelSound.play();
-            }
+            }*/
             level1musicloop();
             numJumps++;             //helpful to keep track
             furnArray.forEach(element => {       //moves all furniture to future
@@ -454,10 +454,10 @@ function timeTravel() {
     } else if (inFuture) { //in future
         if (kb.pressed('t')){
             krill.x -= offsetR -16; //change to var
-            if(Level1Music.isPlaying()){
+            /*if(Level1Music.isPlaying()){
                 Level1Music.stop();
                 TimeTravelSound.play();
-            }
+            }*/
             Level1Music.play();
             Level1Music.loop();
             Level1Music.setVolume(0.2);
